@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/01/23 15:09:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/04 15:47:29 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void	reed_rl(char *rl, char **envp);
 
 void	free_args(char **args);
 void	ex_child(char *rl, char **envp);
+int		find_path_index(char **envp);
+char	*find_path_access(char **all_path, char **cmd);
+
 
 // forks.c //
 
