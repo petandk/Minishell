@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/05 13:28:02 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 15:38:00 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,13 @@
 
 // COLORS //
 
-# define YELLOW	"\033[1;33m"
-# define RED	"\033[1;31m"
-# define GREY	"\033[0;90m"
-# define RESET	"\033[0m"
+# define C_START "\001"
+# define C_END   "\002"
+
+# define YELLOW  C_START "\033[33m" C_END
+# define RED     C_START "\033[31m" C_END
+# define GREY    C_START "\033[90m" C_END
+# define RESET   C_START "\033[0m" C_END
 
 // STRUCTS //
 

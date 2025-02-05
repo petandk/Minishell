@@ -6,17 +6,12 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/04 18:39:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:10:31 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
-
+#include "minishell.h"
+/*
 static int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	index;
@@ -48,7 +43,7 @@ static char	*ft_strrchr(const char *s, int c)
 		return ((char *)s + index);
 	return (NULL);
 }
-
+*/
 char	*go_home(void)
 {
 	char	*home;
@@ -99,7 +94,7 @@ void	ft_cd(char *dest)
 	if (ft_strncmp(dest, "..", 2) == 0)
 		free(newpath);
 }
-
+/*
 int	main(int argc, char *argv[])
 {
 	char	*oldpath;
@@ -114,4 +109,4 @@ int	main(int argc, char *argv[])
 	newpath = getcwd(NULL, 0);
 	printf("New path: %s\n", newpath);
 	return (0);
-}
+}*/

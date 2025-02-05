@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/05 13:31:41 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 15:28:21 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	token(char *rl)
 					printf("Token: %s\n", token);
 					token_i = 0;
 				}
+				printf("operator: %c\n", c);
 				i++;
 				continue;
 			}
