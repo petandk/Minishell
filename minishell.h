@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/04 15:47:29 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 13:28:02 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,9 @@ char	*find_path_access(char **all_path, char **cmd);
 
 void	child(t_fork_data *fkd, int i, char **commands, char **envp);
 void	father(t_fork_data *fkd, int i, char **commands);
+
+// token.c //
+
+void    token(char *rl);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/04 15:53:47 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 13:28:19 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int select_type(char *rl, char **envp)
 	}
 	else if (*rl)
 	{
-		//reed_rl(rl, envp);
-		token(rl, envp);
+//		reed_rl(rl, envp);
+		token(rl);
 		add_history(rl);
 		return (0);
 	}

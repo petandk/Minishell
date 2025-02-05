@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/02/04 15:48:39 by gpolo            ###   ########.fr        #
+#    Updated: 2025/02/05 13:30:28 by gpolo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 
 CC				:= cc
 
-CFLAGS			:= -Wall -Wextra -Werror -g $(LIBS_INC)
+CFLAGS			:= -Wall -Wextra -g $(LIBS_INC)
 
 AR				:= ar rcs
 RANLIB			:= ranlib

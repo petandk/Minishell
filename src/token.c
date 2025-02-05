@@ -6,49 +6,81 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/04 15:51:03 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 13:31:41 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	tokenization(char **str, char **envp)
+int	ft_isspace(char c)
 {
-	int		i;
-	char	**all_path;
-	char    *path;
-
-	i = find_path_index(envp);
-	all_path = ft_split(envp[i] + 5, ':');
-	i = 0;
-	while (str[i])
-	{
-		if (str && str[0] && str[i][0] != '/')
-		{
-			path = find_path_access(all_path, str);
-			if (!path)
-			{
-				free_args(all_path);
-				return ;
-			}
-			printf("%s -> es un comando\n",str[i]);
-		}
-		else if (str[i][0] == '/')
-			printf("%s -> es un comando\n",str[i]);
-		else if (str[i][0] == '-')	
-			printf("%s -> es un un argumento\n",str[i]);
-		else 
-			printf("%s -> es texto\n",str[i]);
-	}	
+	if ((c == 32) || ((c >= 9) && (c <= 13)))
+		return (1);
+	else
+		return (0);
 }
 
-void	token(char *rl, char **envp)
+void	token(char *rl)
 {
-	char **str;
+	char	token[1024];
+	char	c;
+	int		i;
+	int 	token_i;
+	int 	in_quotes;
+	int 	in_double_quotes;
 
-	str = ft_split(rl, ' ');
-	if (!str)
-		return ;
-	tokenization(str, envp);
-	exit (1);
+	i = 0;
+	token_i = 0;
+	in_quotes = 0;
+	in_double_quotes = 0;
+	while (rl[i])
+	{
+		c = rl[i];
+		if (c == '\'' && !in_double_quotes)
+		{
+			in_quotes = !in_quotes;
+			i++;
+			continue;
+		}
+		else if (c == '\"' && !in_quotes)
+		{
+			in_double_quotes = !in_double_quotes;
+			i++;
+			continue;
+		}
+		if (!in_quotes && !in_double_quotes)
+		{
+			if(ft_isspace(c))
+			{
+				if (token_i > 0)
+				{
+					token[token_i] = '\0';
+					printf("Token: %s\n", token);
+					token_i = 0;
+				}
+				i++;
+				continue;
+			}
+			if (ft_strchr("<>|", c))
+			{
+				if (token_i > 0)
+				{
+					token[token_i] = '\0';
+					printf("Token: %s\n", token);
+					token_i = 0;
+				}
+				i++;
+				continue;
+			}
+			token[token_i++] = c;
+		}
+		else 
+			token[token_i++] = c;
+		i++;
+	}
+	if (token_i > 0)
+	{
+		token[token_i] = '\0';
+		printf("Token: %s\n", token);
+	}
 }
