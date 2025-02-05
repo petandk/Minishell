@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 16:31:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/05 15:06:51 by rmanzana         ###   ########.fr       */
+/*   Created: 2025/02/05 16:41:32 by rmanzana          #+#    #+#             */
+/*   Updated: 2025/02/05 16:43:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char *msg, int	is_n)
+void	ft_pwd(void)
 {
-	while (*msg)
-	{
-		write(1, msg, 1);
-		msg++;
-	}
-	if (!is_n)
-		write(1, "\n", 1);
+	char	*current;
+
+	current = getcwd(NULL, 0);
+	printf("%s\n", current);
+	free(current);
 }
-/*
-int	main(void)
-{
-	ft_echo("simulating -n", 1);
-	ft_echo("simulating no -n", 0);
-	return (0);
-}
-*/
