@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/05 13:28:02 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <fcntl.h>
 # include <termios.h>
 # include <termcap.h>
+# include <stddef.h>
 
 // COLORS //
 
@@ -46,6 +47,19 @@ typedef struct s_fork_data
 	int		prev_fd;
 	pid_t	pid;
 }			t_fork_data;
+
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct	s_shell
+{
+	char	*prev_dir;
+	t_env	*env;
+}	t_shell;
 
 // reed_rl //
 
@@ -68,4 +82,28 @@ void	father(t_fork_data *fkd, int i, char **commands);
 
 void    token(char *rl);
 
-#endif
+// cd.c //
+
+void	ft_cd(t_shell *shell, char *dest);
+
+// echo.c //
+
+void	ft_echo(char *msg, int is_n);
+
+// pwd.c //
+
+void	ft_pwd(void);
+
+// export_utils.c //
+
+t_env	*env_lstnew(char *name, char *val);
+t_env	*env_lstlast(t_env	*env);
+void	env_lstadd_back(t_env **env, t_env *newenv);
+t_env	*create_env_list(char **envp);
+
+// export.c //
+void	swap_env_content(t_env *a, t_env *b);
+void	sort_env_list(t_env	*envlist);
+void	ft_export(t_env *envlist);
+
+#endif		
