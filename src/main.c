@@ -6,30 +6,20 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/05 15:38:52 by gpolo            ###   ########.fr       */
-=======
+/*   Updated: 2025/02/11 11:47:31 by gpolo            ###   ########.fr       */
 /*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
->>>>>>> development
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-<<<<<<< HEAD
-int select_type(char *rl)
-=======
+//int select_type(char *rl)
 int select_type(char *rl, char **envp, t_shell *shell)
->>>>>>> development
 {
 	if (!rl)
 		return (1);
-<<<<<<< HEAD
-	if (ft_strcmp(rl, "exit") == 0)
+	else if (ft_strcmp(rl, "exit") == 0)
 		return (1);
-	if (*rl)
-=======
-	}
 	else if (ft_strncmp(rl, "echo", 4) == 0)
 		ft_echo(rl, 0);
 	else if (ft_strncmp(rl, "cd change",9) == 0)
@@ -43,7 +33,6 @@ int select_type(char *rl, char **envp, t_shell *shell)
 	else if (ft_strncmp(rl, "export", 6) == 0)
 		ft_export(shell->env);
 	else if (*rl)
->>>>>>> development
 	{
 		token(rl);
 		add_history(rl);
@@ -66,11 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-<<<<<<< HEAD
-		if (select_type(rl))
-=======
 		if (select_type(rl, envp, shell))
->>>>>>> development
 		{
 			free (rl);
 			free(shell->prev_dir);
@@ -83,4 +68,3 @@ int	main(int argc, char **argv, char **envp)
 	if (!argv)
 		argc--;
 }
-

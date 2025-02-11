@@ -6,16 +6,12 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/05 15:10:31 by gpolo            ###   ########.fr       */
-=======
+/*   Updated: 2025/02/11 11:45:03 by gpolo            ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
->>>>>>> development
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-<<<<<<< HEAD
 /*
 static int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -49,11 +45,9 @@ static char	*ft_strrchr(const char *s, int c)
 	return (NULL);
 }
 */
-char	*go_home(void)
-=======
+//char	*go_home(void)
 
 static char	*go_home(void)
->>>>>>> development
 {
 	char	*home;
 
@@ -133,9 +127,4 @@ int	main(int argc, char *argv[])
 	free(oldpath);
 	free(newpath);
 	return (0);
-<<<<<<< HEAD
 }*/
-=======
-}
-*/
->>>>>>> development
