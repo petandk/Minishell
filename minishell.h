@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/05 15:38:00 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/06 15:10:12 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@
 # define RESET   C_START "\033[0m" C_END
 
 // STRUCTS //
+
+typedef struct s_token
+{
+	char	*str;
+	int		greater_than;
+	int 	less_than;
+	int		pipe;
+}			t_token;
 
 typedef struct s_fork_data
 {
