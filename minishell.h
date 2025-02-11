@@ -6,7 +6,11 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2025/02/06 15:10:12 by gpolo            ###   ########.fr       */
+=======
 /*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
+>>>>>>> development
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +37,23 @@
 
 // COLORS //
 
-# define YELLOW	"\033[1;33m"
-# define RED	"\033[1;31m"
-# define GREY	"\033[0;90m"
-# define RESET	"\033[0m"
+# define C_START "\001"
+# define C_END   "\002"
+
+# define YELLOW  C_START "\033[33m" C_END
+# define RED     C_START "\033[31m" C_END
+# define GREY    C_START "\033[90m" C_END
+# define RESET   C_START "\033[0m" C_END
 
 // STRUCTS //
+
+typedef struct s_token
+{
+	char	*str;
+	int		greater_than;
+	int 	less_than;
+	int		pipe;
+}			t_token;
 
 typedef struct s_fork_data
 {
