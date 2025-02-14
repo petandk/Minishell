@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/11 11:39:34 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/14 13:15:18 by gpolo            ###   ########.fr       */
 /*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -48,9 +48,31 @@ typedef struct s_token
 {
 	char	*str;
 	int		greater_than;
+	int		double_greater;
 	int 	less_than;
+	int		double_less;
 	int		pipe;
+	int		quote;
 }			t_token;
+
+typedef struct s_token_data
+{
+	char	*str;
+	char	c;
+	int		i;
+	int		j;
+	int 	str_i;
+	int 	in_quotes;
+	int 	in_double_quotes;
+	int		size_token;
+	t_token	*token;
+}			t_token_data;
+
+typedef struct s_quote
+{
+	int	in_single;
+	int	in_double;
+}			t_quote;
 
 typedef struct s_fork_data
 {
@@ -73,17 +95,16 @@ typedef struct	s_shell
 	t_env	*env;
 }	t_shell;
 
-// reed_rl //
+// reed_rl.c //
 
 void	reed_rl(char *rl, char **envp);
 
-// ex_child //
+// ex_child.c //
 
 void	free_args(char **args);
 void	ex_child(char *rl, char **envp);
 int		find_path_index(char **envp);
 char	*find_path_access(char **all_path, char **cmd);
-
 
 // forks.c //
 
@@ -93,6 +114,19 @@ void	father(t_fork_data *fkd, int i, char **commands);
 // token.c //
 
 void    token(char *rl);
+
+//  token_utils.c //
+
+int		ft_isspace(char c);
+void	token_operator(t_token *token, char c, char next);
+void	init_token(t_token *token, int size);
+void	free_token(t_token **token, int size);
+void	print_token_array(t_token *tokens, int size);
+int		init_all(t_token_data *data, char *rl);
+
+// count_tokens.c //
+
+int		count_tokens(char *rl);
 
 // cd.c //
 
@@ -114,6 +148,7 @@ void	env_lstadd_back(t_env **env, t_env *newenv);
 t_env	*create_env_list(char **envp);
 
 // export.c //
+
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 void	ft_export(t_env *envlist);
