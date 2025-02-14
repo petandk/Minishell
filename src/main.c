@@ -6,14 +6,13 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/11 11:47:31 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/12 11:19:14 by gpolo            ###   ########.fr       */
 /*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//int select_type(char *rl)
 int select_type(char *rl, char **envp, t_shell *shell)
 {
 	if (!rl)
