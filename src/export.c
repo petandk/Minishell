@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/05 20:33:51 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:12:35 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
- void	swap_env_content(t_env *a, t_env *b)
+void	swap_env_content(t_env *a, t_env *b)
 {
 	char	*temp_name;
 	char	*temp_value;
@@ -63,4 +63,20 @@ void	ft_export(t_env	*envlist)
 			printf("%s=%s\n", current->name, current->value);
 			current = current->next;
 		}
+}
+
+void	clear_env_list(t_env **envlist)
+{
+	t_env	*aux;
+	
+	if (!envlist || !*envlist)
+		return ;
+	while (*envlist)
+	{
+		aux = (*envlist)->next;
+		free((*envlist)->name);
+		free((*envlist)->value);
+		free(*envlist);
+		*envlist = aux;
+	}
 }

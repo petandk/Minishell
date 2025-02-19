@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/05 20:33:49 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:08:30 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ t_env	*env_lstnew(char *name, char *val)
 	}
 }
 
+static	char **free_split(char **result, size_t i)
+{
+	if (!result)
+		return (NULL);
+	if (i == (size_t) - 1)
+		while (result[i])
+			free(result[i++]);
+	else
+		while (i > 0)
+			free(result[--i]);
+	free(result);
+	return (NULL);
+}
+
 t_env	*create_env_list(char **envp)
 {
 	t_env	*envlist;
@@ -59,9 +73,19 @@ t_env	*create_env_list(char **envp)
 	while (*envp)
 	{
 		split_res = ft_split(*envp, '=');
+		if (!split_res)
+			return (clear_env_list(&envlist), NULL);
+		if (!split_res[0])
+			return(free(split_res), clear_env_list(&envlist), NULL);
 		new_node = env_lstnew(split_res[0], split_res[1]);
+		if (!new_node)
+		{
+			free_split(split_res, -1);
+			clear_env_list(&envlist);
+			return (NULL);
+		}
 		env_lstadd_back(&envlist, new_node);
-		free(split_res);
+		free_split(split_res, -1);
 		envp++;
 	}	
 	return (envlist);
