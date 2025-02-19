@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:56:33 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 13:19:40 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:56:06 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,3 @@ void	ft_exit(t_shell **shell)
 	clear_env_list(&((*shell)->env));
 	free(*shell);
 }
-	

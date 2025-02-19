@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 13:12:35 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:06:56 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,21 @@ void	sort_env_list(t_env *envlist)
 
 void	ft_export(t_env	*envlist)
 {
-		t_env	*current;
-		
-		sort_env_list(envlist);
-		current = envlist;
-		while (current)
-		{
-			printf("%s=%s\n", current->name, current->value);
-			current = current->next;
-		}
+	t_env	*current;
+
+	sort_env_list(envlist);
+	current = envlist;
+	while (current)
+	{
+		printf("%s=%s\n", current->name, current->value);
+		current = current->next;
+	}
 }
 
 void	clear_env_list(t_env **envlist)
 {
 	t_env	*aux;
-	
+
 	if (!envlist || !*envlist)
 		return ;
 	while (*envlist)

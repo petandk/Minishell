@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/19 13:08:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:07:19 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -153,6 +153,10 @@ void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 void	ft_export(t_env *envlist);
 void	clear_env_list(t_env **envlist);
+
+// split_first.c //
+
+char	**split_first(char const *s, char c);
 
 // exit.c //
 

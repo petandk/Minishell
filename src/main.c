@@ -6,14 +6,14 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/19 13:22:52 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:28:13 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int select_type(char *rl, char **envp, t_shell *shell)
+int select_type(char *rl, t_shell *shell)
 {
 	if (!rl)
 		return (1);
@@ -21,12 +21,8 @@ int select_type(char *rl, char **envp, t_shell *shell)
 		return (ft_exit(&shell), 1);
 	else if (ft_strncmp(rl, "echo", 4) == 0)
 		ft_echo(rl, 0);
-	else if (ft_strncmp(rl, "cd change",9) == 0)
-		ft_cd(shell, "src/tst/prua");
-	else if (ft_strncmp(rl, "cd -", 4) == 0)
-		ft_cd(shell, "-");
 	else if (ft_strncmp(rl, "cd", 2) == 0)
-		ft_cd(shell, "");
+		ft_cd(shell, rl);
 	else if (ft_strncmp(rl, "pwd", 3) == 0)
 		ft_pwd();
 	else if (ft_strncmp(rl, "export", 6) == 0)
@@ -54,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-		if (select_type(rl, envp, shell))
+		if (select_type(rl, shell))
 		{
 			free (rl);
 			break ;	
