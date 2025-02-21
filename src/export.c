@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 16:06:56 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:09:44 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,9 @@ void	sort_env_list(t_env *envlist)
 	}
 }
 
-void	ft_export(t_env	*envlist)
+void	ft_export(t_env *envlist, char *arg)
 {
-	t_env	*current;
-
-	sort_env_list(envlist);
-	current = envlist;
-	while (current)
-	{
-		printf("%s=%s\n", current->name, current->value);
-		current = current->next;
-	}
+	ft_show_env(envlist, 0);
 }
 
 void	clear_env_list(t_env **envlist)

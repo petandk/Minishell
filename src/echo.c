@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:31:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 15:56:41 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:54:51 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 15:06:51 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -15,6 +15,7 @@
 
 void	ft_echo(char *msg, int is_n)
 {
+	msg += 5;
 	while (*msg)
 	{
 		write(1, msg, 1);

@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:58:58 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 15:56:20 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:52:19 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ static int	word_count(const char *str, char c)
 static char	**ft_fill_matrix(const char *s, char c, char **matrix)
 {
 	size_t	i;
-	int		j;
 	int		start;
 
 	i = 0;
-	j = 0;
 	start = 0;
 	while (s[i] && s[i] != c)
 		i++;

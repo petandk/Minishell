@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/19 17:28:13 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:25:42 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -27,6 +27,8 @@ int select_type(char *rl, t_shell *shell)
 		ft_pwd();
 	else if (ft_strncmp(rl, "export", 6) == 0)
 		ft_export(shell->env);
+	else if (ft_strncmp(rl, "env", 3) == 0)
+		ft_env(shell->env);
 	else if (*rl)
 	{
 		token(rl);
