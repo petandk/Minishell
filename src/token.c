@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/14 13:26:50 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/23 15:41:05 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,20 @@ void	operator(t_token_data *data, char *rl)
 	{
 		data->str[data->str_i] = '\0';
 		data->token[data->j++].str = ft_strdup(data->str);
-		printf("Token: %s\n", data->str);
+//		printf("Token: %s\n", data->str);
 		data->str_i = 0;
 	}
 	if ((data->c == '>' && rl[data->i + 1] == '>')
 		|| (data->c == '<' && rl[data->i + 1] == '<'))
 	{
 		token_operator(&data->token[data->j++], data->c, rl[data->i + 1]);
-		printf("operator: %c%c\n", data->c, rl[data->i + 1]);
+//		printf("operator: %c%c\n", data->c, rl[data->i + 1]);
 		data->i++;
 	}
 	else
 	{
 		token_operator(&data->token[data->j++], data->c, '\0');
-		printf("operator: %c\n", data->c);
+//		printf("operator: %c\n", data->c);
 	}
 }
 
@@ -62,7 +62,7 @@ int	out_quotes(t_token_data *data, char *rl)
 		{
 			data->str[data->str_i] = '\0';
 			data->token[data->j++].str = ft_strdup(data->str);
-			printf("Token: %s\n", data->str);
+//			printf("Token: %s\n", data->str);
 			data->str_i = 0;
 		}
 		data->i++;
@@ -84,11 +84,11 @@ void	str_index(t_token_data *data)
 	{
 		data->str[data->str_i] = '\0';
 		data->token[data->j++].str = ft_strdup(data->str);
-		printf("Token: %s\n", data->str);
+//		printf("Token: %s\n", data->str);
 	}
 }
 
-void	token(char *rl)
+void	token(char *rl, char **envp)
 {
 	t_token_data	data;
 
@@ -109,8 +109,8 @@ void	token(char *rl)
 		data.i++;
 	}
 	str_index(&data);
-	print_token_array(data.token, data.size_token);
-//	execucion(data.token, data.size_token);
+//	print_token_array(data.token, data.size_token);
+	execution(data.token, data.size_token, envp);
 	free (data.str);
 	free_token(&data.token, data.size_token);
 }

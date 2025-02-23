@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/14 13:15:18 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/23 12:30:23 by gpolo            ###   ########.fr       */
 /*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -68,6 +68,14 @@ typedef struct s_token_data
 	t_token	*token;
 }			t_token_data;
 
+typedef struct s_comand_data
+{
+	char	**comand;
+	char	*in_file;
+	char	*out_file;
+	int		*quote;
+}			t_comand_data;
+
 typedef struct s_quote
 {
 	int	in_single;
@@ -105,6 +113,7 @@ void	free_args(char **args);
 void	ex_child(char *rl, char **envp);
 int		find_path_index(char **envp);
 char	*find_path_access(char **all_path, char **cmd);
+void	execute_command(char **cmd, char **envp);
 
 // forks.c //
 
@@ -113,7 +122,8 @@ void	father(t_fork_data *fkd, int i, char **commands);
 
 // token.c //
 
-void    token(char *rl);
+void    token(char *rl, char **envp);
+int		execution(t_token *token, int size_token, char **envp);
 
 //  token_utils.c //
 
@@ -127,6 +137,14 @@ int		init_all(t_token_data *data, char *rl);
 // count_tokens.c //
 
 int		count_tokens(char *rl);
+
+// token_split.c //
+
+t_comand_data   *token_split(t_token *token, int size_token);
+
+// prepare_to_execute.c //
+
+int prepare_to_execute(t_comand_data **comand, t_token *token, int size_token);
 
 // cd.c //
 
