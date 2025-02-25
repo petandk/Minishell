@@ -6,8 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 12:30:23 by gpolo            ###   ########.fr       */
-/*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:25:30 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +162,30 @@ void	ft_pwd(void);
 t_env	*env_lstnew(char *name, char *val);
 t_env	*env_lstlast(t_env	*env);
 void	env_lstadd_back(t_env **env, t_env *newenv);
+char	**	free_split(char **result, size_t i);
 t_env	*create_env_list(char **envp);
 
 // export.c //
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
-void	ft_export(t_env *envlist);
+void	ft_show_env(t_env *envlist,int is_env);
+void	ft_export(t_env *envlist, char *arg);
+void	clear_env_list(t_env **envlist);
 
+// env.c //
+
+void	ft_env(t_env *envlist);
+
+// split_first.c //
+
+char	**split_first(char const *s, char c);
+
+// unset.c //
+
+int		ft_unset(t_env *envlist, char *name);
+
+// exit.c //
+
+void	ft_exit(t_shell **shell);
 #endif		
