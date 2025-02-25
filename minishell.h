@@ -6,12 +6,16 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/25 14:25:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:15:22 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 // INCLUDES //
 
@@ -102,6 +106,12 @@ typedef struct	s_shell
 	t_env	*env;
 }	t_shell;
 
+typedef struct	s_gnl
+{
+	char			*content;
+	struct s_gnl	*next;
+}	t_gnl;
+
 // reed_rl.c //
 
 void	reed_rl(char *rl, char **envp);
@@ -162,7 +172,7 @@ void	ft_pwd(void);
 t_env	*env_lstnew(char *name, char *val);
 t_env	*env_lstlast(t_env	*env);
 void	env_lstadd_back(t_env **env, t_env *newenv);
-char	**	free_split(char **result, size_t i);
+char	**free_split(char **result, size_t i);
 t_env	*create_env_list(char **envp);
 
 // export.c //
@@ -188,4 +198,22 @@ int		ft_unset(t_env *envlist, char *name);
 // exit.c //
 
 void	ft_exit(t_shell **shell);
+
+// get_next_line //
+
+int		len_to_nl(t_gnl *lst);
+void	create_line(t_gnl *lst, char *str);
+char	*get_line(t_gnl *lst);
+char	*get_next_line(int fd);
+t_gnl	*ft_lstnew(void *content);
+void	ft_lstadd_back(t_gnl **lst, t_gnl *new_node);
+void	keep_last_node(t_gnl **lst);
+void	free_list(t_gnl **list);
+int		contains_newline(t_gnl *node);
+
+// heredoc.c //
+
+char	*ft_strstr(const char *haystack, const char *needle);
+void	ft_heredoc(char *input);
+
 #endif		

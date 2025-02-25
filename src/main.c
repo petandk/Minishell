@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/25 14:28:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:15:07 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ int select_type(char *rl, t_shell *shell)
 		ft_unset(shell->env, "USER");
 	else if (ft_strncmp(rl, "env", 3) == 0)
 		ft_env(shell->env);
+	else if (ft_strstr(rl, "<<") != NULL)
+		ft_heredoc(rl);
 	else if (*rl)
 	{
-		token(rl, envp);
+		token(rl, shell->env);
 		add_history(rl);
 	}
 	return (0);
