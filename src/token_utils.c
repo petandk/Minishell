@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/14 13:17:29 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/23 15:35:37 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ int	init_all(t_token_data *data, char *rl)
 		printf("Error: operadores de redirección incorrectos\n");
 		return (0);
 	}
+	if (data->size_token == 0)
+		return (0);
 	data->str = malloc(ft_strlen(rl) * (sizeof(char)));
 	data->token = malloc(data->size_token * (sizeof(t_token)));
 	init_token(data->token , data->size_token);

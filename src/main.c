@@ -7,7 +7,6 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
 /*   Updated: 2025/02/25 14:28:37 by rmanzana         ###   ########.fr       */
-/*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +34,7 @@ int select_type(char *rl, t_shell *shell)
 		ft_env(shell->env);
 	else if (*rl)
 	{
-		token(rl);
+		token(rl, envp);
 		add_history(rl);
 	}
 	return (0);

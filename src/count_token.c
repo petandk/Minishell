@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:34:48 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/14 12:14:30 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/23 15:16:37 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
 	return (0);
 }
 
-int	quak(current, next)
+int	quak(int current,int next)
 {
 	if ((current == '>' && next == '>') || (current == '<' && next == '<'))
 		return (1);
@@ -94,6 +94,6 @@ int	count_tokens(char *rl)
 		else
 			i++;
 	}
-	printf("tokens -> %d\n", tokens);
+//	printf("tokens -> %d\n", tokens);
 	return (tokens);
 }
