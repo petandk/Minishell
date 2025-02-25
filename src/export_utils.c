@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 16:08:57 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:04:49 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	env_lstadd_back(t_env **env, t_env *newenv)
 	}
 }
 
-static char	**free_split(char **result, size_t i)
+char	**free_split(char **result, size_t i)
 {
 	size_t	j;
 

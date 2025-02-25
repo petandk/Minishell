@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/21 19:09:44 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:17:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,22 @@ void	sort_env_list(t_env *envlist)
 
 void	ft_export(t_env *envlist, char *arg)
 {
-	ft_show_env(envlist, 0);
+	t_env	*newnode;
+	char	**splitd;
+
+	if (!arg || arg[0] == '\0')
+		ft_show_env(envlist, 0);
+	else
+	{
+		splitd = split_first(arg, '=');
+		if (!splitd[0])
+			free(splitd);
+		newnode = env_lstnew(splitd[0], splitd[1]);
+		if (!newnode)
+			free_split(splitd, -1);
+		env_lstadd_back(&envlist, newnode);
+		free_split(splitd, -1);
+	}
 }
 
 void	clear_env_list(t_env **envlist)
