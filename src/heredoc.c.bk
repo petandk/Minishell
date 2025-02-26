@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/26 15:20:55 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:14:07 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static int	ft_split_count(char **splited)
 	return (i);
 }
 
-/*static void	ft_del(void *content)
+static void	ft_del(void *content)
 {
 	free(content);
 }
-*/
+
 static void	clean_heredoc(t_heredoc *vars)
 {
 	if (!vars)
@@ -38,48 +38,6 @@ static void	clean_heredoc(t_heredoc *vars)
 	free(vars);
 }
 
-static void	ft_process_heredoc(char	*delimiter, t_list **lines)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			break ;
-		printf("EOF is: %s and yu said %s\n", delimiter, line);
-		if (ft_strcmp(delimiter, line) == 0)
-		{
-			free(line);
-			break ;
-		}
-		ft_lstadd_back(lines, ft_lstnew(ft_strdup(line)));
-		free(line);
-	}
-	ft_lstclear(lines, free);
-	*lines = NULL;
-}
-
-static char	**ft_setup_heredoc(char *input, t_heredoc **here)
-{
-	char	**splited;
-
-	*here = (t_heredoc *)malloc(sizeof(t_heredoc));
-	if (!here)
-		return (NULL);
-	(*here)->helper = ft_replace(input);
-	(*here)->line = NULL;
-	splited = ft_split((*here)->helper, '<');
-	if (splited && !splited[0])
-	{
-		clean_heredoc(*here);
-		free(splited);
-		return (NULL);
-	}
-	(*here)->num_brackets = ft_split_count(splited) - 1;
-	return (splited);
-}
-
 void	ft_heredoc(char *input)
 {
 	char		**splited;
@@ -88,18 +46,42 @@ void	ft_heredoc(char *input)
 	int			i;
 
 	lines = NULL;
-	if (ft_strstr(input, "<<") == NULL)
-		return ;
-	splited = ft_setup_heredoc(input, &aux);
-	if (!splited)
-		return ;
-	i = 1;
-	while (i <= aux->num_brackets)
+	if (ft_strstr(input, "<<") != NULL)
 	{
-		ft_process_heredoc(splited[i], &lines);
-		i++;
+		aux = (t_heredoc *)malloc(sizeof(t_heredoc));
+		if (!aux)
+			return ;
+		aux->helper = ft_replace(input);
+		aux->line = NULL;
+		splited = ft_split(aux->helper, '<');
+		if (splited && !splited[0])
+			return (clean_heredoc(aux), free(splited));
+		aux->num_brackets = ft_split_count(splited) - 1;
+		i = 1;
+		while (i <= aux->num_brackets)
+		{
+			while (1)
+			{
+				aux->line = readline("> ");
+				if (!aux->line)
+					break ;
+				printf("EOF is: %s and yu said %s\n", splited[i], aux->line);
+				if (ft_strcmp(splited[i], aux->line) == 0)
+				{
+					free(aux->line);
+					aux->line = NULL;
+					break ;
+				}
+				ft_lstadd_back(&lines, ft_lstnew(strdup(aux->line)));
+				free(aux->line);
+				aux->line = NULL;
+			}
+			ft_lstclear(&lines, ft_del);
+			lines = NULL;
+			i++;
+		}
+		clean_heredoc(aux);
+		if (splited)
+			free_split(splited, -1);
 	}
-	clean_heredoc(aux);
-	if (splited)
-		free_split(splited, -1);
 }

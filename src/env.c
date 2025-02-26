@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/21 18:47:11 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:06:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	ft_show_env(t_env	*envlist, int is_env)
 			printf("declare -x %s=\"%s\"\n", current->name, current->value);
 		else if (is_env == 1)
 			printf("%s=%s\n", current->name, current->value);
-
 		current = current->next;
 	}
 	if (is_env == 0)

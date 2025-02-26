@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/19 17:28:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:06:10 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -42,7 +42,6 @@ static char	*go_back(void)
 static char	*new_path(t_shell *shell, char *dest)
 {
 	char	*newpath;
-
 
 	if ((ft_strncmp(dest, "", 1) == 0) || (ft_strncmp(dest, "~", 1) == 0))
 		newpath = go_home();
