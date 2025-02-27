@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:58:58 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/21 17:52:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:23:35 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ static char	**ft_fill_matrix(const char *s, char c, char **matrix)
 		if (!matrix[1])
 			return (ft_free(matrix, 1));
 	}
+	else
+		matrix[1] == NULL;
 	return (matrix);
 }
 
@@ -81,6 +83,8 @@ char	**split_first(const char *s, char c)
 {
 	char	**matrix;
 
+	if (!s)
+		return (NULL);
 	matrix = ft_calloc((word_count(s, c) + 1), sizeof(char *));
 	if (!matrix)
 		return (NULL);

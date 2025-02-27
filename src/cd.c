@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/27 17:40:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:44:32 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -57,8 +57,6 @@ static char	*new_path(t_shell *shell, char *dest)
 	}
 	else
 		newpath = dest;
-	if (!newpath)
-		exit(1);
 	return (newpath);
 }
 
