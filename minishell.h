@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/26 15:22:48 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:35:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	father(t_fork_data *fkd, int i, char **commands);
 
 // token.c //
 
-void    token(char *rl, char **envp);
+void    token(char *rl);
 int		execution(t_token *token, int size_token, char **envp);
 
 //  token_utils.c //
@@ -198,11 +198,15 @@ void	ft_exit(t_shell **shell);
 
 // heredoc.c //
 
-void	ft_heredoc(char *input);
+t_list	*ft_heredoc(char *input);
 
 // heredoc_utils.c //
 
 char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_replace(const char *str);
+
+// borrar.c //
+
+void	print_heredoc(t_list *list);
 
 #endif		

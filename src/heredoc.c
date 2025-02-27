@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/26 15:20:55 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:40:50 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ static int	ft_split_count(char **splited)
 	return (i);
 }
 
-/*static void	ft_del(void *content)
-{
-	free(content);
-}
-*/
 static void	clean_heredoc(t_heredoc *vars)
 {
 	if (!vars)
@@ -47,7 +42,6 @@ static void	ft_process_heredoc(char	*delimiter, t_list **lines)
 		line = readline("> ");
 		if (!line)
 			break ;
-		printf("EOF is: %s and yu said %s\n", delimiter, line);
 		if (ft_strcmp(delimiter, line) == 0)
 		{
 			free(line);
@@ -56,8 +50,6 @@ static void	ft_process_heredoc(char	*delimiter, t_list **lines)
 		ft_lstadd_back(lines, ft_lstnew(ft_strdup(line)));
 		free(line);
 	}
-	ft_lstclear(lines, free);
-	*lines = NULL;
 }
 
 static char	**ft_setup_heredoc(char *input, t_heredoc **here)
@@ -80,7 +72,7 @@ static char	**ft_setup_heredoc(char *input, t_heredoc **here)
 	return (splited);
 }
 
-void	ft_heredoc(char *input)
+t_list	*ft_heredoc(char *input)
 {
 	char		**splited;
 	t_list		*lines;
@@ -89,17 +81,21 @@ void	ft_heredoc(char *input)
 
 	lines = NULL;
 	if (ft_strstr(input, "<<") == NULL)
-		return ;
+		return (NULL);
 	splited = ft_setup_heredoc(input, &aux);
 	if (!splited)
-		return ;
+		return (NULL);
 	i = 1;
 	while (i <= aux->num_brackets)
 	{
+		if (lines)
+			ft_lstclear(&lines, free);
+		lines = NULL;
 		ft_process_heredoc(splited[i], &lines);
 		i++;
 	}
 	clean_heredoc(aux);
 	if (splited)
 		free_split(splited, -1);
+	return (lines);
 }
