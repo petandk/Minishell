@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/05 20:33:51 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:17:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
- void	swap_env_content(t_env *a, t_env *b)
+void	swap_env_content(t_env *a, t_env *b)
 {
 	char	*temp_name;
 	char	*temp_value;
@@ -52,15 +52,38 @@ void	sort_env_list(t_env *envlist)
 	}
 }
 
-void	ft_export(t_env	*envlist)
+void	ft_export(t_env *envlist, char *arg)
 {
-		t_env	*current;
-		
-		sort_env_list(envlist);
-		current = envlist;
-		while (current)
-		{
-			printf("%s=%s\n", current->name, current->value);
-			current = current->next;
-		}
+	t_env	*newnode;
+	char	**splitd;
+
+	if (!arg || arg[0] == '\0')
+		ft_show_env(envlist, 0);
+	else
+	{
+		splitd = split_first(arg, '=');
+		if (!splitd[0])
+			free(splitd);
+		newnode = env_lstnew(splitd[0], splitd[1]);
+		if (!newnode)
+			free_split(splitd, -1);
+		env_lstadd_back(&envlist, newnode);
+		free_split(splitd, -1);
+	}
+}
+
+void	clear_env_list(t_env **envlist)
+{
+	t_env	*aux;
+
+	if (!envlist || !*envlist)
+		return ;
+	while (*envlist)
+	{
+		aux = (*envlist)->next;
+		free((*envlist)->name);
+		free((*envlist)->value);
+		free(*envlist);
+		*envlist = aux;
+	}
 }

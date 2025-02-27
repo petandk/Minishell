@@ -6,46 +6,12 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/11 11:45:03 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/19 17:28:02 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-static int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	index;
-
-	index = 0;
-	while ((s1[index] || s2[index]) && index < n)
-	{
-		if ((unsigned char)s1[index] != (unsigned char)s2[index])
-			return ((unsigned char)s1[index] - (unsigned char)s2[index]);
-		index++;
-	}
-	return (0);
-}
-
-static char	*ft_strrchr(const char *s, int c)
-{
-	int	index;
-
-	index = 0;
-	while (s[index])
-		index++;
-	while (index > 0)
-	{
-		if (s[index] == (unsigned char)c)
-			return ((char *)s + index);
-		index--;
-	}
-	if (s[index] == (unsigned char)c)
-		return ((char *)s + index);
-	return (NULL);
-}
-*/
-//char	*go_home(void)
 
 static char	*go_home(void)
 {
@@ -73,13 +39,11 @@ static char	*go_back(void)
 	return (current);
 }
 
-void	ft_cd(t_shell *shell, char *dest)
+static char	*new_path(t_shell *shell, char *dest)
 {
 	char	*newpath;
-	char	*current;
-	int		ret;
 
-	current = getcwd(NULL, 0);
+
 	if ((ft_strncmp(dest, "", 1) == 0) || (ft_strncmp(dest, "~", 1) == 0))
 		newpath = go_home();
 	else if (ft_strncmp(dest, "..", 2) == 0)
@@ -90,6 +54,20 @@ void	ft_cd(t_shell *shell, char *dest)
 		newpath = dest;
 	if (!newpath)
 		exit(1);
+	return (newpath);
+}
+
+void	ft_cd(t_shell *shell, char *dest)
+{
+	char	*newpath;
+	char	*current;
+	int		ret;
+
+	dest += 2;
+	while (*dest && (*dest == ' ' || *dest == '\t'))
+		dest++;
+	current = getcwd(NULL, 0);
+	newpath = new_path(shell, dest);
 	ret = chdir(newpath);
 	if (ret == -1)
 	{
