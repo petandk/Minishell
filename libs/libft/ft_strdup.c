@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 12:14:53 by gpolo             #+#    #+#             */
-/*   Updated: 2024/06/19 12:37:29 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/25 12:19:58 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strdup(const char *s)
 	char	*dup;
 	size_t	len;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen(s) + 1;
 	dup = (char *)malloc(len);
 	if (dup == NULL)

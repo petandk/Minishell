@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/02/05 13:30:28 by gpolo            ###   ########.fr        #
+#    Updated: 2025/02/25 14:53:08 by gpolo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC_DIR			:= src/
 
 OBJ_DIR			:= obj/
 
-LIBS_DIRS		:= ./libs/libft
+LIBS_DIRS		:= ./libs/libft 
 LIBS_A          := ./libs/libft/libft.a
 LIBS_COM		:= readline termcap
 LIBS_INC		:= $(addprefix -I , $(LIBS_DIRS))
