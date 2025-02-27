@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 16:15:55 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/27 15:21:53 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void free_comand(t_comand_data *comand, int num_comands)
 		return;
 	while (i < num_comands)
 	{
-		j = 0;
-		while (comand[i].comand[j])
+		j = 0;	
+		while (comand[i].comand && comand[i].comand[j])
 		{
 			free(comand[i].comand[j]);
 			j++;
@@ -35,56 +35,6 @@ void free_comand(t_comand_data *comand, int num_comands)
 		i++;
 	}
 	free(comand);
-}
-
-void	print_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		printf("args[%d]->%s\n",i, args[i]);
-		i++;
-	}
-}
-
-void print_comands(t_comand_data *comand, int num_comands)
-{
-    int i, j;
-
-    if (!comand)
-    {
-        printf("No commands to print.\n");
-        return;
-    }
-
-    i = 0;
-    while (i < num_comands)
-    {
-        printf("Command %d:\n", i + 1);
-        
-        j = 0;
-        if (comand[i].comand)
-        {
-            printf("  Arguments: ");
-            while (comand[i].comand[j])
-            {
-                printf("[%s]", comand[i].comand[j]);
-                if (comand[i].quote && comand[i].quote[j])
-                    printf("(quote:%d) ", comand[i].quote[j]);
-                j++;
-            }
-            printf("\n");
-        }
-        else
-            printf("  Arguments: (None)\n");
-
-        printf("  Input file: %s\n", comand[i].in_file ? comand[i].in_file : "(None)");
-        printf("  Output file: %s\n", comand[i].out_file ? comand[i].out_file : "(None)");
-
-        i++;
-    }
 }
 
 int    execution(t_token *token, int size_token, char  **envp)

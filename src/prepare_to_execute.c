@@ -6,202 +6,162 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:48:46 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 15:51:41 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/27 16:34:11 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *init_str(char *c, t_token *token, int i, int size_token)
+int inint_to_token(t_token *token, int size_token, t_comand_data **comand, t_ind *ind)
 {
-	char	*str;
+	int num_comands;
+
+	ind->i = 0;
+	ind->j = 0;
+	num_comands = count_comands(token, size_token);
+	*comand = malloc((num_comands) * sizeof(t_comand_data));
+	if (!malloc_test((void *)*comand))
+		exit(1);
+	init_comand(*comand, num_comands);
+	return(num_comands);
+}
+
+int pipe_size(int i, t_token *token, int size_token)
+{
+	int	size;
+ 
+	size = 0;
+	if (token[i].pipe)
+			return (-1);
+	while ((i + size) < size_token && !token[i + size].pipe)
+	{
+		if (!(token[i + size].str) && (token[i + size + 1].str))
+			i += 2;
+		else
+			size++;
+	}
+	if ((size) == 0 && !token[size].str && (size + 1) >= size_token)
+			return (-1);
+	return (size);
+}
+
+void	strdup_comand(t_comand_data **comand, t_token *token, t_ind ind)
+{
+	int k;
 	
-	if (!c || !token || i + 1 >= size_token || !token[i + 1].str)
-		return (NULL);
-	str=ft_strjoin(c, token[i + 1].str);
-	if (!str)
+	k = 0;
+	while ((k < ind.size))
 	{
-		perror("Error in ft_strjoin");
-		exit (1);
+		while (!(token[ind.i].str) && (token[ind.i + 1].str))
+			ind.i += 2;	
+		(*comand)[ind.j].comand[k] = ft_strdup(token[ind.i].str);
+		if (token[ind.i].quote)
+			(*comand)[ind.j].quote[k] = token[ind.i].quote;
+		k++;
+		ind.i++;
 	}
-	return (str);
 }
 
-void	in_out_file(char **file,char *str)
+void	the_comad(t_comand_data **comand, t_token *token, t_ind ind)
 {
-	char	*tmp;
+	(*comand)[ind.j].comand = (char **)malloc((ind.size + 1) * sizeof(char *));
+	(*comand)[ind.j].quote = (int *)malloc((ind.size) * sizeof(int));
+	if (!malloc_test((void *)(*comand)[ind.j].quote)
+		|| !malloc_test((void *)(*comand)[ind.j].comand))
+		exit(1);
+	init_others(*comand, ind.j, ind.size);
+	strdup_comand(comand, token, ind);
+}
 
-	if (file && *file)
+void	the_files(t_ind	*ind, int size_token, t_token *token, t_comand_data **comand)
+{
+	char *str;
+
+	while (ind->i < size_token && !token[ind->i].pipe)
 	{
-		tmp = ft_strjoin(*file, str);
-		if (!tmp)
+		if (!token[ind->i].str)
 		{
-			perror("Error in ft_strjoin"); // Corrección: Manejo de error
-			exit(1);
+			if (ind->i + 1 < size_token && token[ind->i + 1].str)
+			{
+				if (token[ind->i].greater_than)
+				{
+					str = init_str(">", token, ind->i, size_token);
+					in_out_file(&(*comand)[ind->j].out_file, str);
+				}
+				else if (token[ind->i].double_greater)
+				{
+					str=init_str("_", token, ind->i, size_token);
+					in_out_file(&(*comand)[ind->j].out_file, str);
+				}
+				else if (token[ind->i].less_than)
+				{
+					str=init_str("<", token, ind->i, size_token);
+					in_out_file(&(*comand)[ind->j].in_file, str);
+				}
+				else if (token[ind->i].double_less)
+				{
+					str=init_str("_", token, ind->i, size_token);
+					in_out_file(&(*comand)[ind->j].in_file, str);
+				}
+				if (str)
+					free (str);
+			}
 		}
-		free (*file);
-		*file = ft_strdup(tmp);
-		if (!*file)
-		{
-			perror("Error in ft_strdup"); // Corrección: Manejo de error
-			exit(1);
-		}
-		free (tmp);
+		ind->i++;
 	}
-	else
-	{
-		*file = ft_strdup(str);
-		if (!*file)
-		{
-			perror("Error in ft_strdup"); // Corrección: Manejo de error
-			exit(1);
-		}
-	}
-}
-
-void	init_comand(t_comand_data *comand, int size)
-{
-	int i;
-
-	i = 0;
-	while (i < size)
-	{
-		comand[i].in_file = NULL;
-		comand[i].out_file = NULL;
-		i++;
-	}
-}
-
-int	count_comands(t_token *token, int size_token)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 1;
-	while (i < size_token)
-	{
-		if (token[i].pipe)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-void	init_others(t_comand_data *comand, int j, int size)
-{
-	int i;
-
-	i = 0;
-	while (i < size)
-	{
-		comand[j].quote[i] = 0;
-		comand[j].comand[i] = NULL;
-		i++;
-	}
-	if (size > 0)
-		comand[j].comand[size] = NULL;
-	
 }
 int prepare_to_execute(t_comand_data **comand, t_token *token, int size_token)
 {
-	int		i;
-	int		j;
-	int		k;
-	char	*str;
+//	char	*str;
 	int		num_comands;
-	int		size;
-
+	t_ind	ind;
 
 	if (!token || size_token <= 0)
 		return (-1);
-	i = 0; 
-	j = 0;
-	num_comands = count_comands(token, size_token);
-	printf("num comands = %d\n",num_comands);
-	*comand = malloc((num_comands) * sizeof(t_comand_data));
-	if (!*comand)
+	num_comands = inint_to_token(token, size_token, comand, &ind);
+	while (ind.i < size_token)
 	{
-		perror("Error allocating comand");
-		exit(1);
-	}
-	init_comand(*comand, num_comands);
-	while (i < size_token)
-	{	
-		if (!token[i].str && !token[i].pipe )
-        {
-            i++;
-            continue;
-        }
-		size = 0;
-		while ((i + size) < size_token && token[i + size].str && !token[i + size].pipe)
-			size++;	
-		if (size == 0 && token[i].pipe)
-        {
-            printf("Error: Pipe sin comando después.\n");
-            return (-1);
-        }
-		if (size > 0)
+		ind.size = pipe_size(ind.i, token, size_token);
+		if (!ind.size)
+			return (-1);
+		if (ind.size > 0)
+			the_comad(comand, token, ind);
+		the_files(&ind, size_token, token, comand);
+		/*while (ind.i < size_token && !token[ind.i].pipe)
 		{
-			(*comand)[j].comand = (char **)malloc((size + 1) * sizeof(char *));
-			if (!(*comand)[j].comand)
+			if (!token[ind.i].str)
 			{
-				perror("Error allocating comand array");
-				exit(1);
-			}
-			(*comand)[j].quote = (int *)malloc((size) * sizeof(int));
-			if (!(*comand)[j].quote)
-			{
-				perror("Error allocating quote array");
-				exit(1);
-			}
-			init_others(*comand, j, size);
-			k = 0;
-			while ((k < size))
-			{
-				(*comand)[j].comand[k] = ft_strdup(token[i].str);
-				if (token[i].quote)
-					(*comand)[j].quote[k] = token[i].quote;
-				k++;
-				i++;
-			}
-		}
-		while (i < size_token && !token[i].pipe)
-		{
-			if (!token[i].str)
-			{
-				if (i + 1 < size_token && token[i + 1].str)
+				if (ind.i + 1 < size_token && token[ind.i + 1].str)
 				{
-					if (token[i].greater_than)
+					if (token[ind.i].greater_than)
 					{
-						str = init_str(">", token, i, size_token);
-						in_out_file(&(*comand)[j].out_file, str);
+						str = init_str(">", token, ind.i, size_token);
+						in_out_file(&(*comand)[ind.j].out_file, str);
 					}
-					else if (token[i].double_greater)
+					else if (token[ind.i].double_greater)
 					{
-						str=init_str(">>", token, i, size_token);
-						in_out_file(&(*comand)[j].out_file, str);
+						str=init_str(">>", token, ind.i, size_token);
+						in_out_file(&(*comand)[ind.j].out_file, str);
 					}
-					else if (token[i].less_than)
+					else if (token[ind.i].less_than)
 					{
-						str=init_str("<", token, i, size_token);
-						in_out_file(&(*comand)[j].in_file, str);
+						str=init_str("<", token, ind.i, size_token);
+						in_out_file(&(*comand)[ind.j].in_file, str);
 					}
-					else if (token[i].double_less)
+					else if (token[ind.i].double_less)
 					{
-						str=init_str("<<", token, i, size_token);
-						in_out_file(&(*comand)[j].in_file, str);
+						str=init_str("<<", token, ind.i, size_token);
+						in_out_file(&(*comand)[ind.j].in_file, str);
 					}
 					if (str)
 						free (str);
 				}
 			}
-			i++;
-		}
-		
-		if (i < size_token && token[i].pipe)
-			i++;
-		j++;	
+			ind.i++;
+		}*/
+		if (ind.i < size_token && token[ind.i].pipe)
+			ind.i++;
+		ind.j++;
 	}
 	return (num_comands);
 }

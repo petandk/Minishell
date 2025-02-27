@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 15:35:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/27 14:06:43 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ void	free_token(t_token **token, int size)
 	i = 0;
 	while (i < size)
 	{
-		free((*token)[i].str);
+		if ((*token)[i].str)
+			free((*token)[i].str);
 		i++;
 	}
 	free (*token);
@@ -80,27 +81,8 @@ int	init_all(t_token_data *data, char *rl)
 	}
 	if (data->size_token == 0)
 		return (0);
-	data->str = malloc(ft_strlen(rl) * (sizeof(char)));
+	data->str = malloc((ft_strlen(rl) + 1) * (sizeof(char)));
 	data->token = malloc(data->size_token * (sizeof(t_token)));
-	init_token(data->token , data->size_token);
+	init_token(data->token, data->size_token);
 	return (1);
-}
-
-void	print_token_array(t_token *tokens, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size)
-	{
-		printf("Token %d:\n", i);
-		printf("  str: %s\n", tokens[i].str);
-		printf("  greater_than: %d\n", tokens[i].greater_than);
-		printf("  double_greater: %d\n", tokens[i].double_greater);
-		printf("  less_than: %d\n", tokens[i].less_than);
-		printf("  double_less: %d\n", tokens[i].double_less);
-		printf("  pipe: %d\n", tokens[i].pipe);
-		printf("  quote: %d\n", tokens[i].quote);
-		i++;
-	}
 }

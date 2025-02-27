@@ -6,16 +6,21 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 15:41:05 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/27 15:09:29 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	in_quote(t_token_data *data)
+int	in_quote(t_token_data *data, char next)
 {
 	if (data->c == '\'' && !data->in_double_quotes)
 	{
+		if (data->c == next)
+		{
+			data->i += 2;
+			return (1);
+		}
 		data->in_quotes = !data->in_quotes;
 		data->token[data->j].quote = 1;
 		data->i++;
@@ -23,6 +28,11 @@ int	in_quote(t_token_data *data)
 	}
 	else if (data->c == '\"' && !data->in_quotes)
 	{
+		if (data->c == next)
+		{
+			data->i += 2;
+			return (1);
+		}
 		data->in_double_quotes = !data->in_double_quotes;
 		data->token[data->j].quote = 2;
 		data->i++;
@@ -37,20 +47,17 @@ void	operator(t_token_data *data, char *rl)
 	{
 		data->str[data->str_i] = '\0';
 		data->token[data->j++].str = ft_strdup(data->str);
-//		printf("Token: %s\n", data->str);
 		data->str_i = 0;
 	}
 	if ((data->c == '>' && rl[data->i + 1] == '>')
 		|| (data->c == '<' && rl[data->i + 1] == '<'))
 	{
 		token_operator(&data->token[data->j++], data->c, rl[data->i + 1]);
-//		printf("operator: %c%c\n", data->c, rl[data->i + 1]);
 		data->i++;
 	}
 	else
 	{
 		token_operator(&data->token[data->j++], data->c, '\0');
-//		printf("operator: %c\n", data->c);
 	}
 }
 
@@ -62,7 +69,6 @@ int	out_quotes(t_token_data *data, char *rl)
 		{
 			data->str[data->str_i] = '\0';
 			data->token[data->j++].str = ft_strdup(data->str);
-//			printf("Token: %s\n", data->str);
 			data->str_i = 0;
 		}
 		data->i++;
@@ -84,7 +90,6 @@ void	str_index(t_token_data *data)
 	{
 		data->str[data->str_i] = '\0';
 		data->token[data->j++].str = ft_strdup(data->str);
-//		printf("Token: %s\n", data->str);
 	}
 }
 
@@ -97,7 +102,7 @@ void	token(char *rl, char **envp)
 	while (rl[data.i])
 	{
 		data.c = rl[data.i];
-		if (in_quote(&data))
+		if (in_quote(&data, rl[data.i + 1]))
 			continue ;
 		if (!data.in_quotes && !data.in_double_quotes)
 		{
