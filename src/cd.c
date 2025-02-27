@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/26 13:06:10 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:40:19 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -48,7 +48,13 @@ static char	*new_path(t_shell *shell, char *dest)
 	else if (ft_strncmp(dest, "..", 2) == 0)
 		newpath = go_back();
 	else if (ft_strncmp(dest, "-", 1) == 0)
-		newpath = shell->prev_dir;
+	{
+		if (!shell->prev_dir)
+			newpath = getcwd(NULL, 0);
+		else
+			newpath = shell->prev_dir;
+		printf("%s\n", newpath);
+	}
 	else
 		newpath = dest;
 	if (!newpath)
