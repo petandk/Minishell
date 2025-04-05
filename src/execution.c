@@ -6,23 +6,38 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 15:21:53 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/01 13:23:12 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void free_comand(t_comand_data *comand, int num_comands)
+void	free_string_array(char **array, int count)
 {
-	int i;
-	int j;
- 
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (i < count && array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void	free_comand(t_comand_data *comand, int num_comands)
+{
+	int	i;
+	int	j;
+
 	i = 0;
 	if (!comand)
-		return;
+		return ;
 	while (i < num_comands)
 	{
-		j = 0;	
+		j = 0;
 		while (comand[i].comand && comand[i].comand[j])
 		{
 			free(comand[i].comand[j]);
@@ -30,130 +45,24 @@ void free_comand(t_comand_data *comand, int num_comands)
 		}
 		free(comand[i].comand);
 		free(comand[i].quote);
-		free(comand[i].in_file);
-		free(comand[i].out_file);
+		free_string_array(comand[i].in_file, comand[i].in_count);
+		free_string_array(comand[i].out_file, comand[i].out_count);
 		i++;
 	}
 	free(comand);
 }
 
-int    execution(t_token *token, int size_token, char  **envp)
+int	execution(t_token *token, int size_token, char **envp)
 {
-	int				i;
-	int				j;
-	int				pipefd[2];
-	pid_t			pid;
-	int 			fd_in;
-	int				fd;
-	char			**args;
 	t_comand_data	*comand;
+	int				num_comands;
 
-	args = NULL;
-	i = 0;
-	fd_in = 0;
-	fd = 0;
-	int num_comands = prepare_to_execute(&comand, token, size_token);
+	num_comands = prepare_to_execute(&comand, token, size_token);
+	if (num_comands <= 0)
+		return (-1);
 	print_comands(comand, num_comands);
+	printf("_______________________________EXECUTION_______________________________\n");
+	execute_pipeline(comand, num_comands, envp);
 	free_comand(comand, num_comands);
-/*	while (i < size_token)
-	{
-		j = 0;
-		while (i + j < size_token && token[i + j].str && !token[i + j].pipe)
-			j++;
-		args = (char **)malloc((j + 1) * sizeof(char *));
-		args[j] = NULL;
-		j = 0;
-		while (j < size_token && token[i].str && !token[i].pipe)
-		{
-			args[j] = ft_strdup(token[i].str);
-			if (!args[j])
-			{
-				printf("error duplicacion de string");
-				free_args(args);
-				exit(1);
-			}
-			j++;
-			i++;
-		}
-		print_args(args);
-//------------------------------//
-		if (i < size_token && token[i].pipe)
-			pipe(pipefd);
-		pid = fork();
-		if (pid == 0)
-		{
-			if (fd_in != 0)
-			{
-				dup2(fd_in, 0);
-				close(fd_in);
-			}
-			if (i < size_token && token[i].pipe)
-			{
-				dup2(pipefd[1], 1);
-				close(pipefd[0]);
-				close(pipefd[1]);
-			}
-			if (i + 1 < size_token)
-			{
-				if (token[i].greater_than)
-				{
-					fd = open(token[i + 1].str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-					if (fd < 0)
-					{
-						printf("Error opening file");
-						exit (1);
-					}
-					dup2(fd, 1);
-					close (fd);
-					i++;
-				}
-				else if (token[i].double_greater)
-				{
-					fd = open(token[i + 1].str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-					if (fd < 0)
-					{
-						printf("Error opening file");
-						exit (1);
-					}
-					dup2(fd, 1);
-					close (fd);
-					i++;
-				}
-				else if (token[i].less_than)
-				{
-					fd = open(token[i + 1].str, O_RDONLY);
-					if (fd < 0)
-					{
-						printf("Error opening file");
-						exit (1);
-					}
-					dup2(fd, 0);
-					close (fd);
-					i++;
-				}
-				else if (token[i].double_less)
-				{
-					printf("WORK IN PROGRES\n");
-					i++;
-				}
-			}
-			execute_command(args, envp);
-			printf("execve error\n");
-			exit(1);
-		}
-		else 
-		{
-			waitpid(pid, NULL, 0);
-			free_args(args);
-			if (i < size_token && token[i].pipe)
-			{
-				close(pipefd[1]);
-				fd_in = pipefd[0];
-			}
-			else
-				fd_in = 0;
-		}
-		i++;
-	}*/
 	return (1);
 }

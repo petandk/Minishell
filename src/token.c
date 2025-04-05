@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 15:09:29 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/05 11:22:30 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	in_quote(t_token_data *data, char next)
 {
+	int  i;
+
 	if (data->c == '\'' && !data->in_double_quotes)
 	{
 		if (data->c == next)
@@ -23,6 +25,10 @@ int	in_quote(t_token_data *data, char next)
 		}
 		data->in_quotes = !data->in_quotes;
 		data->token[data->j].quote = 1;
+		if (data->in_quotes)
+			data->token[data->j].quote_start = data->i;
+		else
+			data->token[data->j].quote_end = data->i;
 		data->i++;
 		return (1);
 	}
@@ -34,6 +40,10 @@ int	in_quote(t_token_data *data, char next)
 			return (1);
 		}
 		data->in_double_quotes = !data->in_double_quotes;
+		if (data->in_double_quotes)
+			data->token[data->j].quote_start = data->i;
+		else	
+			data->token[data->j].quote_end = data->i;
 		data->token[data->j].quote = 2;
 		data->i++;
 		return (1);
@@ -74,7 +84,7 @@ int	out_quotes(t_token_data *data, char *rl)
 		data->i++;
 		return (1);
 	}
-	if (ft_strchr("<>|", data->c))
+	if (ft_strchr("<>|&", data->c))
 	{
 		operator(data, rl);
 		data->i++;

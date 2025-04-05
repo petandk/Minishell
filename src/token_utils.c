@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 14:06:43 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/04 12:24:19 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	token_operator(t_token *token, char c, char next)
 		token->greater_than = 1;
 	else if (c == '<')
 		token->less_than = 1;
+	else if (c == '&')
+		token->pipe = -1;
 	else if (c == '|')
 		token->pipe = 1;
 }

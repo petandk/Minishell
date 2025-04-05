@@ -6,8 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 16:47:45 by gpolo            ###   ########.fr       */
-/*   Updated: 2025/02/25 14:25:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +52,8 @@ typedef struct s_token
 	int		double_less;
 	int		pipe;
 	int		quote;
+	int		quote_start;
+	int 	quote_end;
 }			t_token;
 
 typedef struct s_token_data
@@ -76,13 +77,22 @@ typedef struct s_ind
 	int		size;
 }			t_ind;
 
+typedef struct s_quotes
+{
+	int quote;
+	int quote_start;
+	int	quote_end;
+}		t_quotes;
+
 typedef struct s_comand_data
 {
-	char	**comand;
-	char	*in_file;
-	char	*out_file;
-	int		*quote;
-}			t_comand_data;
+	char		**comand;
+	char		**in_file;
+	char		**out_file;
+	t_quotes	*quote;
+	int			in_count;
+	int			out_count;
+}				t_comand_data;
 
 typedef struct s_quote
 {
@@ -110,6 +120,13 @@ typedef struct	s_shell
 	char	*prev_dir;
 	t_env	*env;
 }	t_shell;
+
+typedef struct s_num_malloc
+{
+	int	*com;
+	int	*in;
+	int	*out;
+}	t_num_malloc;
 
 // reed_rl.c //
 
@@ -150,8 +167,11 @@ void	init_comand(t_comand_data *comand, int size);
 void	in_out_file(char **file,char *str);
 char	*init_str(char *c, t_token *token, int i, int size_token);
 
-//  token_utils_2.c //
+//  token_utils_3.c //
 
+void	init_int_out(t_comand_data *comand, int size_in, int size_out);
+int		check_in_out(int size_token, t_token *token);
+void	in_out_size(t_comand_data *comand, t_ind ind, int size_token, t_token *token);
 int		chek_token(t_token *token);
 int		chek_double(char a, char b, int  *i);
 
@@ -166,6 +186,25 @@ t_comand_data   *token_split(t_token *token, int size_token);
 // prepare_to_execute.c //
 
 int		prepare_to_execute(t_comand_data **comand, t_token *token, int size_token);
+
+// the_files.c //
+
+int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand);
+
+// execute_pipeline.c //
+
+void	execute_pipeline(t_comand_data *commands, int cmd_count, char **envp);
+
+// handle_redirections.c //
+
+void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count);
+
+//handle_redirections_utils.c//
+
+void    out_red(char *file);
+void    append(char *file);
+void    in_red(char *file);
+void    here_doc(char *file);
 
 // cd.c //
 

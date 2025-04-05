@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/25 14:28:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:51:01 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@ int select_type(char *rl, t_shell *shell)
 	if (!rl)
 		return (1);
 	else if (ft_strcmp(rl, "exit") == 0)
-		return (ft_exit(&shell), 1);
-	else if (ft_strncmp(rl, "echo", 4) == 0)
-		ft_echo(rl, 0);
+		return (1);
+//	else if (ft_strncmp(rl, "echo", 4) == 0)
+//		ft_echo(rl, 0);
+	else if (ft_strncmp(rl, "cd change",9) == 0)
+		ft_cd(shell, "src/tst/prua");
+	else if (ft_strncmp(rl, "cd -", 4) == 0)
+		ft_cd(shell, "-");
 	else if (ft_strncmp(rl, "cd", 2) == 0)
 		ft_cd(shell, rl);
 	else if (ft_strncmp(rl, "pwd", 3) == 0)
