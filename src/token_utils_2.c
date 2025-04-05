@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:15:13 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 10:53:42 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/05 10:41:44 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	init_others(t_comand_data *comand, int j, int size)
 	i = 0;
 	while (i < size)
 	{
-		comand[j].quote[i] = 0;
+		comand[j].quote[i].quote = 0;
+		comand[j].quote[i].quote_start = 0;
+		comand[j].quote[i].quote_end = 0;
 		comand[j].comand[i] = NULL;
 		i++;
 	}
@@ -88,6 +90,8 @@ int	count_comands(t_token *token, int size_token)
 	{
 		if (token[i].pipe)
 			count++;
+		if (token[i].pipe == -1)
+			return (-1);
 		i++;
 	}
 	return (count);

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/01/23 16:53:28 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/01 17:43:09 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,19 @@ void	execute_command(char **cmd, char **envp)
 		if (!path)
 		{
 			free_args(all_path);
-			return ;
+			printf("command not found\n");
+			exit (127);
 		}
 	}
 	else
 		path = cmd[0];
 	free_args(all_path);
 	execve(path, cmd, envp);
-	perror("Error");
+	printf("command not found\n");
+	exit (127);
 }
 
-
-void    ex_child(char *rl, char **envp)
+void	ex_child(char *rl, char **envp)
 {
 	char	**cmd1;
 
