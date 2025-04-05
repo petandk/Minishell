@@ -6,31 +6,11 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:12:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/26 14:30:46 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/05 14:27:24 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_strstr(const char *haystack, const char *needle)
-{
-	size_t	i;
-	size_t	j;
-
-	if (!*needle)
-		return ((char *) haystack);
-	i = 0;
-	while (haystack[i])
-	{
-		j = 0;
-		while (needle[j] && haystack[i + j] == needle[j])
-			j++;
-		if (!needle[j])
-			return ((char *) &haystack[i]);
-		i++;
-	}
-	return (NULL);
-}
 
 static size_t	ft_calculate_size(const char *str)
 {
@@ -94,4 +74,15 @@ char	*ft_replace(const char *str)
 		return (NULL);
 	ft_handle_string(str, result);
 	return (result);
+}
+
+void	clean_heredoc(t_heredoc *vars)
+{
+	if (!vars)
+		return ;
+	if (vars->helper)
+		free(vars->helper);
+	if (vars->line)
+		free(vars->line);
+	free(vars);
 }

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/05 11:02:26 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/05 14:45:41 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <termios.h>
 # include <termcap.h>
 # include <stddef.h>
+# include <errno.h>
 
 // COLORS //
 
@@ -181,11 +182,12 @@ void	clear_env_list(t_env **envlist);
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
-int	ft_export(t_env *envlist, char *arg);
+int		ft_export(t_env *envlist, char *arg);
 
 // utils.c //
 
-int	is_valid_name(char *name);
+int		is_valid_name(char *name);
+char	*ft_strstr(const char *haystack, const char *needle);
 
 // env.c //
 
@@ -203,7 +205,7 @@ int		ft_unset(t_env **envlist, char *name);
 
 // exit.c //
 
-void	ft_exit(t_shell **shell);
+void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //
 
@@ -211,8 +213,13 @@ t_list	*ft_heredoc(char *input);
 
 // heredoc_utils.c //
 
-char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_replace(const char *str);
+void	clean_heredoc(t_heredoc *vars);
+
+// heredoc_utils2.c //
+
+int		ft_split_count(char **splited);
+void	handle_heredoc_signal(int singum);
 
 // borrar.c //
 
