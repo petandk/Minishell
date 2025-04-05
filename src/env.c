@@ -6,13 +6,13 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/26 13:06:38 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/04 18:49:04 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_env	*clone_env_list(t_env *envlist)
+t_env	*clone_env_list(t_env *envlist)
 {
 	t_env	*copy;
 	t_env	*current;
@@ -34,20 +34,13 @@ static t_env	*clone_env_list(t_env *envlist)
 	return (copy);
 }
 
-void	ft_show_env(t_env	*envlist, int is_env)
+void	ft_show_env(t_env *envlist, int is_env)
 {
 	t_env	*current;
-	t_env	*sorted;
 
-	sorted = NULL;
-	if (is_env == 0)
-	{
-		sorted = clone_env_list(envlist);
-		sort_env_list(sorted);
-		current = sorted;
-	}
-	else
-		current = envlist;
+	if (!envlist)
+		return ;
+	current = envlist;
 	while (current)
 	{
 		if (is_env == 0)
@@ -56,8 +49,6 @@ void	ft_show_env(t_env	*envlist, int is_env)
 			printf("%s=%s\n", current->name, current->value);
 		current = current->next;
 	}
-	if (is_env == 0)
-		clear_env_list(&sorted);
 }
 
 void	ft_env(t_env *envlist)

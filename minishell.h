@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 16:25:14 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/05 11:02:26 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,16 +172,25 @@ void	env_lstadd_back(t_env **env, t_env *newenv);
 char	**free_split(char **result, size_t i);
 t_env	*create_env_list(char **envp);
 
+// export_utils2.c //
+
+t_env	*find_env_var(t_env *envlist, char *name);
+void	clear_env_list(t_env **envlist);
+
 // export.c //
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
-void	ft_show_env(t_env *envlist, int is_env);
-void	ft_export(t_env *envlist, char *arg);
-void	clear_env_list(t_env **envlist);
+int	ft_export(t_env *envlist, char *arg);
+
+// utils.c //
+
+int	is_valid_name(char *name);
 
 // env.c //
 
+t_env	*clone_env_list(t_env *envlist);
+void	ft_show_env(t_env *envlist, int is_env);
 void	ft_env(t_env *envlist);
 
 // split_first.c //
@@ -190,7 +199,7 @@ char	**split_first(char const *s, char c);
 
 // unset.c //
 
-int		ft_unset(t_env *envlist, char *name);
+int		ft_unset(t_env **envlist, char *name);
 
 // exit.c //
 

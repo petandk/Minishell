@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:58:58 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/27 18:23:35 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/04 18:39:27 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	**ft_fill_matrix(const char *s, char c, char **matrix)
 			return (ft_free(matrix, 1));
 	}
 	else
-		matrix[1] == NULL;
+		matrix[1] = NULL;
 	return (matrix);
 }
 

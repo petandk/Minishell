@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/27 17:33:57 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/05 10:52:17 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,42 @@
 
 int select_type(char *rl, t_shell **shell)
 {
-	t_list *list;
+	t_list	*list;
+	char	*arg;
 
 	if (!rl)
 		return (1);
 	else if (ft_strcmp(rl, "exit") == 0)
 		return (ft_exit(shell), 1);
 	else if (ft_strncmp(rl, "echo", 4) == 0)
-		ft_echo(rl, 0);
+	{
+		if (ft_strncmp(rl + 4, " -n", 3) == 0)
+			ft_echo(rl, 1);
+		else
+			ft_echo(rl, 0);
+	}
 	else if (ft_strncmp(rl, "cd", 2) == 0)
-		ft_cd(*shell, rl);
+		ft_cd(*shell, rl + 3);
 	else if (ft_strncmp(rl, "pwd", 3) == 0)
 		ft_pwd();
-	else if (ft_strncmp(rl, "export test", 11) == 0)
-		ft_export((*shell)->env, "test=testingexport");
 	else if (ft_strncmp(rl, "export", 6) == 0)
-		ft_export((*shell)->env, NULL);
+	{
+		arg = rl + 6;
+		while (*arg && ft_isspace(*arg))
+			arg++;
+		if (*arg)
+			ft_export(&(*shell)->env, arg);
+		else
+			ft_export(&(*shell)->env, NULL);
+	}
 	else if (ft_strncmp(rl, "unset", 5) == 0)
-		ft_unset((*shell)->env, "USER");
+	{
+		arg = rl + 5;
+		while (*arg && ft_isspace(*arg))
+			arg++;
+		if (*arg)
+			ft_unset(&(*shell)->env, arg);
+	}
 	else if (ft_strncmp(rl, "env", 3) == 0)
 		ft_env((*shell)->env);
 	else if (ft_strstr(rl, "<<") != NULL)
