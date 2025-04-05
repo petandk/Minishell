@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 16:31:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/21 17:54:51 by rmanzana         ###   ########.fr       */
-/*   Updated: 2025/02/05 15:06:51 by rmanzana         ###   ########.fr       */
+/*   Created: 2025/02/19 12:56:33 by rmanzana          #+#    #+#             */
+/*   Updated: 2025/02/19 15:56:06 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char *msg, int is_n)
+void	ft_exit(t_shell **shell)
 {
-	msg += 5;
-	while (*msg)
-	{
-		write(1, msg, 1);
-		msg++;
-	}
-	if (!is_n)
-		write(1, "\n", 1);
+	if (!shell || !*shell)
+		return ;
+	free((*shell)->prev_dir);
+	clear_env_list(&((*shell)->env));
+	free(*shell);
 }
-/*
-int	main(void)
-{
-	ft_echo("simulating -n", 1);
-	ft_echo("simulating no -n", 0);
-	return (0);
-}
-*/

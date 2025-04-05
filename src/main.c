@@ -7,13 +7,12 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
 /*   Updated: 2025/04/01 16:51:01 by gpolo            ###   ########.fr       */
-/*   Updated: 2025/02/05 20:16:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int select_type(char *rl, char **envp, t_shell *shell)
+int select_type(char *rl, t_shell *shell)
 {
 	if (!rl)
 		return (1);
@@ -26,11 +25,17 @@ int select_type(char *rl, char **envp, t_shell *shell)
 	else if (ft_strncmp(rl, "cd -", 4) == 0)
 		ft_cd(shell, "-");
 	else if (ft_strncmp(rl, "cd", 2) == 0)
-		ft_cd(shell, "");
+		ft_cd(shell, rl);
 	else if (ft_strncmp(rl, "pwd", 3) == 0)
 		ft_pwd();
+	else if (ft_strncmp(rl, "export test", 11) == 0)
+		ft_export(shell->env, "test=testingexport");
 	else if (ft_strncmp(rl, "export", 6) == 0)
-		ft_export(shell->env);
+		ft_export(shell->env, NULL);
+	else if (ft_strncmp(rl, "unset", 5) == 0)
+		ft_unset(shell->env, "USER");
+	else if (ft_strncmp(rl, "env", 3) == 0)
+		ft_env(shell->env);
 	else if (*rl)
 	{
 		token(rl, envp);
@@ -54,11 +59,9 @@ int	main(int argc, char **argv, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-		if (select_type(rl, envp, shell))
+		if (select_type(rl, shell))
 		{
 			free (rl);
-			free(shell->prev_dir);
-			free(shell);
 			break ;	
 		}
 		free (rl);
