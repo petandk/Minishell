@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/05 15:01:55 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:05:44 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,11 @@ int	ft_split_count(char **splited)
 	return (i);
 }
 
-void	handle_heredoc_signal(int signum)
+void	control_d_error(char *delimiter)
 {
-	struct termios	term;
-	struct termios	old_term;
+	ft_putstr_fd("minishell: warning: here-document ", 2);
+	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
 
-	if (signum == SIGINT)
-	{
-		tcgetattr(STDIN_FILENO, &old_term);
-		term = old_term;
-		term.c_lflag &= ~(ECHOCTL);
-		tcsetattr(STDIN_FILENO, TCSANOW, &term);
-		write(STDOUT_FILENO, "\n", 1);
-		errno = EINTR;
-		tcsetattr(STDIN_FILENO, TCSANOW, &old_term);
-	}
 }

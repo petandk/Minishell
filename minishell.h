@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/05 14:45:41 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:49:48 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +220,10 @@ void	clean_heredoc(t_heredoc *vars);
 
 int		ft_split_count(char **splited);
 void	handle_heredoc_signal(int singum);
+void	control_d_error(char *delimiter);
 
 // borrar.c //
 
 void	print_heredoc(t_list *list);
 
-#endif		
+#endif
