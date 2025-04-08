@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:15 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/05 13:05:12 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:05:10 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	return (NULL);
 }
 
-
+int	malloc_test(void *str)
+{
+	if (!str)
+	{
+		perror("Error in Malloc");
+		return (0);
+	}
+	return (1);
+}

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 16:26:57 by gpolo             #+#    #+#             */
-/*   Updated: 2024/06/18 12:25:07 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/02/25 12:25:55 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 
 	c = 0;
 	if (!dest && !src)
-		return (0);
+		return (NULL);
 	while (c < n)
 	{
 		((unsigned char *) dest)[c] = ((unsigned char *) src)[c];

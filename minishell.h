@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/07 21:03:52 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:02:42 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ typedef struct s_token
 	int		double_less;
 	int		pipe;
 	int		quote;
-}	t_token;
+	int		quote_start;
+	int 	quote_end;
+}			t_token;
 
 typedef struct s_token_data
 {
@@ -68,13 +70,37 @@ typedef struct s_token_data
 	t_token	*token;
 }	t_token_data;
 
+typedef struct s_ind
+{
+	int		i;
+	int		j;
+	int		k;
+	int		size;
+}			t_ind;
+
+typedef struct s_quote_tracker
+{
+	int	open_pos;
+	int	current_len;
+	int	active;
+}		t_quote_tracker;
+
+typedef struct s_quotes
+{
+	int quote;
+	int quote_start;
+	int	quote_end;
+}		t_quotes;
+
 typedef struct s_comand_data
 {
-	char	**comand;
-	char	*in_file;
-	char	*out_file;
-	int		*quote;
-}			t_comand_data;
+	char		**comand;
+	char		**in_file;
+	char		**out_file;
+	t_quotes	*quote;
+	int			in_count;
+	int			out_count;
+}				t_comand_data;
 
 typedef struct s_quote
 {
@@ -110,6 +136,13 @@ typedef struct s_heredoc
 	int		num_brackets;
 }	t_heredoc;
 
+typedef struct s_num_malloc
+{
+	int	*com;
+	int	*in;
+	int	*out;
+}	t_num_malloc;
+
 // reed_rl.c //
 
 void	reed_rl(char *rl, char **envp);
@@ -121,11 +154,6 @@ void	ex_child(char *rl, char **envp);
 int		find_path_index(char **envp);
 char	*find_path_access(char **all_path, char **cmd);
 void	execute_command(char **cmd, char **envp);
-
-// forks.c //
-
-void	child(t_fork_data *fkd, int i, char **commands, char **envp);
-void	father(t_fork_data *fkd, int i, char **commands);
 
 // token.c //
 
@@ -141,6 +169,30 @@ void	free_token(t_token **token, int size);
 void	print_token_array(t_token *tokens, int size);
 int		init_all(t_token_data *data, char *rl);
 
+//  token_utils_2.c //
+
+int		count_comands(t_token *token, int size_token);
+void	init_others(t_comand_data *comand, int j, int size);
+void	init_comand(t_comand_data *comand, int size);
+void	in_out_file(char **file,char *str);
+char	*init_str(char *c, t_token *token, int i, int size_token);
+
+//  token_utils_3.c //
+
+void	init_int_out(t_comand_data *comand, int size_in, int size_out);
+int		check_in_out(int size_token, t_token *token);
+void	in_out_size(t_comand_data *comand, t_ind ind, int size_token, t_token *token);
+int		chek_token(t_token *token);
+int		chek_double(char a, char b, int  *i);
+
+
+//  token_utils_4.c //
+
+void	free_t(char *str, t_token **token, int size);
+void	init_quote_tracker(t_quote_tracker *qt);
+void	quotes(t_token_data *data, t_quote_tracker *qt);
+void	d_quotes(t_token_data *data, t_quote_tracker *qt);
+
 // count_tokens.c //
 
 int		count_tokens(char *rl);
@@ -152,6 +204,25 @@ t_comand_data	*token_split(t_token *token, int size_token);
 // prepare_to_execute.c //
 
 int		prepare_to_execute(t_comand_data **comand, t_token *token, int size_token);
+
+// the_files.c //
+
+int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand);
+
+// execute_pipeline.c //
+
+void	execute_pipeline(t_comand_data *commands, int cmd_count, char **envp);
+
+// handle_redirections.c //
+
+void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count);
+
+//handle_redirections_utils.c//
+
+void    out_red(char *file);
+void    append(char *file);
+void    in_red(char *file);
+void    here_doc(char *file);
 
 // cd.c //
 
@@ -188,6 +259,16 @@ int		ft_export(t_env *envlist, char *arg);
 
 int		is_valid_name(char *name);
 char	*ft_strstr(const char *haystack, const char *needle);
+
+// utils.c //
+
+int		malloc_test(void *str);
+
+// pirnt_things.c //
+
+void	print_token_array(t_token *tokens, int size);
+void	print_args(char **args);
+void	print_comands(t_comand_data *comand, int num_comands);
 
 // env.c //
 
@@ -226,4 +307,5 @@ void	control_d_error(char *delimiter);
 
 void	print_heredoc(t_list *list);
 
-#endif
+
+#endif		

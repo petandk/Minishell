@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:34:48 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/23 15:16:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/03/28 11:39:15 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
 {
 	if (rl[*i] == '\'' && !quote->in_double)
 	{
+		if (chek_double(rl[*i], rl[*i + 1], i))
+			return (1);
 		quote->in_single = !quote->in_single;
 		if (quote->in_single == 0)
 			*tokens += 1;
@@ -24,6 +26,8 @@ int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
 	}
 	else if (rl[*i] == '\"' && !quote->in_single)
 	{
+		if (chek_double(rl[*i], rl[*i + 1], i))
+			return (1);
 		quote->in_double = !quote->in_double;
 		if (quote->in_double == 0)
 			*tokens += 1;
@@ -33,7 +37,7 @@ int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
 	return (0);
 }
 
-int	quak(int current,int next)
+int	quak(int current, int next)
 {
 	if ((current == '>' && next == '>') || (current == '<' && next == '<'))
 		return (1);
@@ -94,6 +98,5 @@ int	count_tokens(char *rl)
 		else
 			i++;
 	}
-//	printf("tokens -> %d\n", tokens);
 	return (tokens);
 }
