@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 13:13:45 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:43:07 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,15 +150,14 @@ void	reed_rl(char *rl, char **envp);
 // ex_child.c //
 
 void	free_args(char **args);
-void	ex_child(char *rl, char **envp);
-int		find_path_index(char **envp);
+char	*find_path_index(t_env *envp);
 char	*find_path_access(char **all_path, char **cmd);
-void	execute_command(char **cmd, char **envp);
+void	execute_command(char **cmd, t_env *env, char **envp);
 
 // token.c //
 
-void	token(char *rl, char **envp);
-int		execution(t_token *token, int size_token, char **envp);
+void	token(char *rl, t_env *env, char **envp);
+int		execution(t_token *token, int size_token, t_env *env, char **envp);
 
 //  token_utils.c //
 
@@ -211,18 +210,22 @@ int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand
 
 // execute_pipeline.c //
 
-void	execute_pipeline(t_comand_data *commands, int cmd_count, char **envp);
+void	execute_pipeline(t_comand_data *commands, int cmd_count, t_env *env, char **envp);
 
 // handle_redirections.c //
 
 void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count);
 
-//handle_redirections_utils.c//
+// handle_redirections_utils.c //
 
 void    out_red(char *file);
 void    append(char *file);
 void    in_red(char *file);
 void    here_doc(char *file);
+
+// exapncion_var.c //
+
+void    exapncion_var(char **cmd, int cmd_c, t_env env);
 
 // cd.c //
 

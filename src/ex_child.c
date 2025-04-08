@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/01 17:43:09 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/08 14:43:02 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,12 @@ void	free_args(char **args)
 	free(args);
 }
 
-int	find_path_index(char **envp)
+char	*find_path_index(t_env *envp)
 {
-	int		i;
-	char	*str;
-	int		j;
+	char	*e;
 
-	i = 0;
-	str = "PATH=";
-	while (envp[i])
-	{
-		j = 0;
-		while (envp[i][j] == str[j] && str[j] != '\0')
-			j++;
-		if (str[j] == '\0')
-			return (i);
-		i++;
-	}
-	return (-1);
+	e = ft_strdup(find_env_var(envp, "PATH")->value);
+	return (e);
 }
 
 char	*find_path_access(char **all_path, char **cmd)
@@ -70,20 +58,21 @@ char	*find_path_access(char **all_path, char **cmd)
 	return (path);
 }
 
-void	execute_command(char **cmd, char **envp)
+void	execute_command(char **cmd, t_env *env, char **envp)
 {
-	int		i;
+	char	*str;
 	char	**all_path;
 	char	*path;
 
-	i = find_path_index(envp);
-	all_path = ft_split(envp[i] + 5, ':');
+	str = find_path_index(env);
+	all_path = ft_split(str, ':');
 	if (cmd && cmd[0] && cmd [0][0] != '/')
 	{
 		path = find_path_access(all_path, cmd);
 		if (!path)
 		{
 			free_args(all_path);
+			free(str);
 			printf("command not found\n");
 			exit (127);
 		}
@@ -91,18 +80,9 @@ void	execute_command(char **cmd, char **envp)
 	else
 		path = cmd[0];
 	free_args(all_path);
+	free(str);
+//	bultings();
 	execve(path, cmd, envp);
 	printf("command not found\n");
 	exit (127);
-}
-
-void	ex_child(char *rl, char **envp)
-{
-	char	**cmd1;
-
-	cmd1 = ft_split(rl, ' ');
-	if (!cmd1)
-		exit (1);
-	execute_command(cmd1, envp);
-	exit (1);
 }
