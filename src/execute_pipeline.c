@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 11:42:44 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/08 14:45:26 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count)
 	*prev_fd = pipefd[0];
 }
 
-void	execute_pipeline(t_comand_data *cmd, int cmd_count, char **envp)
+void	execute_pipeline(t_comand_data *cmd, int cmd_count,
+			t_env *env, char **envp)
 {
 	t_fork_data	data;
 
@@ -65,7 +66,8 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count, char **envp)
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(cmd[data.i].in_file, cmd[data.i].out_file,
 				cmd[data.i].in_count, cmd[data.i].out_count);
-			execute_command(cmd[data.i].comand, envp);
+//			exapncion_var(&cmd[data.i].comand, cmd_count, env)
+			execute_command(cmd[data.i].comand, env, envp);
 		}
 		else
 		{
