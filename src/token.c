@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 13:04:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:11:09 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static void	finalize_token(t_token_data *data, t_quote_tracker *qt)
 	}
 }
 
-void	token(char *rl)
+void	token(char *rl, char **envp)
 {
 	t_token_data	data;
 	t_quote_tracker	qt;

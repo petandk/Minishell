@@ -6,13 +6,13 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 13:04:12 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:12:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int select_type(char *rl, t_shell **shell)
+int select_type(char *rl, t_shell **shell, char **envp)
 {
 	t_list	*list;
 	char	*arg;
@@ -60,7 +60,7 @@ int select_type(char *rl, t_shell **shell)
 	}
 	else if (*rl)
 	{
-		token(rl);
+		token(rl, envp);
 		add_history(rl);
 	}
 	return (0);
@@ -83,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-		if (select_type(rl, &shell))
+		if (select_type(rl, &shell, envp))
 		{
 			free (rl);
 			break ;	
