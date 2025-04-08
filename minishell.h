@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/02/05 20:32:21 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:24:44 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ typedef struct s_ind
 	int		size;
 }			t_ind;
 
+typedef struct s_quote_tracker
+{
+	int	open_pos;
+	int	current_len;
+	int	active;
+}		t_quote_tracker;
+
 typedef struct s_quotes
 {
 	int quote;
@@ -140,11 +147,6 @@ int		find_path_index(char **envp);
 char	*find_path_access(char **all_path, char **cmd);
 void	execute_command(char **cmd, char **envp);
 
-// forks.c //
-
-void	child(t_fork_data *fkd, int i, char **commands, char **envp);
-void	father(t_fork_data *fkd, int i, char **commands);
-
 // token.c //
 
 void    token(char *rl, char **envp);
@@ -174,6 +176,14 @@ int		check_in_out(int size_token, t_token *token);
 void	in_out_size(t_comand_data *comand, t_ind ind, int size_token, t_token *token);
 int		chek_token(t_token *token);
 int		chek_double(char a, char b, int  *i);
+
+
+//  token_utils_4.c //
+
+void	free_t(char *str, t_token **token, int size);
+void	init_quote_tracker(t_quote_tracker *qt);
+void	quotes(t_token_data *data, t_quote_tracker *qt);
+void	d_quotes(t_token_data *data, t_quote_tracker *qt);
 
 // count_tokens.c //
 

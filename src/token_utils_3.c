@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 13:01:16 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/01 17:15:22 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/08 11:51:54 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	check_in_out(int size_token, t_token *token)
 	{
 		if (!token[i].str && i == (size_token - 1))
 			return (0);
-		else if ((!token[i].str && !token[i].pipe) && ((!token[i + 1].str) || (token[i + 1].pipe)))
+		else if ((!token[i].str && !token[i].pipe) && ((!token[i + 1].str)
+				|| (token[i + 1].pipe)))
 			return (0);
 		i++;
 	}
