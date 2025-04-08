@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/07 21:50:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:21:29 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static int	process_line(char *line, char *delimiter, int pipe_fd)
 static void sigint_handler(int sig)
 {
 	(void)sig;
-	write(STDOUT_FILENO, "^C\n", 3);
 	exit(130);
 }
 
@@ -123,23 +122,23 @@ static t_list	*handle_heredoc(char *delimiter)
 	{
 		close(pipe_fd[1]);
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == 130)
+		if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 		{
-			errno = EINTR;
-			close(pipe_fd[0]);
-			return (NULL);
-		}
-		if (!WIFSIGNALED(status))
 			lines = read_heredoc_pipe(pipe_fd[0]);
-		else
+			close(pipe_fd[0]);
+			return (lines);
+		}
+		printf("status is: %d\nwtermsig(status) is: %d\n and sigint is: %d\n", status, WTERMSIG(status), SIGINT);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		{
-			lines = NULL;
-			if (WTERMSIG(status) == SIGINT)
-				errno = EINTR;
+			write(STDOUT_FILENO, "^C\n", 3);
+			close(pipe_fd[0]);
+			errno = EINTR;
+			return (NULL);
 		}
 		close(pipe_fd[0]);
 	}
-	return (lines);
+	return (NULL);
 }
 
 static char	**ft_setup_heredoc(char *input, t_heredoc **here)
