@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/08 12:21:29 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:28:30 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,10 @@ static t_list	*handle_heredoc(char *delimiter)
 			close(pipe_fd[0]);
 			return (lines);
 		}
-		printf("status is: %d\nwtermsig(status) is: %d\n and sigint is: %d\n", status, WTERMSIG(status), SIGINT);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		//printf("wifsignaled(status) is: %d\nstatus is: %d\nwtermsig(status) is: %d\n and sigint is: %d\n",WIFSIGNALED(status), status, WTERMSIG(status), SIGINT);
+		if (!WIFSIGNALED(status) && WTERMSIG(status) == 0)
 		{
-			write(STDOUT_FILENO, "^C\n", 3);
+			write(STDOUT_FILENO, "> ^C\n", 5);
 			close(pipe_fd[0]);
 			errno = EINTR;
 			return (NULL);
