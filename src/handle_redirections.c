@@ -6,15 +6,15 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/04 11:40:04 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/08 11:46:30 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void in_files(char **in_file, int in_count)
+static void	in_files(char **in_file, int in_count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < in_count)
@@ -27,9 +27,9 @@ static void in_files(char **in_file, int in_count)
 	}
 }
 
-static void out_files(char **out_file, int out_count)
+static void	out_files(char **out_file, int out_count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < out_count)
@@ -42,7 +42,8 @@ static void out_files(char **out_file, int out_count)
 	}
 }
 
-void	handle_redirections (char **in_file, char **out_file, int in_count, int out_count)
+void	handle_redirections(char **in_file, char **out_file,
+			int in_count, int out_count)
 {
 	if (in_file && in_count)
 		in_files(in_file, in_count);
