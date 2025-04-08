@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 12:24:44 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/08 13:02:42 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <termios.h>
 # include <termcap.h>
 # include <stddef.h>
+# include <errno.h>
 
 // COLORS //
 
@@ -48,7 +49,7 @@ typedef struct s_token
 	char	*str;
 	int		greater_than;
 	int		double_greater;
-	int 	less_than;
+	int		less_than;
 	int		double_less;
 	int		pipe;
 	int		quote;
@@ -62,12 +63,12 @@ typedef struct s_token_data
 	char	c;
 	int		i;
 	int		j;
-	int 	str_i;
-	int 	in_quotes;
-	int 	in_double_quotes;
+	int		str_i;
+	int		in_quotes;
+	int		in_double_quotes;
 	int		size_token;
 	t_token	*token;
-}			t_token_data;
+}	t_token_data;
 
 typedef struct s_ind
 {
@@ -122,11 +123,18 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct	s_shell
+typedef struct s_shell
 {
 	char	*prev_dir;
 	t_env	*env;
 }	t_shell;
+
+typedef struct s_heredoc
+{
+	char	*helper;
+	char	*line;
+	int		num_brackets;
+}	t_heredoc;
 
 typedef struct s_num_malloc
 {
@@ -149,7 +157,7 @@ void	execute_command(char **cmd, char **envp);
 
 // token.c //
 
-void    token(char *rl, char **envp);
+void	token(char *rl);
 int		execution(t_token *token, int size_token, char **envp);
 
 //  token_utils.c //
@@ -191,7 +199,7 @@ int		count_tokens(char *rl);
 
 // token_split.c //
 
-t_comand_data   *token_split(t_token *token, int size_token);
+t_comand_data	*token_split(t_token *token, int size_token);
 
 // prepare_to_execute.c //
 
@@ -233,16 +241,24 @@ void	ft_pwd(void);
 t_env	*env_lstnew(char *name, char *val);
 t_env	*env_lstlast(t_env	*env);
 void	env_lstadd_back(t_env **env, t_env *newenv);
-char	**	free_split(char **result, size_t i);
+char	**free_split(char **result, size_t i);
 t_env	*create_env_list(char **envp);
+
+// export_utils2.c //
+
+t_env	*find_env_var(t_env *envlist, char *name);
+void	clear_env_list(t_env **envlist);
 
 // export.c //
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
-void	ft_show_env(t_env *envlist,int is_env);
-void	ft_export(t_env *envlist, char *arg);
-void	clear_env_list(t_env **envlist);
+int		ft_export(t_env *envlist, char *arg);
+
+// utils.c //
+
+int		is_valid_name(char *name);
+char	*ft_strstr(const char *haystack, const char *needle);
 
 // utils.c //
 
@@ -256,6 +272,8 @@ void	print_comands(t_comand_data *comand, int num_comands);
 
 // env.c //
 
+t_env	*clone_env_list(t_env *envlist);
+void	ft_show_env(t_env *envlist, int is_env);
 void	ft_env(t_env *envlist);
 
 // split_first.c //
@@ -264,10 +282,30 @@ char	**split_first(char const *s, char c);
 
 // unset.c //
 
-int		ft_unset(t_env *envlist, char *name);
+int		ft_unset(t_env **envlist, char *name);
 
 // exit.c //
 
-void	ft_exit(t_shell **shell);
+void	ft_exit(t_shell **shell, int exit_code);
+
+// heredoc.c //
+
+t_list	*ft_heredoc(char *input);
+
+// heredoc_utils.c //
+
+char	*ft_replace(const char *str);
+void	clean_heredoc(t_heredoc *vars);
+
+// heredoc_utils2.c //
+
+int		ft_split_count(char **splited);
+void	handle_heredoc_signal(int singum);
+void	control_d_error(char *delimiter);
+
+// borrar.c //
+
+void	print_heredoc(t_list *list);
+
 
 #endif		

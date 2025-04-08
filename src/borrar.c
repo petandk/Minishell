@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   borrar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/19 12:56:33 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/05 12:55:52 by rmanzana         ###   ########.fr       */
+/*   Created: 2025/02/27 14:20:27 by rmanzana          #+#    #+#             */
+/*   Updated: 2025/02/27 14:40:30 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_shell **shell, int exit_code)
+void	print_heredoc(t_list *list)
 {
-	if (!shell || !*shell)
-		exit(exit_code);
-	if ((*shell)->prev_dir)
+	t_list	*current;
+
+	if (!list)
+		return ;
+	current = list;
+	while (current != NULL)
 	{
-		free((*shell)->prev_dir);
-		(*shell)->prev_dir = NULL;
+		printf("%s\n", (char *)current->content);
+		current = current->next;
 	}
-	clear_env_list(&((*shell)->env));
-	free(*shell);
-	*shell = NULL;
-	exit (exit_code);
 }

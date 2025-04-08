@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/15 11:26:21 by gpolo             #+#    #+#              #
-#    Updated: 2025/01/23 14:17:30 by gpolo            ###   ########.fr        #
+#    Updated: 2025/02/26 12:00:40 by rmanzana         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ AR							:= ar rcs
 
 RAN							:= ranlib
 
-all :						$(NAME)
+all :						$(NAME) $(BONUS)
 
 $(NAME) : 					$(OBJECTS) $(LIBS) Makefile
 							$(AR) $(NAME) $(OBJECTS)
