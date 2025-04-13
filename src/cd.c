@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/05 11:09:26 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/13 20:50:11 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -60,7 +60,6 @@ static char	*new_path(t_shell *shell, char *dest)
 			return (ft_putendl_fd("cd: OLDPWD not set", 2), NULL);
 		newpath = ft_strdup(shell->prev_dir);
 		ft_putendl_fd(newpath, 1);
-		free(newpath);
 	}
 	else
 		newpath = ft_strdup(dest);
@@ -119,10 +118,6 @@ void	ft_cd(t_shell *shell, char *dest)
 	update_pwd_env(shell->env);
 	free(shell->prev_dir);
 	shell->prev_dir = current;
-	if (ft_strncmp(dest, "..", 2) == 0
-		|| ft_strncmp(dest, "~", 1) == 0
-		|| ft_strncmp(dest, "", 1) == 0
-		|| ft_strncmp(dest, "-", 1) == 0)
-		free(newpath);
+	free(newpath);
 	return ;
 }

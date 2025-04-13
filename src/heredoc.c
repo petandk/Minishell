@@ -6,11 +6,12 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/08 16:28:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:36:50 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 static int	process_line(char *line, char *delimiter, int pipe_fd)
 {
@@ -24,10 +25,10 @@ static int	process_line(char *line, char *delimiter, int pipe_fd)
 	return (0);
 }
 
-
 static void sigint_handler(int sig)
 {
 	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
 	exit(130);
 }
 
@@ -89,6 +90,7 @@ static t_list *read_heredoc_pipe(int fd)
 {
 	char	*line;
 	t_list	*lines;
+	int		count = 0;
 
 	lines = NULL;
 	while(1)
@@ -97,6 +99,7 @@ static t_list *read_heredoc_pipe(int fd)
 		if (!line)
 			break ;
 		ft_lstadd_back(&lines, ft_lstnew(line));
+		count++;
 	}
 	return (lines);
 }
@@ -128,10 +131,8 @@ static t_list	*handle_heredoc(char *delimiter)
 			close(pipe_fd[0]);
 			return (lines);
 		}
-		//printf("wifsignaled(status) is: %d\nstatus is: %d\nwtermsig(status) is: %d\n and sigint is: %d\n",WIFSIGNALED(status), status, WTERMSIG(status), SIGINT);
-		if (!WIFSIGNALED(status) && WTERMSIG(status) == 0)
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		{
-			write(STDOUT_FILENO, "> ^C\n", 5);
 			close(pipe_fd[0]);
 			errno = EINTR;
 			return (NULL);

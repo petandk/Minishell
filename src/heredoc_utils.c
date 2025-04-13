@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:12:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/07 21:15:47 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:03:57 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static size_t	ft_calculate_size(const char *str)
 
 	if (!str)
 		return (0);
-	size = ft_strlen(str);
+	size = ft_strlen(str) + 1;
 	if (ft_strstr(str, " << "))
 		size -= 3;
 	if (ft_strstr(str, "<<"))

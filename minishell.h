@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:43:07 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/13 21:26:05 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,7 @@ t_env	*create_env_list(char **envp);
 
 // export_utils2.c //
 
+t_env	*create_basic_env(void);
 t_env	*find_env_var(t_env *envlist, char *name);
 void	clear_env_list(t_env **envlist);
 

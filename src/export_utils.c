@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/27 16:36:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:25:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_env	*create_env_list(char **envp)
 	char	**split_res;
 	t_env	*new_node;
 
+	if (!envp || !*envp)
+		return (create_basic_env());
 	envlist = NULL;
 	while (*envp)
 	{
