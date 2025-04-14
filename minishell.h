@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/13 21:26:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:55:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,9 +303,16 @@ void	clean_heredoc(t_heredoc *vars);
 
 // heredoc_utils2.c //
 
+void	child_process_heredoc(char	*delimiter, int pipe_fd);
+int		process_line(char *line, char *delimiter, int pipe_fd);
+void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
-void	handle_heredoc_signal(int singum);
 void	control_d_error(char *delimiter);
+
+// heredoc_utils3.c //
+
+char	*read_line_pipe(int fd);
+t_list	*read_heredoc_pipe(int fd);
 
 // borrar.c //
 
