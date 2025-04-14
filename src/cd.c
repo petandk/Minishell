@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/14 20:31:28 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/14 21:41:50 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -109,6 +109,7 @@ void	ft_cd(t_shell *shell, char *dest)
 		free(current);
 		return ;
 	}
+	update_oldpwd_env(shell->env, current);
 	update_pwd_env(shell->env);
 	free(shell->prev_dir);
 	shell->prev_dir = current;

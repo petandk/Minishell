@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/14 20:55:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/14 21:46:03 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,10 @@ void    exapncion_var(char **cmd, int cmd_c, t_env env);
 // cd.c //
 
 void	ft_cd(t_shell *shell, char *dest);
+
+// cd_utils.c //
+
+int	update_oldpwd_env(t_env *env, char *old_path);
 
 // echo.c //
 
