@@ -6,11 +6,35 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/04 17:54:13 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:26:53 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_env	*create_basic_env(void)
+{
+	t_env	*envlist;
+	t_env	*newnode;
+	char	*pwd;
+
+	envlist = NULL;
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+	{
+		newnode = env_lstnew("PWD", pwd);
+		if (newnode)
+			env_lstadd_back(&envlist, newnode);
+		free(pwd);
+	}
+	newnode = env_lstnew("SHLVL", "1");
+	if (newnode)
+		env_lstadd_back(&envlist, newnode);
+	newnode = env_lstnew("PATH", "/usr/local/bin:/usr/bin:/bin");
+	if (newnode)
+		env_lstadd_back(&envlist, newnode);
+	return (envlist);
+}
 
 t_env	*find_env_var(t_env *envlist, char *name)
 {

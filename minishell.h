@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:43:07 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/14 21:46:03 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,10 @@ void    exapncion_var(char **cmd, int cmd_c, t_env env);
 
 void	ft_cd(t_shell *shell, char *dest);
 
+// cd_utils.c //
+
+int	update_oldpwd_env(t_env *env, char *old_path);
+
 // echo.c //
 
 void	ft_echo(char *msg, int is_n);
@@ -249,6 +253,7 @@ t_env	*create_env_list(char **envp);
 
 // export_utils2.c //
 
+t_env	*create_basic_env(void);
 t_env	*find_env_var(t_env *envlist, char *name);
 void	clear_env_list(t_env **envlist);
 
@@ -302,9 +307,16 @@ void	clean_heredoc(t_heredoc *vars);
 
 // heredoc_utils2.c //
 
+void	child_process_heredoc(char	*delimiter, int pipe_fd);
+int		process_line(char *line, char *delimiter, int pipe_fd);
+void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
-void	handle_heredoc_signal(int singum);
 void	control_d_error(char *delimiter);
+
+// heredoc_utils3.c //
+
+char	*read_line_pipe(int fd);
+t_list	*read_heredoc_pipe(int fd);
 
 // borrar.c //
 

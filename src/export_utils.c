@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/02/27 16:36:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/14 21:12:07 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_env	*create_env_list(char **envp)
 	char	**split_res;
 	t_env	*new_node;
 
+	if (!envp || !*envp)
+		return (create_basic_env());
 	envlist = NULL;
 	while (*envp)
 	{
@@ -88,11 +90,7 @@ t_env	*create_env_list(char **envp)
 			return (free(split_res), clear_env_list(&envlist), NULL);
 		new_node = env_lstnew(split_res[0], split_res[1]);
 		if (!new_node)
-		{
-			free_split(split_res, -1);
-			clear_env_list(&envlist);
-			return (NULL);
-		}
+			return (free_split(split_res, -1), clear_env_list(&envlist), NULL);
 		env_lstadd_back(&envlist, new_node);
 		free_split(split_res, -1);
 		envp++;
