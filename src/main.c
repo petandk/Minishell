@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:06:57 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/15 16:13:28 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int select_type(char *rl, t_shell **shell, char **envp)
 {
 	t_list	*list;
-	char	*arg;
+	//char	*arg;
 
 	if (!rl)
 		return (1);
-	else if (ft_strcmp(rl, "exit") == 0)
+/*	else if (ft_strcmp(rl, "exit") == 0)
 		return (ft_exit(shell, 0), 1);
 	else if (ft_strncmp(rl, "echo", 4) == 0)
 	{
@@ -51,7 +51,7 @@ int select_type(char *rl, t_shell **shell, char **envp)
 			ft_unset(&(*shell)->env, arg);
 	}
 	else if (ft_strncmp(rl, "env", 3) == 0)
-		ft_env((*shell)->env);
+		ft_env((*shell)->env);*/
 	else if (ft_strstr(rl, "<<") != NULL)
 	{
 		list = ft_heredoc(rl);
@@ -60,7 +60,7 @@ int select_type(char *rl, t_shell **shell, char **envp)
 	}
 	else if (*rl)
 	{
-		token(rl, (*shell)->env, envp);
+		token(rl, *shell, envp);
 		add_history(rl);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:02:00 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/15 16:06:41 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	free_comand(t_comand_data *comand, int num_comands)
 	free(comand);
 }
 
-int	execution(t_token *token, int size_token, t_env *env, char **envp)
+int	execution(t_token *token, int size_token, t_shell *shell, char **envp)
 {
 	t_comand_data	*comand;
 	int				num_comands;
@@ -62,7 +62,7 @@ int	execution(t_token *token, int size_token, t_env *env, char **envp)
 		return (-1);
 	print_comands(comand, num_comands);
 	printf("___________________________EXECUTION___________________________\n");
-	execute_pipeline(comand, num_comands, env, envp);
+	execute_pipeline(comand, num_comands, shell, envp);
 	free_comand(comand, num_comands);
 	return (1);
 }

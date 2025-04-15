@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:45:26 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/15 16:36:43 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,15 @@ static void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count)
 }
 
 void	execute_pipeline(t_comand_data *cmd, int cmd_count,
-			t_env *env, char **envp)
+			t_shell *shell, char **envp)
 {
 	t_fork_data	data;
 
 	data.i = 0;
 	data.prev_fd = -1;
+	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
+		if (builtins(shell, cmd[0].comand))
+			return ;
 	while (data.i < cmd_count)
 	{
 		if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
@@ -67,7 +70,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			handle_redirections(cmd[data.i].in_file, cmd[data.i].out_file,
 				cmd[data.i].in_count, cmd[data.i].out_count);
 //			exapncion_var(&cmd[data.i].comand, cmd_count, env)
-			execute_command(cmd[data.i].comand, env, envp);
+			execute_command(cmd[data.i].comand, shell, envp);
 		}
 		else
 		{

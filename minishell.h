@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/14 21:46:03 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:16:06 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,12 @@ void	reed_rl(char *rl, char **envp);
 void	free_args(char **args);
 char	*find_path_index(t_env *envp);
 char	*find_path_access(char **all_path, char **cmd);
-void	execute_command(char **cmd, t_env *env, char **envp);
+void	execute_command(char **cmd, t_shell *shell, char **envp);
 
 // token.c //
 
-void	token(char *rl, t_env *env, char **envp);
-int		execution(t_token *token, int size_token, t_env *env, char **envp);
+void	token(char *rl, t_shell *shell, char **envp);
+int		execution(t_token *token, int size_token, t_shell *shell, char **envp);
 
 //  token_utils.c //
 
@@ -210,7 +210,7 @@ int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand
 
 // execute_pipeline.c //
 
-void	execute_pipeline(t_comand_data *commands, int cmd_count, t_env *env, char **envp);
+void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell, char **envp);
 
 // handle_redirections.c //
 
@@ -322,5 +322,8 @@ t_list	*read_heredoc_pipe(int fd);
 
 void	print_heredoc(t_list *list);
 
+// builtins.c //
+
+int		builtins(t_shell *shell, char **cmd);
 
 #endif		
