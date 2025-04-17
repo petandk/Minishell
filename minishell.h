@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/15 16:16:06 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:24:14 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,7 @@ void	clear_env_list(t_env **envlist);
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
+int		process_export(char *arg, char ***splitd, char **name, char **value, int is_env);
 int		ft_export(t_env *envlist, char *arg);
 
 // utils.c //
@@ -282,7 +283,7 @@ void	print_comands(t_comand_data *comand, int num_comands);
 
 t_env	*clone_env_list(t_env *envlist);
 void	ft_show_env(t_env *envlist, int is_env);
-void	ft_env(t_env *envlist);
+void	ft_env(t_env *envlist, char **args);
 
 // split_first.c //
 

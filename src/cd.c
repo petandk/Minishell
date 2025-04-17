@@ -6,21 +6,21 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/15 14:54:08 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/16 20:27:01 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*go_home(void)
+static char	*go_home(t_shell *shell)
 {
-	char	*home;
+	t_env	*home;
 
-	home = getenv("HOME");
-	if (home == NULL)
-		return (perror("cd:HOME not set"), NULL);
-	return (ft_strdup(home));
+	home = find_env_var(shell->env, "HOME");
+	if (!home)
+		return (ft_putendl_fd("minishell: cd: HOME not set", 2), NULL);
+	return (ft_strdup(home->value));
 }
 
 static char	*go_back(void)
@@ -50,8 +50,9 @@ static char	*new_path(t_shell *shell, char *dest)
 {
 	char	*newpath;
 
-	if ((ft_strncmp(dest, "", 1) == 0) || (ft_strncmp(dest, "~", 1) == 0))
-		newpath = go_home();
+	if ((!dest || ft_strncmp(dest, "", 1) == 0)
+		|| (ft_strncmp(dest, "~", 1) == 0))
+		newpath = go_home(shell);
 	else if (ft_strncmp(dest, "..", 2) == 0)
 		newpath = go_back();
 	else if (ft_strncmp(dest, "-", 1) == 0)
