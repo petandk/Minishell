@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:43:02 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/16 20:45:08 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ char	*find_path_access(char **all_path, char **cmd)
 	return (path);
 }
 
-void	execute_command(char **cmd, t_env *env, char **envp)
+static char	*get_command_path(t_shell *shell, char **cmd)
 {
 	char	*str;
 	char	**all_path;
 	char	*path;
 
-	str = find_path_index(env);
+	str = find_path_index(shell->env);
 	all_path = ft_split(str, ':');
 	if (cmd && cmd[0] && cmd [0][0] != '/')
 	{
@@ -81,8 +81,22 @@ void	execute_command(char **cmd, t_env *env, char **envp)
 		path = cmd[0];
 	free_args(all_path);
 	free(str);
-//	bultings();
-	execve(path, cmd, envp);
-	printf("command not found\n");
-	exit (127);
+	return (path);
+}
+
+void	execute_command(char **cmd, t_shell *shell, char **envp)
+{
+	char	*path;
+
+	if (!cmd || !cmd[0])
+		return ;
+	path = get_command_path(shell, cmd);
+	if (!builtins(shell, cmd))
+	{
+		execve(path, cmd, envp);
+		printf("command not found\n");
+		exit (127);
+	}
+	if (path != cmd[0])
+		free(path);
 }
