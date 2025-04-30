@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/16 21:24:14 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:20:04 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct s_shell
 {
 	char	*prev_dir;
 	t_env	*env;
+	int		exit_status;
 }	t_shell;
 
 typedef struct s_heredoc
@@ -214,14 +215,14 @@ void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell, ch
 
 // handle_redirections.c //
 
-void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count);
+void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count, t_shell *shell);
 
 // handle_redirections_utils.c //
 
 void    out_red(char *file);
 void    append(char *file);
 void    in_red(char *file);
-void    here_doc(char *file);
+void    here_doc(char *delimiter, t_shell *shell);
 
 // exapncion_var.c //
 
@@ -261,7 +262,7 @@ void	clear_env_list(t_env **envlist);
 
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
-int		process_export(char *arg, char ***splitd, char **name, char **value, int is_env);
+int		process_export(char *arg, char ***splitd, t_env *env_var, int is_env);
 int		ft_export(t_env *envlist, char *arg);
 
 // utils.c //
@@ -299,7 +300,8 @@ void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //
 
-t_list	*ft_heredoc(char *input);
+t_list	*handle_heredoc(char *delimiter, t_shell **shell);
+t_list	*ft_heredoc(char *input, t_shell **shell);
 
 // heredoc_utils.c //
 
@@ -310,7 +312,7 @@ void	clean_heredoc(t_heredoc *vars);
 
 void	child_process_heredoc(char	*delimiter, int pipe_fd);
 int		process_line(char *line, char *delimiter, int pipe_fd);
-void	sigint_handler(int sig);
+//void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
 void	control_d_error(char *delimiter);
 

@@ -6,11 +6,18 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/14 20:45:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:17:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	exit(130);
+}
 
 void	child_process_heredoc(char	*delimiter, int pipe_fd)
 {
@@ -45,13 +52,6 @@ int	process_line(char *line, char *delimiter, int pipe_fd)
 	write(pipe_fd, "\n", 1);
 	free(line);
 	return (0);
-}
-
-void	sigint_handler(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	exit(130);
 }
 
 int	ft_split_count(char **splited)

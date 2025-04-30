@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/15 16:36:43 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:43:12 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		{
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(cmd[data.i].in_file, cmd[data.i].out_file,
-				cmd[data.i].in_count, cmd[data.i].out_count);
+				cmd[data.i].in_count, cmd[data.i].out_count, shell);
 //			exapncion_var(&cmd[data.i].comand, cmd_count, env)
 			execute_command(cmd[data.i].comand, shell, envp);
 		}
