@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/30 16:32:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:36:56 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void	handle_redirections(char **in_file, char **out_file, int in_count, int out_
 void    out_red(char *file);
 void    append(char *file);
 void    in_red(char *file);
-void    here_doc(char *delimiter, t_shell *shell);
+void    here_doc(char **delimiters, t_shell *shell);
 
 // exapncion_var.c //
 
@@ -301,7 +301,7 @@ void	ft_exit(t_shell **shell, int exit_code);
 // heredoc.c //
 
 t_list	*handle_heredoc(char *delimiter, t_shell **shell);
-t_list	*ft_heredoc(char *input, t_shell **shell);
+t_list	*ft_heredoc(char **input, t_shell **shell);
 
 // heredoc_utils.c //
 
@@ -312,7 +312,7 @@ void	clean_heredoc(t_heredoc *vars);
 
 void	child_process_heredoc(char	*delimiter, int pipe_fd);
 int		process_line(char *line, char *delimiter, int pipe_fd);
-//void	sigint_handler(int sig);
+void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
 void	control_d_error(char *delimiter);
 
@@ -320,10 +320,6 @@ void	control_d_error(char *delimiter);
 
 char	*read_line_pipe(int fd);
 t_list	*read_heredoc_pipe(int fd);
-
-// borrar.c //
-
-void	print_heredoc(t_list *list);
 
 // builtins.c //
 
