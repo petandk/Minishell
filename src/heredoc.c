@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/01 17:55:11 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:53:20 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		close(pipe_fd[0]);
+		errno = EINTR;
 		return (NULL);
 	}
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
@@ -62,6 +63,8 @@ t_list	*handle_heredoc(char *delimiter, t_shell **shell)
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		child_process_heredoc(delimiter, pipe_fd[1]);
 	}
 	result = parent_process_heredoc(pipe_fd, pid, shell);
@@ -95,33 +98,35 @@ static t_list	*ft_hdc_helper(char **splited,
 		int num_brackets, t_shell **shell)
 {
 	t_list	*lines;
-	t_list	*last_lines;
+	t_list	*result;
 	int		i;
 	int		old_errno;
 
 	lines = NULL;
-	last_lines = NULL;
-	i = 1;
-	errno = 0;
+	result = NULL;
+	i = 0;
 	old_errno = errno;
 	while (i <= num_brackets)
 	{
-		if (lines && i < num_brackets)
-			ft_lstclear(&lines, free);
-		else if (lines)
-			last_lines = lines;
-		lines = handle_heredoc(splited[i] + 1, shell);
-		if (!lines && errno == EINTR)
-			break ;
+		if (splited[i] &&splited[i][0] == '_')
+		{
+			lines = handle_heredoc(splited[i] + 1, shell);
+			if (!lines && errno == EINTR)
+			{
+				errno = EINTR;
+				break ;
+			}
+			if (i == num_brackets)
+				result = lines;
+			else if (lines)
+				ft_lstclear(&lines, free);
+			lines = NULL;
+		}
 		i++;
 	}
-	if (errno == 0)
-	{
+	if (errno != EINTR)
 		errno = old_errno;
-		if (last_lines)
-			return (last_lines);
-	}
-	return (lines);
+	return (result);
 }
 
 t_list	*ft_heredoc(char **input, t_shell **shell)
@@ -130,7 +135,7 @@ t_list	*ft_heredoc(char **input, t_shell **shell)
 	int			num_brackets;
 	void		(*old_sig[2])(int);
 	int			old_errno;
-
+	
 	lines = NULL;
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT, SIG_IGN);

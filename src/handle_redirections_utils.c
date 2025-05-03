@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/01 13:29:44 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/03 16:53:09 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	here_doc(char **delimiters, t_shell *shell)
 	t_list	*lines;
 	int		pipefd[2];
 	t_list	*current;
-
+	
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe error");

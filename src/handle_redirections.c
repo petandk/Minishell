@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/01 12:12:14 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:56:19 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,11 @@
 
 static void	in_files(char **in_file, int in_count, t_shell *shell)
 {
-	int	i;
-
-	i = 0;
-	while (i < in_count)
-	{
-		if (in_file[i][0] == '_')
-			here_doc(in_file, shell);
-		else
-			in_red(in_file[i] + 1);
-		i++;
-	}
+	(void)in_count;
+	if (in_file && in_file[0][0] == '_')
+		here_doc(in_file, shell);
+	else
+		in_red(in_file[0] + 1);
 }
 
 static void	out_files(char **out_file, int out_count)
