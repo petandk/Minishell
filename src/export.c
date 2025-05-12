@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/16 21:24:45 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:41:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	sort_env_list(t_env *envlist)
 	}
 }
 
-int	process_export(char *arg, char ***splitd, char **name, char **value, int is_env)
+int	process_export(char *arg, char ***splitd,
+		t_env *env_var, int is_env)
 {
 	*splitd = split_first(arg, '=');
 	if (!*splitd || !*splitd[0])
@@ -61,18 +62,18 @@ int	process_export(char *arg, char ***splitd, char **name, char **value, int is_
 			free_split(*splitd, -1);
 		return (1);
 	}
-	*name = (*splitd)[0];
+	env_var->name = (*splitd)[0];
 	if ((*splitd)[1])
-		*value = (*splitd)[1];
+		env_var->value = (*splitd)[1];
 	else
-		*value = "";
-	if (!is_valid_name(*name))
+		env_var->value = "";
+	if (!is_valid_name(env_var->name))
 	{
 		if (is_env)
 			ft_putstr_fd("env: ", 2);
 		else
 			ft_putstr_fd("export: ", 2);
-		ft_putstr_fd(*name, 2);
+		ft_putstr_fd(env_var->name, 2);
 		ft_putendl_fd(": not a valid identifier", 2);
 		free_split(*splitd, -1);
 		return (1);
@@ -105,11 +106,11 @@ int	update_or_create_var(t_env **envlist, char *name, char *value)
 int	ft_export(t_env *envlist, char *arg)
 {
 	char	**splitd;
-	char	*name;
-	char	*value;
+	t_env	env_var;
 	int		ret;
 	t_env	*sorted;
 
+	env_var.next = NULL;
 	if (!arg || arg[0] == '\0')
 	{
 		sorted = clone_env_list(envlist);
@@ -120,9 +121,9 @@ int	ft_export(t_env *envlist, char *arg)
 		clear_env_list(&sorted);
 		return (0);
 	}
-	if (process_export(arg, &splitd, &name, &value, 0))
+	if (process_export(arg, &splitd, &env_var, 0))
 		return (1);
-	ret = update_or_create_var(&envlist, name, value);
+	ret = update_or_create_var(&envlist, env_var.name, env_var.value);
 	free_split(splitd, -1);
 	return (ret);
 }

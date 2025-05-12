@@ -2,3 +2,5 @@
 *.swp
 minishell
 a.out
+.bonus
+*.a

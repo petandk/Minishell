@@ -6,58 +6,18 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/10 12:39:57 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/06 16:11:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int select_type(char *rl, t_shell **shell, char **envp)
+int	select_type(char *rl, t_shell **shell, char **envp)
 {
-	t_list	*list;
-	//char	*arg;
-
 	if (!rl)
-		return (1);
-/*	else if (ft_strcmp(rl, "exit") == 0)
-		return (ft_exit(shell, 0), 1);
-/*	else if (ft_strncmp(rl, "echo", 4) == 0)
-	{
-		if (ft_strncmp(rl + 4, " -n", 3) == 0)
-			ft_echo(rl, 1);
-		else
-			ft_echo(rl, 0);
-	}*/
-	else if (ft_strncmp(rl, "cd", 2) == 0)
-		ft_cd(*shell, rl + 3);
-	else if (ft_strncmp(rl, "pwd", 3) == 0)
-		ft_pwd();
-	else if (ft_strncmp(rl, "export", 6) == 0)
-	{
-		arg = rl + 6;
-		while (*arg && ft_isspace(*arg))
-			arg++;
-		if (*arg)
-			ft_export((*shell)->env, arg);
-		else
-			ft_export((*shell)->env, NULL);
-	}
-	else if (ft_strncmp(rl, "unset", 5) == 0)
-	{
-		arg = rl + 5;
-		while (*arg && ft_isspace(*arg))
-			arg++;
-		if (*arg)
-			ft_unset(&(*shell)->env, arg);
-	}
-	else if (ft_strncmp(rl, "env", 3) == 0)
-		ft_env((*shell)->env);*/
-	else if (ft_strstr(rl, "<<") != NULL)
-	{
-		list = ft_heredoc(rl);
-		print_heredoc(list);
-		ft_lstclear(&list, free);
-	}
+		return (printf("exit\n"), 1);
+	else if (ft_strcmp(rl, "status") == 0)
+		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
 	else if (*rl)
 	{
 		token(rl, *shell, envp);
@@ -66,32 +26,65 @@ int select_type(char *rl, t_shell **shell, char **envp)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+static t_shell	*shell_init(char **envp)
 {
-	char	*rl;
 	t_shell	*shell;
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		return (1);
+		exit (1);
 	shell->prev_dir = NULL;
+	shell->exit_status = 0;
+	shell->env = NULL;
 	shell->env = create_env_list(envp);
 	if (!shell->env)
-		return (free(shell), 1);
+	{
+		free(shell);
+		exit (1);
+	}
+	return (shell);
+}
+
+static void	handle_sigint_main(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+static void	shell_loop(t_shell *shell, char **envp)
+{
+	char	*rl;
+
 	while (1)
 	{
+
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
 		if (select_type(rl, &shell, envp))
 		{
 			free (rl);
-			break ;	
+			break ;
 		}
 		free (rl);
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_shell	*shell;
+
+	(void)argc;
+	(void)argv;
+	signal (SIGINT, handle_sigint_main);
+	signal (SIGQUIT, SIG_IGN);
+	shell = shell_init(envp);
+	shell_loop(shell, envp);
 	free(shell);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	return (0);
-	if (!argv)
-		argc--;
 }

@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/16 21:42:42 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:49:41 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ void	ft_show_env(t_env *envlist, int is_env)
 	}
 }
 
-
 void	ft_env(t_env *envlist, char **args)
 {
 	t_env	*temp_env;
 	int		i;
-	
+
 	if (!args || !args[0])
 		return (ft_show_env(envlist, 1));
 	temp_env = clone_env_list(envlist);
@@ -69,9 +68,7 @@ void	ft_env(t_env *envlist, char **args)
 		i++;
 	}
 	if (args[i])
-	{
-		//aqui la ejecucion de comandos
-	}
+		ft_putstr_fd("Error: \"env\" should be executed without options or arguments.\n", 2);
 	else
 		ft_show_env(temp_env, 1);
 	clear_env_list(&temp_env);

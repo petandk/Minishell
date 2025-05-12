@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/10 12:12:39 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/08 13:51:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	execute_command(char **cmd, t_shell *shell, char **envp)
 	char	*path;
 
 	if (!cmd || !cmd[0])
-		return ;
+		exit(0);
 	path = get_command_path(shell, cmd);
 	if (!builtins(shell, cmd))
 	{
