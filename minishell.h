@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:43:07 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 11:45:34 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,24 @@
 
 // STRUCTS //
 
+typedef struct s_quotes
+{
+	int quote;
+	int quote_start;
+	int	quote_end;
+	int closed;	
+}		t_quotes;
+
 typedef struct s_token
 {
-	char	*str;
-	int		greater_than;
-	int		double_greater;
-	int		less_than;
-	int		double_less;
-	int		pipe;
-	int		quote;
-	int		quote_start;
-	int 	quote_end;
+	char		*str;
+	int			greater_than;
+	int			double_greater;
+	int			less_than;
+	int			double_less;
+	int			pipe;
+	t_quotes	quotes[16];
+	int			quote_count;
 }			t_token;
 
 typedef struct s_token_data
@@ -64,8 +71,6 @@ typedef struct s_token_data
 	int		i;
 	int		j;
 	int		str_i;
-	int		in_quotes;
-	int		in_double_quotes;
 	int		size_token;
 	t_token	*token;
 }	t_token_data;
@@ -85,28 +90,22 @@ typedef struct s_quote_tracker
 	int	active;
 }		t_quote_tracker;
 
-typedef struct s_quotes
-{
-	int quote;
-	int quote_start;
-	int	quote_end;
-}		t_quotes;
-
 typedef struct s_comand_data
 {
 	char		**comand;
 	char		**in_file;
 	char		**out_file;
-	t_quotes	*quote;
+	t_quotes	**quote;
+	int			*quote_count;
 	int			in_count;
 	int			out_count;
 }				t_comand_data;
 
-typedef struct s_quote
+/*typedef struct s_quote
 {
 	int	in_single;
 	int	in_double;
-}			t_quote;
+}			t_quote;*/
 
 typedef struct s_fork_data
 {
@@ -184,13 +183,19 @@ void	in_out_size(t_comand_data *comand, t_ind ind, int size_token, t_token *toke
 int		chek_token(t_token *token);
 int		chek_double(char a, char b, int  *i);
 
-
 //  token_utils_4.c //
 
 void	free_t(char *str, t_token **token, int size);
 void	init_quote_tracker(t_quote_tracker *qt);
 void	quotes(t_token_data *data, t_quote_tracker *qt);
 void	d_quotes(t_token_data *data, t_quote_tracker *qt);
+int		finalize_token(t_token_data *data);
+
+//  token_utils_5.c //
+
+void	start_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
+void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
+int		check_unclosed_quotes(t_token_data *data, int token_count);
 
 // count_tokens.c //
 
@@ -223,9 +228,9 @@ void    append(char *file);
 void    in_red(char *file);
 void    here_doc(char *file);
 
-// exapncion_var.c //
+// expancion_var.c //
 
-void    exapncion_var(char **cmd, int cmd_c, t_env env);
+void    expancion_var(t_comand_data *cmd, t_env *env);
 
 // cd.c //
 
@@ -309,6 +314,5 @@ void	control_d_error(char *delimiter);
 // borrar.c //
 
 void	print_heredoc(t_list *list);
-
 
 #endif		

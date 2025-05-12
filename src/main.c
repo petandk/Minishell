@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:06:57 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/04/10 12:39:57 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int select_type(char *rl, t_shell **shell, char **envp)
 		return (1);
 	else if (ft_strcmp(rl, "exit") == 0)
 		return (ft_exit(shell, 0), 1);
-	else if (ft_strncmp(rl, "echo", 4) == 0)
+/*	else if (ft_strncmp(rl, "echo", 4) == 0)
 	{
 		if (ft_strncmp(rl + 4, " -n", 3) == 0)
 			ft_echo(rl, 1);
 		else
 			ft_echo(rl, 0);
-	}
+	}*/
 	else if (ft_strncmp(rl, "cd", 2) == 0)
 		ft_cd(*shell, rl + 3);
 	else if (ft_strncmp(rl, "pwd", 3) == 0)
