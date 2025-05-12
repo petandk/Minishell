@@ -6,92 +6,75 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/15 16:03:16 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:51:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	handle_quotes(t_token_data *data, t_quote_tracker *qt, char next)
+static int	handle_quotes(t_token_data *data, t_quote_tracker *qt)
 {
-	if (data->c == '\'' && qt->active != 2)
+	t_token	*curr_token;
+
+	curr_token = &data->token[data->j];
+	if ((data->c == '\'' && qt->active != 2)
+		|| (data->c == '\"' && qt->active != 1))
 	{
-		if (data->c == next)
-		{
-			data->i += 2;
-			return (1);
-		}
-		quotes(data, qt);
-		return (1);
-	}
-	else if (data->c == '\"' && qt->active != 1)
-	{
-		if (data->c == next)
-		{
-			data->i += 2;
-			return (1);
-		}
-		d_quotes(data, qt);
+		if (!qt->active)
+			start_quote(data, qt, curr_token);
+		else
+			end_quote(data, qt, curr_token);
+		data->i++;
 		return (1);
 	}
 	return (0);
 }
 
-static void	operator(t_token_data *data, char *rl)
+static void	save_token_string(t_token_data *data)
 {
 	if (data->str_i > 0)
 	{
 		data->str[data->str_i] = '\0';
-		data->token[data->j++].str = ft_strdup(data->str);
+		data->token[data->j].str = ft_strdup(data->str);
+		data->j++;
 		data->str_i = 0;
 	}
+}
+
+static void	handle_operator(t_token_data *data, char *rl)
+{
+	save_token_string(data);
 	if ((data->c == '>' && rl[data->i + 1] == '>')
 		|| (data->c == '<' && rl[data->i + 1] == '<'))
 	{
-		token_operator(&data->token[data->j++], data->c, rl[data->i + 1]);
+		token_operator(&data->token[data->j], data->c, rl[data->i + 1]);
+		data->j++;
 		data->i++;
 	}
 	else
-		token_operator(&data->token[data->j++], data->c, '\0');
+	{
+		token_operator(&data->token[data->j], data->c, '\0');
+		data->j++;
+	}
 }
 
 static int	process_outside_quotes(t_token_data *data, char *rl)
 {
 	if (ft_isspace(data->c))
 	{
-		if (data->str_i > 0)
-		{
-			data->str[data->str_i] = '\0';
-			data->token[data->j++].str = ft_strdup(data->str);
-			data->str_i = 0;
-		}
+		save_token_string(data);
 		data->i++;
 		return (1);
 	}
 	if (ft_strchr("<>|&", data->c))
 	{
-		operator(data, rl);
+		handle_operator(data, rl);
 		data->i++;
 		return (1);
 	}
-	data->str[data->str_i++] = data->c;
+	data->str[data->str_i] = data->c;
+	data->str_i++;
 	return (0);
-}
-
-static void	finalize_token(t_token_data *data, t_quote_tracker *qt)
-{
-	if (data->str_i > 0)
-	{
-		data->str[data->str_i] = '\0';
-		data->token[data->j].str = ft_strdup(data->str);
-		if (qt->active)
-		{
-			data->token[data->j].quote = qt->active;
-			data->token[data->j].quote_start = qt->open_pos;
-			data->token[data->j].quote_end = qt->current_len;
-		}
-		data->j++;
-	}
 }
 
 void	token(char *rl, t_shell *shell, char **envp)
@@ -105,7 +88,7 @@ void	token(char *rl, t_shell *shell, char **envp)
 	while (rl[data.i])
 	{
 		data.c = rl[data.i];
-		if (handle_quotes(&data, &qt, rl[data.i + 1]))
+		if (handle_quotes(&data, &qt))
 			continue ;
 		if (qt.active)
 		{
@@ -118,7 +101,7 @@ void	token(char *rl, t_shell *shell, char **envp)
 			continue ;
 		data.i++;
 	}
-	finalize_token(&data, &qt);
-	execution(data.token, data.size_token, shell, envp);
+	if (!finalize_token(&data)
+	  execution(data.token, data.size_token, shell, envp);
 	free_t(data.str, &data.token, data.size_token);
 }

@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/04 12:24:19 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/03 14:45:46 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,26 @@ void	token_operator(t_token *token, char c, char next)
 void	init_token(t_token *token, int size)
 {
 	int	i;
+	int q;
 
 	i = 0;
 	while (i < size)
 	{
+		token[i].str = NULL;
 		token[i].greater_than = 0;
 		token[i].double_greater = 0;
 		token[i].less_than = 0;
 		token[i].double_less = 0;
 		token[i].pipe = 0;
-		token[i].quote = 0;
+		q = 0;
+		while (q < 16)
+		{
+			token[i].quotes[q].quote = 0;
+			token[i].quotes[q].quote_start = -1;
+			token[i].quotes[q].quote_end = -1;
+			q++;
+		}
+		token[i].quote_count = 0;
 		i++;
 	}
 }
@@ -73,8 +83,6 @@ int	init_all(t_token_data *data, char *rl)
 	data->i = 0;
 	data->j = 0;
 	data->str_i = 0;
-	data->in_quotes = 0;
-	data->in_double_quotes = 0;
 	data->size_token = count_tokens(rl);
 	if (data->size_token == -1)
 	{
@@ -84,7 +92,14 @@ int	init_all(t_token_data *data, char *rl)
 	if (data->size_token == 0)
 		return (0);
 	data->str = malloc((ft_strlen(rl) + 1) * (sizeof(char)));
+	if (!data->str)
+		return (0);
 	data->token = malloc(data->size_token * (sizeof(t_token)));
+	if (!data->token)
+	{
+		free(data->str);
+		return (0);
+	}
 	init_token(data->token, data->size_token);
 	return (1);
 }

@@ -74,7 +74,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(&cmd[data.i], shell);
-//			exapncion_var(&cmd[data.i].comand, cmd_count, env)
+			exapncion_var(&cmd[data.i], shell->env);
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 				execute_command(cmd[data.i].comand, shell, envp);
 			else

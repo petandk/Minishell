@@ -6,21 +6,63 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:34:48 by gpolo             #+#    #+#             */
-/*   Updated: 2025/03/28 11:39:15 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/03 14:53:41 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
+int	count_tokens(char *rl)
+{
+	int		i = 0;
+	int		tokens = 0;
+	int		in_single = 0;
+	int		in_double = 0;
+	int		in_token = 0;
+
+	while (rl[i])
+	{
+		if (rl[i] == '\'' && !in_double)
+			in_single = !in_single;
+		else if (rl[i] == '\"' && !in_single)
+			in_double = !in_double;
+		else if (!in_single && !in_double && ft_isspace(rl[i]))
+			in_token = 0;
+		else if (!in_single && !in_double && ft_strchr("<>|", rl[i]))
+		{
+			if (in_token)
+			{
+				tokens++;
+				in_token = 0;
+			}
+			if ((rl[i] == '>' && rl[i + 1] == '>') || (rl[i] == '<' && rl[i + 1] == '<'))
+				i++;
+			tokens++;
+		}
+		else
+		{
+			if (!in_token)
+			{
+				tokens++;
+				in_token = 1;
+			}
+		}
+		i++;
+	}
+	return (tokens);
+}
+
+/*
+//int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
+int	in_quote_c(char *rl, t_quote *quote, int *i)
 {
 	if (rl[*i] == '\'' && !quote->in_double)
 	{
 		if (chek_double(rl[*i], rl[*i + 1], i))
 			return (1);
 		quote->in_single = !quote->in_single;
-		if (quote->in_single == 0)
-			*tokens += 1;
+//		if (quote->in_single == 0)
+//			*tokens += 1;
 		*i += 1;
 		return (1);
 	}
@@ -29,8 +71,8 @@ int	in_quote_c(char *rl, t_quote *quote, int *tokens, int *i)
 		if (chek_double(rl[*i], rl[*i + 1], i))
 			return (1);
 		quote->in_double = !quote->in_double;
-		if (quote->in_double == 0)
-			*tokens += 1;
+//		if (quote->in_double == 0)
+//			*tokens += 1;
 		*i += 1;
 		return (1);
 	}
@@ -85,7 +127,8 @@ int	count_tokens(char *rl)
 	tokens = 0;
 	while (rl[i])
 	{
-		if (in_quote_c(rl, &quote, &tokens, &i))
+//		if (in_quote_c(rl, &quote, &tokens, &i))
+		if (in_quote_c(rl, &quote, &i))
 			continue ;
 		if (!quote.in_single && !quote.in_double)
 		{
@@ -99,4 +142,4 @@ int	count_tokens(char *rl)
 			i++;
 	}
 	return (tokens);
-}
+}*/

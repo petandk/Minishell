@@ -27,6 +27,8 @@ char	*find_path_index(t_env *envp)
 	char	*e;
 
 	e = ft_strdup(find_env_var(envp, "PATH")->value);
+	if(!malloc_test((void*)e))
+		return (NULL);
 	return (e);
 }
 

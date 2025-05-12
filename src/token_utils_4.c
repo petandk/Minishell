@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:58:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 12:39:51 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 11:46:22 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,19 @@ void	init_quote_tracker(t_quote_tracker *qt)
 
 void	quotes(t_token_data *data, t_quote_tracker *qt)
 {
+	t_token *curr_token = &data->token[data->j];
+	int idx;
+
 	if (qt->active == 1)
 	{
-		data->token[data->j].quote = 1;
-		data->token[data->j].quote_start = qt->open_pos;
-		data->token[data->j].quote_end = qt->current_len;
+		idx = curr_token->quote_count;
+		if (idx < 16)
+		{
+			curr_token->quotes[idx].quote = 1;
+			curr_token->quotes[idx].quote_start = qt->open_pos;
+			curr_token->quotes[idx].quote_end = data->str_i - 1;
+			curr_token->quote_count++;
+		}
 		init_quote_tracker(qt);
 	}
 	else
@@ -44,11 +52,19 @@ void	quotes(t_token_data *data, t_quote_tracker *qt)
 
 void	d_quotes(t_token_data *data, t_quote_tracker *qt)
 {
+	t_token *curr_token = &data->token[data->j];
+	int	idx;
+
 	if (qt->active == 2)
 	{
-		data->token[data->j].quote = 2;
-		data->token[data->j].quote_start = qt->open_pos;
-		data->token[data->j].quote_end = qt->current_len;
+		idx = curr_token->quote_count;
+		if (idx < 16)
+		{
+			curr_token->quotes[idx].quote = 2;
+			curr_token->quotes[idx].quote_start = qt->open_pos;
+			curr_token->quotes[idx].quote_end = data->str_i - 1;
+			curr_token->quote_count++;
+		}
 		init_quote_tracker(qt);
 	}
 	else
@@ -57,4 +73,18 @@ void	d_quotes(t_token_data *data, t_quote_tracker *qt)
 		qt->open_pos = data->str_i;
 	}
 	data->i++;
+}
+
+int	finalize_token(t_token_data *data)
+{
+	int i;
+
+	if (data->str_i > 0)
+	{
+		data->str[data->str_i] = '\0';
+		data->token[data->j].str = ft_strdup(data->str);
+		data->j++;
+	}
+	i = check_unclosed_quotes(data, data->j);
+	return (i);
 }
