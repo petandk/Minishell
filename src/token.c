@@ -77,7 +77,7 @@ static int	process_outside_quotes(t_token_data *data, char *rl)
 	return (0);
 }
 
-void	token(char *rl, t_env *env, char **envp)
+void	token(char *rl, t_shell *shell, char **envp)
 {
 	t_token_data	data;
 	t_quote_tracker	qt;
@@ -101,7 +101,7 @@ void	token(char *rl, t_env *env, char **envp)
 			continue ;
 		data.i++;
 	}
-	if (!finalize_token(&data))
-		execution(data.token, data.size_token, env, envp);
+	if (!finalize_token(&data)
+	  execution(data.token, data.size_token, shell, envp);
 	free_t(data.str, &data.token, data.size_token);
 }

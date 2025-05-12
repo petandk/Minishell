@@ -53,7 +53,7 @@ void	free_comand(t_comand_data *comand, int num_comands)
 	free(comand);
 }
 
-int	execution(t_token *token, int size_token, t_env *env, char **envp)
+int	execution(t_token *token, int size_token, t_shell *shell, char **envp)
 {
 	t_comand_data	*comand;
 	int				num_comands;
@@ -63,7 +63,7 @@ int	execution(t_token *token, int size_token, t_env *env, char **envp)
 		return (-1);
 	print_comands(comand, num_comands);
 	printf("___________________________EXECUTION___________________________\n");
-	execute_pipeline(comand, num_comands, env, envp);
+	execute_pipeline(comand, num_comands, shell, envp);
 	free_comand(comand, num_comands);
 	return (1);
 }

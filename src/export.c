@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/05 10:48:09 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:24:45 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sort_env_list(t_env *envlist)
 	}
 }
 
-static int	process_export(char *arg, char ***splitd, char **name, char **value)
+int	process_export(char *arg, char ***splitd, char **name, char **value, int is_env)
 {
 	*splitd = split_first(arg, '=');
 	if (!*splitd || !*splitd[0])
@@ -68,7 +68,10 @@ static int	process_export(char *arg, char ***splitd, char **name, char **value)
 		*value = "";
 	if (!is_valid_name(*name))
 	{
-		ft_putstr_fd("export: ", 2);
+		if (is_env)
+			ft_putstr_fd("env: ", 2);
+		else
+			ft_putstr_fd("export: ", 2);
 		ft_putstr_fd(*name, 2);
 		ft_putendl_fd(": not a valid identifier", 2);
 		free_split(*splitd, -1);
@@ -77,7 +80,7 @@ static int	process_export(char *arg, char ***splitd, char **name, char **value)
 	return (0);
 }
 
-static int	update_or_create_var(t_env **envlist, char *name, char *value)
+int	update_or_create_var(t_env **envlist, char *name, char *value)
 {
 	t_env	*exist;
 
@@ -117,7 +120,7 @@ int	ft_export(t_env *envlist, char *arg)
 		clear_env_list(&sorted);
 		return (0);
 	}
-	if (process_export(arg, &splitd, &name, &value))
+	if (process_export(arg, &splitd, &name, &value, 0))
 		return (1);
 	ret = update_or_create_var(&envlist, name, value);
 	free_split(splitd, -1);

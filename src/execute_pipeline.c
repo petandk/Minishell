@@ -50,12 +50,15 @@ static void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count)
 }
 
 void	execute_pipeline(t_comand_data *cmd, int cmd_count,
-			t_env *env, char **envp)
+			t_shell *shell, char **envp)
 {
 	t_fork_data	data;
 
 	data.i = 0;
 	data.prev_fd = -1;
+	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
+		if (builtins(shell, cmd[0].comand))
+			return ;
 	while (data.i < cmd_count)
 	{
 		if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
