@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 12:00:25 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 12:29:29 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,15 @@ static char *replace_str(char *str1, int start, int end, char *str2)
 	return (new_str);
 }
 
-void expan(char **str, t_quotes *quote, t_env *env, int i)
+void expan(char **str, t_quotes *quote, t_env *env)
 {
 	char	*new_str;
 	char	*value;
 	int		len;
 	int		start;
+	int		i;
 
+	i = 0;
 	while ((*str)[i])
 	{
 		if ((*str)[i] == '$' && quote->quote != 1)
@@ -108,14 +110,12 @@ void expan(char **str, t_quotes *quote, t_env *env, int i)
 void	expancion_var(t_comand_data *cmd, t_env *env)
 {
 	int i;
-	int j;
 
 	i = 0;
-	j = 0;
 	while (cmd->comand && cmd->comand[i])
 	{
 		if (ft_strchr(cmd->comand[i], '$'))
-			expan(&cmd->comand[i], cmd->quote[i], env, j);
+			expan(&cmd->comand[i], cmd->quote[i], env);
 		i++;
 	}
 }
