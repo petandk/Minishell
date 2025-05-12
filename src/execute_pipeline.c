@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/26 17:43:12 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:01:56 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,16 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			t_shell *shell, char **envp)
 {
 	t_fork_data	data;
+	void		(*old_sig[2])(int);
 
+	old_sig[0] = signal(SIGINT, SIG_IGN);
+	old_sig[1] = signal(SIGQUIT,SIG_IGN);
 	data.i = 0;
 	data.prev_fd = -1;
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 		if (builtins(shell, cmd[0].comand))
-			return ;
+			return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);
+
 	while (data.i < cmd_count)
 	{
 		if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
@@ -66,11 +70,15 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		handle_fork(&data.pid);
 		if (data.pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
-			handle_redirections(cmd[data.i].in_file, cmd[data.i].out_file,
-				cmd[data.i].in_count, cmd[data.i].out_count, shell);
+			handle_redirections(&cmd[data.i], shell);
 //			exapncion_var(&cmd[data.i].comand, cmd_count, env)
-			execute_command(cmd[data.i].comand, shell, envp);
+			if (cmd[data.i].comand && cmd[data.i].comand[0])
+				execute_command(cmd[data.i].comand, shell, envp);
+			else
+				exit(0);
 		}
 		else
 		{
@@ -79,4 +87,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		}
 		data.i++;
 	}
+	signal(SIGINT, old_sig[0]);
+	signal(SIGQUIT, old_sig[1]);
 }

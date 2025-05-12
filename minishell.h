@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/01 13:36:56 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:43:01 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell, ch
 
 // handle_redirections.c //
 
-void	handle_redirections(char **in_file, char **out_file, int in_count, int out_count, t_shell *shell);
+void	handle_redirections(t_comand_data *cmd, t_shell *shell);
 
 // handle_redirections_utils.c //
 

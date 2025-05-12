@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/26 18:47:00 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:49:41 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ void	ft_env(t_env *envlist, char **args)
 		i++;
 	}
 	if (args[i])
-	{
-		//aqui la ejecucion de comandos
-	}
+		ft_putstr_fd("Error: \"env\" should be executed without options or arguments.\n", 2);
 	else
 		ft_show_env(temp_env, 1);
 	clear_env_list(&temp_env);

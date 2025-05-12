@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/03 16:11:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:43:22 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	child_process_heredoc(char	*delimiter, int pipe_fd)
 		if (result == 1)
 		{
 			control_d_error(delimiter);
-			break ;
+			close(pipe_fd);
+			exit(42);
 		}
 		else if (result == 2)
 			break ;
@@ -61,6 +62,7 @@ int	ft_split_count(char **splited)
 	i = 0;
 	while (splited[i])
 		i++;
+	printf("split_count: %d\n", i);
 	return (i);
 }
 

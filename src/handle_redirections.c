@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/03 19:56:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:42:27 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ static void	out_files(char **out_file, int out_count)
 	}
 }
 
-void	handle_redirections(char **in_file, char **out_file,
-			int in_count, int out_count, t_shell *shell)
+void	handle_redirections(t_comand_data *cmd, t_shell *shell)
 {
-	if (in_file && in_count)
-		in_files(in_file, in_count, shell);
-	if (out_file && out_count)
-		out_files(out_file, out_count);
+	if (cmd->in_file && cmd->in_count)
+		in_files(cmd->in_file, cmd->in_count, shell);
+	if (cmd->out_file && cmd->out_count)
+		out_files(cmd->out_file, cmd->out_count);
 }

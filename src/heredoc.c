@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/03 16:53:20 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:50:02 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,21 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
+	if ((*shell)->exit_status == 130)
+		return (close(pipe_fd[0]), NULL);
 	if (WIFEXITED(status))
 		(*shell)->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		(*shell)->exit_status = 128 + WTERMSIG(status);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-		close(pipe_fd[0]);
+		close (pipe_fd[0]);
 		errno = EINTR;
+		return (NULL);
+	}
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 42)
+	{
+		close(pipe_fd[0]);
 		return (NULL);
 	}
 	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
@@ -36,6 +43,8 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 		close(pipe_fd[0]);
 		return (lines);
 	}
+	if ((*shell)->exit_status == 130)
+		exit(130);
 	close(pipe_fd[0]);
 	return (NULL);
 }
@@ -72,27 +81,15 @@ t_list	*handle_heredoc(char *delimiter, t_shell **shell)
 	signal(SIGQUIT, old_sig[1]);
 	return (result);
 }
-/*
-static char	**ft_setup_heredoc(char *input, t_heredoc **here)
-{
-	char	**splited;
 
-	*here = (t_heredoc *)malloc(sizeof(t_heredoc));
-	if (!here)
-		return (NULL);
-	(*here)->helper = ft_replace(input);
-	(*here)->line = NULL;
-	splited = ft_split((*here)->helper, '<');
-	if (splited && !splited[0])
-	{
-		clean_heredoc(*here);
-		free(splited);
-		return (NULL);
-	}
-	(*here)->num_brackets = ft_split_count(splited) - 1;
-	return (splited);
+static void show_error_test(void)
+{
+	char *splited = "abc";
+
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(splited + 1, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 }
-*/
 
 static t_list	*ft_hdc_helper(char **splited,
 		int num_brackets, t_shell **shell)
@@ -108,9 +105,11 @@ static t_list	*ft_hdc_helper(char **splited,
 	old_errno = errno;
 	while (i <= num_brackets)
 	{
-		if (splited[i] &&splited[i][0] == '_')
+		if (splited[i] && splited[i][0] == '_')
 		{
 			lines = handle_heredoc(splited[i] + 1, shell);
+			if (!lines && i == num_brackets)
+				exit(0);
 			if (!lines && errno == EINTR)
 			{
 				errno = EINTR;
@@ -124,8 +123,29 @@ static t_list	*ft_hdc_helper(char **splited,
 		}
 		i++;
 	}
-	if (errno != EINTR)
-		errno = old_errno;
+	if (errno == EINTR)
+	{
+		if (result)
+			ft_lstclear(&result, free);
+		return (NULL);
+	}
+	i = 0;
+	while (i <= num_brackets)
+	{
+		if (splited[i] && splited[i][0] == '<')
+		{
+			if (access(splited[i] + 1, F_OK) != 0)
+			{
+				show_error_test();
+				(*shell)->exit_status = 1;
+				if (result)
+					ft_lstclear(&result, free);
+				return (NULL);
+			}
+		}
+		i++;
+	}
+	errno = old_errno;
 	return (result);
 }
 
