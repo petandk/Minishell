@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:15:13 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/05 10:41:44 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 11:54:06 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ void	init_comand(t_comand_data *comand, int size)
 		comand[i].in_file = NULL;
 		comand[i].out_file = NULL;
 		comand[i].comand = NULL;
-		comand[i].quote = 0;
+		comand[i].quote_count = NULL;
+		comand[i].quote = NULL;
+		comand[i].in_count = 0;
+		comand[i].out_count = 0;
 		i++;
 	}
 }
@@ -65,18 +68,29 @@ void	init_comand(t_comand_data *comand, int size)
 void	init_others(t_comand_data *comand, int j, int size)
 {
 	int	i;
+	int	q;
 
 	i = 0;
 	while (i < size)
 	{
-		comand[j].quote[i].quote = 0;
-		comand[j].quote[i].quote_start = 0;
-		comand[j].quote[i].quote_end = 0;
 		comand[j].comand[i] = NULL;
+		if (comand[j].quote && comand[j].quote[i])
+		{
+			q = 0;
+			while (q < 16)
+			{
+				comand[j].quote[i][q].quote = 0;
+				comand[j].quote[i][q].quote_start = 0;
+				comand[j].quote[i][q].quote_end = 0;
+				q++;
+			}
+		}
 		i++;
 	}
 	if (size > 0)
 		comand[j].comand[size] = NULL;
+	comand[j].in_count = 0;
+	comand[j].out_count = 0;
 }
 
 int	count_comands(t_token *token, int size_token)

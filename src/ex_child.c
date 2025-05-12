@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/16 20:45:08 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:12:39 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*find_path_index(t_env *envp)
 	char	*e;
 
 	e = ft_strdup(find_env_var(envp, "PATH")->value);
+	if(!malloc_test((void*)e))
+		return (NULL);
 	return (e);
 }
 

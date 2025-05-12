@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:48:46 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/05 10:46:34 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 10:44:16 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	pipe_size(int i, t_token *token, int size_token)
 void	strdup_comand(t_comand_data **comand, t_token *token, t_ind ind)
 {
 	int	k;
+	int	q;
 
 	k = 0;
 	while ((k < ind.size))
@@ -61,29 +62,44 @@ void	strdup_comand(t_comand_data **comand, t_token *token, t_ind ind)
 		while (!(token[ind.i].str) && (token[ind.i + 1].str))
 			ind.i += 2;
 		(*comand)[ind.j].comand[k] = ft_strdup(token[ind.i].str);
-		if (token[ind.i].quote)
+		q = 0;
+		while (q < token[ind.i].quote_count)
 		{
-			(*comand)[ind.j].quote[k].quote = token[ind.i].quote;
-			(*comand)[ind.j].quote[k].quote_start = token[ind.i].quote_start;
-			(*comand)[ind.j].quote[k].quote_end = token[ind.i].quote_end;
+			(*comand)[ind.j].quote[k][q].quote = token[ind.i].quotes[q].quote;
+			(*comand)[ind.j].quote[k][q].quote_start
+				= token[ind.i].quotes[q].quote_start;
+			(*comand)[ind.j].quote[k][q].quote_end
+				= token[ind.i].quotes[q].quote_end;
+			q++;
 		}
+		(*comand)[ind.j].quote_count[k] = token[ind.i].quote_count;
 		k++;
 		ind.i++;
 	}
+	(*comand)[ind.j].comand[k] = NULL;
 }
 
 void	the_comad(t_comand_data **comand, t_token *token, t_ind ind)
 {
-	if (ind.size == 0)
-	{
-		(*comand)[ind.j].comand = NULL;
-		return ;
-	}
+	int	k;
+
 	(*comand)[ind.j].comand = (char **)malloc((ind.size + 1) * sizeof(char *));
-	(*comand)[ind.j].quote = (t_quotes *)malloc((ind.size) * sizeof(t_quotes));
+	(*comand)[ind.j].quote
+		= (t_quotes **)malloc((ind.size + 1) * sizeof(t_quotes *));
+	(*comand)[ind.j].quote_count = (int *)malloc((ind.size + 1) * sizeof(int));
 	if (!malloc_test((void *)(*comand)[ind.j].quote)
-		|| !malloc_test((void *)(*comand)[ind.j].comand))
+		|| !malloc_test((void *)(*comand)[ind.j].comand)
+		|| !malloc_test((void *)(*comand)[ind.j].quote_count))
 		exit(1);
+	k = 0;
+	while (k < ind.size)
+	{
+		(*comand)[ind.j].quote[k] = (t_quotes *)malloc(16 * sizeof(t_quotes));
+		if (!malloc_test((void *)(*comand)[ind.j].quote[k]))
+			exit(1);
+		k++;
+	}
+	(*comand)[ind.j].quote[ind.size] = NULL;
 	init_others(*comand, ind.j, ind.size);
 	strdup_comand(comand, token, ind);
 }

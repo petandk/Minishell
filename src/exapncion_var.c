@@ -6,21 +6,116 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/04/08 14:42:01 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 12:00:25 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	exapncion_var(char **cmd, int cmd_c, t_env env);
-{
-	int i;
 
-	i = 0;
-	while (i < cmd_c)
+static int len_expan(char *str ,int start, int qs, int qe)
+{
+	char	c;
+	int		len;
+ 
+	len = 0;
+	while (str[start + len])
 	{
-		if (strchr(cadena, caracter) != NULL)
+		c = str[start + len];
+		if (start + len == qs || start + len == qe)
+		{
+			if (start + len == qe)
+				len++;
+			break;
+		}
+		if (!ft_isalnum(c) && c != '_')
+			break;
+		len++;
+	}
+	return (len);
+}
+
+static char	*find_value(char *key, t_env *env)
+{
+	t_env   *var;
+	char    *value;
+
+	if (!malloc_test((void *)key))
+		exit(1);
+	var = find_env_var(env, key);
+	free(key);
+	if (var)
+		value = var->value;
+	else
+		value = "";
+	return (value);
+}
+
+static char *replace_str(char *str1, int start, int end, char *str2)
+{
+	int new_len;
+	char *new_str;
+	int i;
+	int j;
+
+	new_len = ft_strlen(str1 - (end - start) + ft_strlen(str2));
+	new_str = malloc(new_len + 1);
+	if (!malloc_test((void *)new_str))
+		exit(1);
+	i = 0;
+	while (i < start)
+	{
+		new_str[i] = str1[i];
+		i++;
+	}
+	j = 0;
+	while (str2 && str2[j])
+		new_str[i++] = str2[j++];
+	j = end;
+	while (str1[j])
+		new_str[i++] = str1[j++];
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+void expan(char **str, t_quotes *quote, t_env *env, int i)
+{
+	char	*new_str;
+	char	*value;
+	int		len;
+	int		start;
+
+	while ((*str)[i])
+	{
+		if ((*str)[i] == '$' && quote->quote != 1)
+		{
+			start = (i + 1);
+			len = len_expan(*str, start,quote->quote_start,quote->quote_end);
+			if (len == 0)
+			{
+				i++;
+				continue ;
+			}
+			value = find_value(ft_substr(*str, start, len), env);
+			new_str = replace_str(*str, i, start + len, value);
+			free(*str);
+			(*str) = new_str;
+			i += ft_strlen(value) - 1;
+		}
 		i++;
 	}
 }
-*/
+
+void	expancion_var(t_comand_data *cmd, t_env *env)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (cmd->comand && cmd->comand[i])
+	{
+		if (ft_strchr(cmd->comand[i], '$'))
+			expan(&cmd->comand[i], cmd->quote[i], env, j);
+		i++;
+	}
+}
