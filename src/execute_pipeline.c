@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 12:24:11 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:52:31 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	old_sig[1] = signal(SIGQUIT,SIG_IGN);
 	data.i = 0;
 	data.prev_fd = -1;
+	expancion_var(&cmd[data.i], shell->env);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 		if (builtins(shell, cmd[0].comand))
 			return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);
@@ -74,7 +75,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(&cmd[data.i], shell);
-			expancion_var(&cmd[data.i], shell->env);
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 				execute_command(cmd[data.i].comand, shell, envp);
 			else
