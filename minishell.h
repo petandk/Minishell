@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/08 13:43:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:54:05 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void	handle_redirections(t_comand_data *cmd, t_shell *shell);
 void    out_red(char *file);
 void    append(char *file);
 void    in_red(char *file);
-void    here_doc(char **delimiters, t_shell *shell);
+void    here_doc(char **delimiters, int in_file, t_shell *shell);
 
 // expancion_var.c //
 
@@ -243,7 +243,7 @@ int	update_oldpwd_env(t_env *env, char *old_path);
 
 // echo.c //
 
-void	ft_echo(char *msg, int is_n);
+void	ft_echo(char **cmd);
 
 // pwd.c //
 
@@ -306,7 +306,7 @@ void	ft_exit(t_shell **shell, int exit_code);
 // heredoc.c //
 
 t_list	*handle_heredoc(char *delimiter, t_shell **shell);
-t_list	*ft_heredoc(char **input, t_shell **shell);
+t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell);
 
 // heredoc_utils.c //
 

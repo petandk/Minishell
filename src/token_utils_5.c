@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:00:10 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 11:55:02 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/12 13:05:01 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	check_unclosed_quotes(t_token_data *data, int token_count)
 		{
 			if (!curr_token->quotes[q_i].closed)
 			{
-				printf("NO CLOSED PIPIES\n");
+				printf("NO CLOSED QUOTES\n");
 				return (1);
 			}
 			q_i++;

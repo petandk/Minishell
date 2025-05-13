@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/12 11:50:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:53:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 {
 	int		status;
 	t_list	*lines;
+	int		exit_code;
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
@@ -32,16 +33,20 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 		errno = EINTR;
 		return (NULL);
 	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 42)
+	else if (WIFEXITED(status))
 	{
-		close(pipe_fd[0]);
-		return (NULL);
-	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
-	{
-		lines = read_heredoc_pipe(pipe_fd[0]);
-		close(pipe_fd[0]);
-		return (lines);
+		exit_code = WEXITSTATUS(status);
+		if (exit_code == EXIT_SUCCESS)
+		{
+			lines = read_heredoc_pipe(pipe_fd[0]);
+			close(pipe_fd[0]);
+			return (lines);
+		}
+		else if (exit_code == 42)
+		{
+			close(pipe_fd[0]);
+			return (NULL);
+		}
 	}
 	if ((*shell)->exit_status == 130)
 		exit(130);
@@ -82,12 +87,10 @@ t_list	*handle_heredoc(char *delimiter, t_shell **shell)
 	return (result);
 }
 
-static void show_error_test(void)
+static void show_file_error(char *file)
 {
-	char *splited = "abc";
-
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(splited + 1, 2);
+	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 }
 
@@ -103,6 +106,7 @@ static t_list	*ft_hdc_helper(char **splited,
 	result = NULL;
 	i = 0;
 	old_errno = errno;
+	num_brackets--;
 	while (i <= num_brackets)
 	{
 		if (splited[i] && splited[i][0] == '_')
@@ -136,11 +140,11 @@ static t_list	*ft_hdc_helper(char **splited,
 		{
 			if (access(splited[i] + 1, F_OK) != 0)
 			{
-				show_error_test();
+				show_file_error(splited[i] + 1);
 				(*shell)->exit_status = 1;
 				if (result)
 					ft_lstclear(&result, free);
-				return (NULL);
+				exit(1);
 			}
 		}
 		i++;
@@ -149,10 +153,9 @@ static t_list	*ft_hdc_helper(char **splited,
 	return (result);
 }
 
-t_list	*ft_heredoc(char **input, t_shell **shell)
+t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell)
 {
 	t_list		*lines;
-	int			num_brackets;
 	void		(*old_sig[2])(int);
 	int			old_errno;
 	
@@ -160,7 +163,6 @@ t_list	*ft_heredoc(char **input, t_shell **shell)
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT, SIG_IGN);
 	old_errno = errno;
-	num_brackets = ft_split_count(input) - 1;
 	lines = ft_hdc_helper(input, num_brackets, shell);
 	if (!lines && errno == EINTR)
 		(*shell)->exit_status = 130;
