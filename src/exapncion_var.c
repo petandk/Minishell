@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 12:29:29 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:57:34 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@ static int len_expan(char *str ,int start, int qs, int qe)
 	int		len;
  
 	len = 0;
+	printf("_____LEN_EXPAN____\n");
+	printf("qs-> %d:\n",qs);
+	printf("qe-> %d:\n",qe);
+	printf("start-> %d:\n",start);
 	while (str[start + len])
 	{
+		printf("start + len-> %d:\n",start + len);
 		c = str[start + len];
+		printf("C-> %c:\n",c);
 		if (start + len == qs || start + len == qe)
 		{
-			if (start + len == qe)
+			if (start + len == qe && ft_isalnum(c) || c == '_')
 				len++;
 			break;
 		}
@@ -41,6 +47,7 @@ static char	*find_value(char *key, t_env *env)
 
 	if (!malloc_test((void *)key))
 		exit(1);
+	printf("value to expan-> %s:\n",key);
 	var = find_env_var(env, key);
 	free(key);
 	if (var)
@@ -92,16 +99,21 @@ void expan(char **str, t_quotes *quote, t_env *env)
 		{
 			start = (i + 1);
 			len = len_expan(*str, start,quote->quote_start,quote->quote_end);
-			if (len == 0)
+			printf("len-> %d:\n",len);
+			if (len == 0 && (ft_strlen(*str) == 1))
 			{
 				i++;
 				continue ;
 			}
 			value = find_value(ft_substr(*str, start, len), env);
 			new_str = replace_str(*str, i, start + len, value);
+			printf("value to replace-> %s:\n",new_str);
 			free(*str);
 			(*str) = new_str;
+			printf("the str repalced-> %s:\n",(*str));
 			i += ft_strlen(value) - 1;
+			printf("the coninue index-> %d:\n",i);
+			printf("_____________________\n");
 		}
 		i++;
 	}
