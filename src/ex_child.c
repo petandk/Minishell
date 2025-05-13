@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/08 13:51:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:42:14 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 		if (!path)
 		{
 			free_args(all_path);
+			printf("%s: command not found\n", cmd[0]);
 			free(str);
-			printf("command not found\n");
 			exit (127);
 		}
 	}
@@ -92,13 +92,19 @@ void	execute_command(char **cmd, t_shell *shell, char **envp)
 
 	if (!cmd || !cmd[0])
 		exit(0);
+	if (ft_strcmp(cmd[0], "exit") == 0 || ft_strcmp(cmd[0], "cd") == 0)
+		exit(0);
 	path = get_command_path(shell, cmd);
-	if (!builtins(shell, cmd))
+	if (builtins(shell, cmd))
+	{
+		if (path != cmd[0])
+			free(path);
+		exit(0);
+	}
+	else
 	{
 		execve(path, cmd, envp);
-		printf("command not found\n");
+		printf("%s: command not found\n", cmd[0]);
 		exit (127);
 	}
-	if (path != cmd[0])
-		free(path);
 }

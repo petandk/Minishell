@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/03 16:53:09 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:28:18 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	in_red(char *file)
 	close (fd);
 }
 
-void	here_doc(char **delimiters, t_shell *shell)
+void	here_doc(char **delimiters, int in_count, t_shell *shell)
 {
 	t_list	*lines;
 	int		pipefd[2];
@@ -65,7 +65,7 @@ void	here_doc(char **delimiters, t_shell *shell)
 		perror("pipe error");
 		exit (1);
 	}
-	lines = ft_heredoc(delimiters, &shell);
+	lines = ft_heredoc(delimiters,in_count, &shell);
 	if (!lines)
 		return (close(pipefd[0]), close(pipefd[1]), (void)0);
 	current = lines;

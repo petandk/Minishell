@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 12:24:11 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:46:46 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,39 +54,54 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 {
 	t_fork_data	data;
 	void		(*old_sig[2])(int);
+	pid_t		*pids;
+	int			cnt;
 
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT,SIG_IGN);
 	data.i = 0;
 	data.prev_fd = -1;
+	expancion_var(&cmd[data.i], shell->env);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
-		if (builtins(shell, cmd[0].comand))
-			return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);
-
+	{
+		if ((!cmd[0].in_file || cmd[0].in_count == 0)
+			&& (!cmd[0].out_file || cmd[0].out_count == 0)
+			&& ((ft_strcmp(cmd[0].comand[0], "cd") == 0)
+			|| (ft_strcmp(cmd[0].comand[0], "exit") == 0)))
+		{
+			if (builtins(shell, cmd[0].comand))
+				return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);	
+		}
+	}
+	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
+	if (!pids)
+		return ;
 	while (data.i < cmd_count)
 	{
-		if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
+	//	if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
+		if (data.i < cmd_count - 1)
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
+		pids[data.i] = data.pid;
 		if (data.pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(&cmd[data.i], shell);
-			expancion_var(&cmd[data.i], shell->env);
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 				execute_command(cmd[data.i].comand, shell, envp);
 			else
 				exit(0);
 		}
 		else
-		{
 			else_pid_0(&data.prev_fd, data.pipefd, data.i, cmd_count);
-			waitpid(data.pid, NULL, 0);
-		}
 		data.i++;
 	}
+	cnt = 0;
+	while (cnt < cmd_count)	
+			waitpid(pids[cnt++], NULL, 0);
+	free(pids);
 	signal(SIGINT, old_sig[0]);
 	signal(SIGQUIT, old_sig[1]);
 }
