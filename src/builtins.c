@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:14 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/16 21:39:04 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:53:03 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ int	builtins(t_shell *shell, char **cmd)
 	}
 	if (!ft_strcmp(cmd[0], "echo"))
 	{
-		if (cmd[1] && !ft_strcmp(cmd[1], "-n"))
-			return (ft_echo(cmd[2], 1), 1);
-		else
-			return (ft_echo(cmd[1], 0), 1);
+			return (ft_echo(cmd), 1);
 	}
 	else if (!ft_strcmp(cmd[0], "cd"))
 		return (ft_cd(shell, cmd[1]), 1);
