@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/06 16:11:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:24:55 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	select_type(char *rl, t_shell **shell, char **envp)
 {
 	if (!rl)
-		return (printf("exit\n"), 1);
+	{
+		printf("exit\n");
+		exit(1);
+	}
 	else if (ft_strcmp(rl, "status") == 0)
 		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
 	else if (*rl)

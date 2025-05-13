@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 18:42:14 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:45:37 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 	all_path = ft_split(str, ':');
 	if (cmd && cmd[0] && cmd [0][0] != '/')
 	{
+		if (access(cmd[0], X_OK) == 0)
+			return (cmd[0]);
 		path = find_path_access(all_path, cmd);
 		if (!path)
 		{
@@ -89,22 +91,13 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 void	execute_command(char **cmd, t_shell *shell, char **envp)
 {
 	char	*path;
+	//char	**new_env;
 
+	//new_env = list_to_matrix(shell->env);
 	if (!cmd || !cmd[0])
 		exit(0);
-	if (ft_strcmp(cmd[0], "exit") == 0 || ft_strcmp(cmd[0], "cd") == 0)
-		exit(0);
 	path = get_command_path(shell, cmd);
-	if (builtins(shell, cmd))
-	{
-		if (path != cmd[0])
-			free(path);
-		exit(0);
-	}
-	else
-	{
-		execve(path, cmd, envp);
-		printf("%s: command not found\n", cmd[0]);
-		exit (127);
-	}
+	execve(path, cmd, envp);
+	printf("%s: command not found\n", cmd[0]);
+	exit (127);
 }
