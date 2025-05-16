@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/13 11:57:34 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/16 12:18:53 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ static int len_expan(char *str ,int start, int qs, int qe)
 		printf("start + len-> %d:\n",start + len);
 		c = str[start + len];
 		printf("C-> %c:\n",c);
+		if (start + len == qs && start + len == qe)
+			break;
 		if (start + len == qs || start + len == qe)
 		{
-			if (start + len == qe && ft_isalnum(c) || c == '_')
+			if (start + len == qe && (ft_isalnum(c) || c == '_'))
 				len++;
 			break;
 		}
@@ -64,7 +66,7 @@ static char *replace_str(char *str1, int start, int end, char *str2)
 	int i;
 	int j;
 
-	new_len = ft_strlen(str1 - (end - start) + ft_strlen(str2));
+	new_len = ft_strlen(str1) - (end - start) + ft_strlen(str2);
 	new_str = malloc(new_len + 1);
 	if (!malloc_test((void *)new_str))
 		exit(1);
