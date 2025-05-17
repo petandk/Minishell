@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:31:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/13 17:42:38 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 11:49:58 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 15:06:51 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -36,22 +36,13 @@ void	ft_echo(char **cmd)
 
 	i = 1;
 	is_n = 0;
+	while (cmd[i] && is_flag(cmd[i]))
+	{
+		is_n = 1;
+		i++;
+	}
 	while (cmd[i])
 	{
-		if (i == 1)
-		{
-			is_n = is_flag(cmd[i]);
-			i++;
-			continue ;
-		}
-		else
-		{
-			if (is_n == 1 && is_flag(cmd[i]))
-			{
-				i++;
-				continue ;
-			}
-		}
 		if (cmd[i][0] != '\0')
 			ft_putstr_fd(cmd[i], 1);
 		if (cmd[i + 1])
