@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:00:10 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 13:05:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:49:03 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,12 @@ int	check_unclosed_quotes(t_token_data *data, int token_count)
 		tok_i++;
 	}
 	return (0);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char *join;
+	join = ft_strjoin(s1,s2);
+	free(s1);
+	return (join);
 }

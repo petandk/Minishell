@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 18:54:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:49:35 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int		finalize_token(t_token_data *data);
 void	start_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
-
+char	*ft_strjoin_free(char *s1, char *s2);
 // count_tokens.c //
 
 int		count_tokens(char *rl);
