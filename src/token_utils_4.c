@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:58:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 11:46:22 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 12:34:46 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ void	init_quote_tracker(t_quote_tracker *qt)
 
 void	quotes(t_token_data *data, t_quote_tracker *qt)
 {
-	t_token *curr_token = &data->token[data->j];
-	int idx;
+	t_token	*curr_token;
+	int		idx;
 
+	curr_token = &data->token[data->j];
 	if (qt->active == 1)
 	{
 		idx = curr_token->quote_count;
@@ -52,9 +53,10 @@ void	quotes(t_token_data *data, t_quote_tracker *qt)
 
 void	d_quotes(t_token_data *data, t_quote_tracker *qt)
 {
-	t_token *curr_token = &data->token[data->j];
-	int	idx;
+	t_token	*curr_token;
+	int		idx;
 
+	curr_token = &data->token[data->j];
 	if (qt->active == 2)
 	{
 		idx = curr_token->quote_count;
@@ -77,7 +79,7 @@ void	d_quotes(t_token_data *data, t_quote_tracker *qt)
 
 int	finalize_token(t_token_data *data)
 {
-	int i;
+	int	i;
 
 	if (data->str_i > 0)
 	{

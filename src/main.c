@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/06 16:11:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:47:01 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static void	shell_loop(t_shell *shell, char **envp)
 
 	while (1)
 	{
-
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
