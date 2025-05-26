@@ -35,7 +35,9 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 CC				:= cc
 
 CFLAGS			:= -Wall -Wextra -g -fsanitize=address $(LIBS_INC)
+
 #-fsanitize=address
+
 AR				:= ar rcs
 RANLIB			:= ranlib
 RM				:= rm -rf

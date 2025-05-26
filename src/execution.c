@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	free_string_array(char **array, int count)
+static void	free_string_array(char **array, int count)
 {
 	int	i;
 
@@ -27,7 +27,7 @@ void	free_string_array(char **array, int count)
 	free(array);
 }
 
-void	free_comand(t_comand_data *comand, int num_comands)
+static void	free_comand(t_comand_data *comand, int num_comands)
 {
 	int	i;
 	int	j;
@@ -53,7 +53,7 @@ void	free_comand(t_comand_data *comand, int num_comands)
 	free(comand);
 }
 
-int	execution(t_token *token, int size_token, t_shell *shell, char **envp)
+int	execution(t_token *token, int size_token, t_shell *shell)
 {
 	t_comand_data	*comand;
 	int				num_comands;
@@ -63,7 +63,7 @@ int	execution(t_token *token, int size_token, t_shell *shell, char **envp)
 		return (-1);
 	print_comands(comand, num_comands);
 	printf("___________________________EXECUTION___________________________\n");
-	execute_pipeline(comand, num_comands, shell, envp);
+	execute_pipeline(comand, num_comands, shell);
 	free_comand(comand, num_comands);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/13 21:26:53 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:53:39 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ t_env	*find_env_var(t_env *envlist, char *name)
 		current = current->next;
 	}
 	return (NULL);
+}
+
+int	count_env_nodes(t_env *envlist)
+{
+	int		count;
+	t_env	*current;
+
+	count = 0;
+	if (!envlist)
+		return (0);
+	current	= envlist;
+	while (current)
+	{
+		count++;
+		current = current->next;
+	}
+	return (count);
 }
 
 void	clear_env_list(t_env **envlist)

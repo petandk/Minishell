@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:15 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/08 13:05:10 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:09:55 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,32 @@ int	malloc_test(void *str)
 		return (0);
 	}
 	return (1);
+}
+
+char	**list_to_matrix(t_env *env)
+{
+	t_env	*current;
+	char	**matrix;
+	int		i;
+	char	*joiner;
+
+	current = env;
+	i = 0;
+	matrix = (char **)malloc(sizeof(char *) * (count_env_nodes(env) + 1));
+	if (!matrix)
+		return (NULL);
+	while (current)
+	{
+		joiner = ft_strjoin(current->name, "=");
+		if (!joiner)
+			return (ft_free(matrix, i));
+		matrix[i] = ft_strjoin(joiner, current->value);
+		free(joiner);
+		if (!matrix[i])
+			return (ft_free(matrix, i));
+		current = current->next;
+		i++;
+	}
+	matrix[i] = NULL;
+	return (matrix);
 }

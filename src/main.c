@@ -12,15 +12,18 @@
 
 #include "minishell.h"
 
-int	select_type(char *rl, t_shell **shell, char **envp)
+int	select_type(char *rl, t_shell **shell)
 {
 	if (!rl)
-		return (printf("exit\n"), 1);
+	{
+		printf("exit\n");
+		exit(1);
+	}
 	else if (ft_strcmp(rl, "status") == 0)
 		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
 	else if (*rl)
 	{
-		token(rl, *shell, envp);
+		token(rl, *shell);
 		add_history(rl);
 	}
 	return (0);
@@ -54,7 +57,7 @@ static void	handle_sigint_main(int sig)
 	rl_redisplay();
 }
 
-static void	shell_loop(t_shell *shell, char **envp)
+static void	shell_loop(t_shell *shell)
 {
 	char	*rl;
 
@@ -63,7 +66,7 @@ static void	shell_loop(t_shell *shell, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-		if (select_type(rl, &shell, envp))
+		if (select_type(rl, &shell))
 		{
 			free (rl);
 			break ;
@@ -81,7 +84,7 @@ int	main(int argc, char **argv, char **envp)
 	signal (SIGINT, handle_sigint_main);
 	signal (SIGQUIT, SIG_IGN);
 	shell = shell_init(envp);
-	shell_loop(shell, envp);
+	shell_loop(shell);
 	free(shell);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
