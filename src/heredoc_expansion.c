@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/26 13:45:05 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/26 13:57:50 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static int len_expan(char *str, int start)
 	len = 0;
 	while (str[start + len])
 	{
-		c = str[start + len]
+		c = str[start + len];
 		if (ft_isalnum(c) || c == '_')
 			len++;
 		else
-			break;
+			break ;
 	}
-	return (len)
+	return (len);
 }
 
 static char	*find_value(char *key, t_env *env)
@@ -46,7 +46,7 @@ static char	*find_value(char *key, t_env *env)
 }
 
 
-char *heredoc_expansion(char *str, s_shell shell)
+char *heredoc_expansion(char *str, t_shell **shell)
 {
 	int		i;
 	int		len;
@@ -61,21 +61,22 @@ char *heredoc_expansion(char *str, s_shell shell)
 		if (str[i] == '$')
 		{
 			start = i + 1;
-			len = len_expan(str, start)
-			if len == 0
+			len = len_expan(str, start);
+			if (len == 0)
 			{
 				i++;
-				continue
+				continue ;
 			}
-			value = find_value(ft_substr(*str, start, len), shell->env);
+			value = find_value(ft_substr(str, start, len), (*shell)->env);
 			tmp = ft_substr(str, 0, i);
 			new_str = ft_strjoin_free(tmp, value);
 			tmp = ft_strdup(str + start + len);
-			new_str = ft_strjoin_free(new_str, tmp)
-			free(tmp)
+			new_str = ft_strjoin_free(new_str, tmp);
+			free(tmp);
 			i += ft_strlen(value);
 		}
-		else i++;
+		else 
+			i++;
 	}
-	return (new_str)
+	return (new_str);
 }

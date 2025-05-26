@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/26 13:14:46 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:56:57 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,6 +338,10 @@ void	control_d_error(char *delimiter);
 
 char	*read_line_pipe(int fd);
 t_list	*read_heredoc_pipe(int fd);
+
+// heredoc_expansion.c //
+
+char	*heredoc_expansion(char *str, t_shell **shell);
 
 // builtins.c //
 
