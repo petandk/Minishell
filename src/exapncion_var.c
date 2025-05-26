@@ -6,37 +6,31 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/17 14:44:08 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 11:35:37 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int len_expan(char *str ,int start, int qs, int qe)
+static int	len_expan(char *str, int start, int qs, int qe)
 {
 	char	c;
 	int		len;
- 
+
 	len = 0;
-	printf("_____LEN_EXPAN____\n");
-	printf("qs-> %d:\n",qs);
-	printf("qe-> %d:\n",qe);
-	printf("start-> %d:\n",start);
 	while (str[start + len])
 	{
-		printf("start + len-> %d:\n",start + len);
 		c = str[start + len];
-		printf("C-> %c:\n",c);
 		if (start + len == qs && start + len == qe)
-			break;
+			break ;
 		if (start + len == qs || start + len == qe)
 		{
 			if (start + len == qe && (ft_isalnum(c) || c == '_'))
 				len++;
-			break;
+			break ;
 		}
 		if (!ft_isalnum(c) && c != '_')
-			break;
+			break ;
 		len++;
 	}
 	return (len);
@@ -44,12 +38,11 @@ static int len_expan(char *str ,int start, int qs, int qe)
 
 static char	*find_value(char *key, t_env *env)
 {
-	t_env   *var;
-	char    *value;
+	t_env	*var;
+	char	*value;
 
 	if (!malloc_test((void *)key))
 		exit(1);
-	printf("value to expan-> %s:\n",key);
 	var = find_env_var(env, key);
 	free(key);
 	if (var)
@@ -58,92 +51,63 @@ static char	*find_value(char *key, t_env *env)
 		value = "";
 	return (value);
 }
-/*
-static char *replace_str(char *str1, int start, int end, char *str2)
-{
-	int new_len;
-	char *new_str;
-	int i;
-	int j;
-	
-	printf("str1 -> %s\n",str1);
-	printf("str2 -> %s\n",str2);
-	new_len = ft_strlen(str1) - (end - start) + ft_strlen(str2);
-	new_str = malloc(new_len + 1);
-	if (!malloc_test((void *)new_str))
-		exit(1);
-	i = 0;
-	while (i < start)
-	{
-		new_str[i] = str1[i];
-		i++;
-	}
-	j = 0;
-	while (str2 && str2[j])
-		new_str[i++] = str2[j++];
-	j = end;
-	while (str1[j])
-		new_str[i++] = str1[j++];
-	new_str[i] = '\0';
-	return (new_str);
-}*/
 
-
-void expan(char **str, t_quotes *quote, t_env *env)
+static void	process_dollar(t_expan *ex, char **str,
+	t_quotes *quote, t_env *env)
 {
-	char	*new_str;
+	int		len;
 	char	*value;
 	char	*tmp;
-	int		len;
-	int		start;
-	int		i;
-	int 	j;
 
-	new_str = ft_strdup("");
-	i = 0;
-	j = 0;
-	while ((*str)[i])
+	ex->start = ex->i + 1;
+	while (quote[ex->j].quote_start != 0 || quote[ex->j].quote_end != 0)
 	{
-		if ((*str)[i] == '$' && quote[j].quote != 1)
+		if (ex->start < quote[ex->j].quote_end)
+			break ;
+		ex->j++;
+	}
+	len = len_expan(*str, ex->start,
+			quote[ex->j].quote_start, quote[ex->j].quote_end);
+	if (len == 0 && ft_strlen(*str) == 1 && quote[ex->j].quote == 0)
+	{
+		tmp = ft_substr(*str, ex->i, 1);
+		ex->new_str = ft_strjoin_free(ex->new_str, tmp);
+		free(tmp);
+		ex->i++;
+		return ;
+	}
+	value = find_value(ft_substr(*str, ex->start, len), env);
+	ex->new_str = ft_strjoin_free(ex->new_str, value);
+	ex->i += len + 1;
+}
+
+void	expan(char **str, t_quotes *quote, t_env *env)
+{
+	t_expan	ex;
+	char	*tmp;
+
+	ex.new_str = ft_strdup("");
+	ex.i = 0;
+	ex.j = 0;
+	while ((*str)[ex.i])
+	{
+		if ((*str)[ex.i] == '$' && !is_in_single_quote(ex.i, quote))
+			process_dollar(&ex, str, quote, env);
+		else
 		{
-			start = (i + 1);
-			while ((quote[j].quote_end && start > quote[j].quote_end)
-				&&(quote[j].quote_start != 0 && quote[j].quote_end != 0))
-				j++;
-			len = len_expan(*str, start,quote[j].quote_start,quote[j].quote_end);
-			printf("len-> %d:\n",len);
-			if (len == 0 && (ft_strlen(*str) == 1) && (quote[j].quote == 0))
-			{
-				tmp = ft_substr(*str, i, 1);
-				new_str = ft_strjoin_free(new_str, tmp);
-				free(tmp);
-				i++;
-				continue ;
-			}
-			value = find_value(ft_substr(*str, start, len), env);
-			printf("value -> %s:\n",value);
-			new_str=ft_strjoin_free(new_str, value);
-			printf("value to replace-> %s:\n",new_str);
-			printf("_____________________\n");
-			i +=(len + 1);
-		}
-		else 
-		{
-			tmp = ft_substr(*str, i, 1);
-			new_str = ft_strjoin_free(new_str, tmp);
+			tmp = ft_substr(*str, ex.i, 1);
+			ex.new_str = ft_strjoin_free(ex.new_str, tmp);
 			free(tmp);
-			i++;
+			ex.i++;
 		}
 	}
 	free(*str);
-	(*str) = new_str;
-	printf("the str repalced-> %s:\n",(*str));
-	printf("_____________________\n");
+	*str = ex.new_str;
 }
 
 void	expancion_var(t_comand_data *cmd, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd->comand && cmd->comand[i])

@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:00:10 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/17 12:49:03 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 12:35:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,24 @@ int	check_unclosed_quotes(t_token_data *data, int token_count)
 
 char	*ft_strjoin_free(char *s1, char *s2)
 {
-	char *join;
-	join = ft_strjoin(s1,s2);
+	char	*join;
+
+	join = ft_strjoin(s1, s2);
 	free(s1);
 	return (join);
+}
+
+int	is_in_single_quote(int i, t_quotes *quotes)
+{
+	int	j;
+
+	j = 0;
+	while (!(quotes[j].quote_start == 0 && quotes[j].quote_end == 0))
+	{
+		if (quotes[j].quote == 1 && quotes[j].closed
+			&& i > quotes[j].quote_start && i < quotes[j].quote_end)
+			return (1);
+		j++;
+	}
+	return (0);
 }

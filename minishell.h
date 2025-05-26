@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/17 12:49:35 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 12:29:24 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,20 @@ typedef struct s_comand_data
 	int			out_count;
 }				t_comand_data;
 
-/*typedef struct s_quote
+typedef struct s_token_state
 {
 	int	in_single;
 	int	in_double;
-}			t_quote;*/
+	int	in_token;
+}	t_token_state;
+
+typedef struct s_expan
+{
+	char	*new_str;
+	int		i;
+	int		j;
+	int		start;
+}			t_expan;
 
 typedef struct s_fork_data
 {
@@ -198,6 +207,7 @@ void	start_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
 char	*ft_strjoin_free(char *s1, char *s2);
+int		is_in_single_quote(int i, t_quotes *quotes);
 // count_tokens.c //
 
 int		count_tokens(char *rl);

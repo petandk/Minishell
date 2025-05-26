@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/06 11:28:36 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 11:43:39 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_comand(t_comand_data *comand, int num_comands)
 		j = 0;
 		while (comand[i].comand && comand[i].comand[j])
 			free(comand[i].comand[j++]);
-		j = 0;	
+		j = 0;
 		while (comand[i].quote && comand[i].quote[j] && (j < 16))
 			free(comand[i].quote[j++]);
 		free(comand[i].comand);
