@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:58:58 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/04 18:39:27 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:05:53 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	*ft_free(char **strings, int count)
+void	*ft_free(char **strings, int count)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 18:54:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:25:33 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,15 @@ void	reed_rl(char *rl, char **envp);
 void	free_args(char **args);
 char	*find_path_index(t_env *envp);
 char	*find_path_access(char **all_path, char **cmd);
-void	execute_command(char **cmd, t_shell *shell, char **envp);
+void	execute_command(char **cmd, t_shell *shell);
 
 // token.c //
 
-void	token(char *rl, t_shell *shell, char **envp);
-int		execution(t_token *token, int size_token, t_shell *shell, char **envp);
+void	token(char *rl, t_shell *shell);
+
+//	execution.c //
+
+int		execution(t_token *token, int size_token, t_shell *shell);
 
 //  token_utils.c //
 
@@ -165,7 +168,6 @@ int		ft_isspace(char c);
 void	token_operator(t_token *token, char c, char next);
 void	init_token(t_token *token, int size);
 void	free_token(t_token **token, int size);
-void	print_token_array(t_token *tokens, int size);
 int		init_all(t_token_data *data, char *rl);
 
 //  token_utils_2.c //
@@ -216,7 +218,7 @@ int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand
 
 // execute_pipeline.c //
 
-void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell, char **envp);
+void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell);
 
 // handle_redirections.c //
 
@@ -261,6 +263,7 @@ t_env	*create_env_list(char **envp);
 
 t_env	*create_basic_env(void);
 t_env	*find_env_var(t_env *envlist, char *name);
+int		count_env_nodes(t_env *envlist);
 void	clear_env_list(t_env **envlist);
 
 // export.c //
@@ -274,10 +277,9 @@ int		ft_export(t_env *envlist, char *arg);
 
 int		is_valid_name(char *name);
 char	*ft_strstr(const char *haystack, const char *needle);
-
-// utils.c //
-
+char	**list_to_matrix(t_env *env);
 int		malloc_test(void *str);
+
 
 // pirnt_things.c //
 
@@ -293,6 +295,7 @@ void	ft_env(t_env *envlist, char **args);
 
 // split_first.c //
 
+void	*ft_free(char **strings, int count);
 char	**split_first(char const *s, char c);
 
 // unset.c //

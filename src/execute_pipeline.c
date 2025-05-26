@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/13 16:25:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:19:33 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count)
 }
 
 void	execute_pipeline(t_comand_data *cmd, int cmd_count,
-			t_shell *shell, char **envp)
+			t_shell *shell)
 {
 	t_fork_data	data;
 	void		(*old_sig[2])(int);
@@ -76,7 +76,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		return ;
 	while (data.i < cmd_count)
 	{
-	//	if (data.i < cmd_count - 1 && pipe(data.pipefd) == -1)
 		if (data.i < cmd_count - 1)
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
@@ -88,10 +87,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			handle_redirections(&cmd[data.i], shell);
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
-			{
-				printf("export bitch: %s\n", cmd[data.i].comand[0]);
-				execute_command(cmd[data.i].comand, shell, envp);
-			}
+				execute_command(cmd[data.i].comand, shell);
 			else
 				exit(0);
 		}

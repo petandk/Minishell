@@ -6,13 +6,13 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/13 17:24:55 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:28:05 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	select_type(char *rl, t_shell **shell, char **envp)
+int	select_type(char *rl, t_shell **shell)
 {
 	if (!rl)
 	{
@@ -23,7 +23,7 @@ int	select_type(char *rl, t_shell **shell, char **envp)
 		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
 	else if (*rl)
 	{
-		token(rl, *shell, envp);
+		token(rl, *shell);
 		add_history(rl);
 	}
 	return (0);
@@ -57,7 +57,7 @@ static void	handle_sigint_main(int sig)
 	rl_redisplay();
 }
 
-static void	shell_loop(t_shell *shell, char **envp)
+static void	shell_loop(t_shell *shell)
 {
 	char	*rl;
 
@@ -67,7 +67,7 @@ static void	shell_loop(t_shell *shell, char **envp)
 		rl = readline(YELLOW "M" RED "i" YELLOW "n"
 				RED "i" YELLOW "s" RED "h"
 				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
-		if (select_type(rl, &shell, envp))
+		if (select_type(rl, &shell))
 		{
 			free (rl);
 			break ;
@@ -85,7 +85,7 @@ int	main(int argc, char **argv, char **envp)
 	signal (SIGINT, handle_sigint_main);
 	signal (SIGQUIT, SIG_IGN);
 	shell = shell_init(envp);
-	shell_loop(shell, envp);
+	shell_loop(shell);
 	free(shell);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);

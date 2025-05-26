@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 12:24:39 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:25:36 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	process_outside_quotes(t_token_data *data, char *rl)
 	return (0);
 }
 
-void	token(char *rl, t_shell *shell, char **envp)
+void	token(char *rl, t_shell *shell)
 {
 	t_token_data	data;
 	t_quote_tracker	qt;
@@ -102,6 +102,6 @@ void	token(char *rl, t_shell *shell, char **envp)
 		data.i++;
 	}
 	if (!finalize_token(&data))
-	  execution(data.token, data.size_token, shell, envp);
+	  execution(data.token, data.size_token, shell);
 	free_t(data.str, &data.token, data.size_token);
 }
