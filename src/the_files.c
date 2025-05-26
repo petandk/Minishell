@@ -6,11 +6,18 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 11:48:45 by gpolo             #+#    #+#             */
-/*   Updated: 2025/03/28 13:26:07 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/16 11:58:13 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	has_quotes(t_token *tk, int index)
+{
+	if (!tk || !tk[index].str)
+		return (0);
+	return (tk[index].quote_count > 0);
+}
 
 void	process_redirection(t_token *tk, t_comand_data *cmd,
 			int *idx, char *rdt)
@@ -21,7 +28,12 @@ void	process_redirection(t_token *tk, t_comand_data *cmd,
 	if (tk[idx[2]].str == NULL && rdt)
 	{
 		if (ft_strcmp(rdt, "-") == 0)
-			str = init_str("_", tk, idx[2], idx[3]);
+		{
+			if (has_quotes(tk, idx[2] + 1))
+				str = init_str("_", tk, idx[2], idx[3]);
+			else
+				str = init_str("-", tk, idx[2], idx[3]);
+		}
 		else
 			str = init_str(rdt, tk, idx[2], idx[3]);
 		if (ft_strcmp(rdt, ">") == 0 || ft_strcmp(rdt, "_") == 0)

@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/03 14:45:46 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/20 12:25:55 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	token_operator(t_token *token, char c, char next)
 void	init_token(t_token *token, int size)
 {
 	int	i;
-	int q;
+	int	q;
 
 	i = 0;
 	while (i < size)
