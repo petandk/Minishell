@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 11:44:38 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/26 12:30:07 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 static void	in_files(char **in_file, int in_count, t_shell *shell)
 {
 	if (in_file && in_file[0][0] == '_')
-		here_doc(in_file, in_count, shell);
+		here_doc(in_file, in_count, shell, 0);
+	else if (in_file && in_file[0][0] == '-')
+		here_doc(in_file, in_count, shell, 1);
 	else
 		in_red(in_file[0] + 1);
 }

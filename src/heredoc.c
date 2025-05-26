@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/13 11:53:37 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:12:33 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 	return (NULL);
 }
 
-t_list	*handle_heredoc(char *delimiter, t_shell **shell)
+t_list	*handle_heredoc(char *delimiter, t_shell **shell, int expand)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -79,7 +79,7 @@ t_list	*handle_heredoc(char *delimiter, t_shell **shell)
 		close(pipe_fd[0]);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		child_process_heredoc(delimiter, pipe_fd[1]);
+		child_process_heredoc(shell, delimiter, pipe_fd[1], expand);
 	}
 	result = parent_process_heredoc(pipe_fd, pid, shell);
 	signal(SIGINT, old_sig[0]);
@@ -95,7 +95,7 @@ static void show_file_error(char *file)
 }
 
 static t_list	*ft_hdc_helper(char **splited,
-		int num_brackets, t_shell **shell)
+		int num_brackets, t_shell **shell, int expand)
 {
 	t_list	*lines;
 	t_list	*result;
@@ -109,9 +109,9 @@ static t_list	*ft_hdc_helper(char **splited,
 	num_brackets--;
 	while (i <= num_brackets)
 	{
-		if (splited[i] && splited[i][0] == '_')
+		if (splited[i] && (splited[i][0] == '_' || splited[i][0] == '-'))
 		{
-			lines = handle_heredoc(splited[i] + 1, shell);
+			lines = handle_heredoc(splited[i] + 1, shell, expand);
 			if (!lines && i == num_brackets)
 				exit(0);
 			if (!lines && errno == EINTR)
@@ -153,7 +153,7 @@ static t_list	*ft_hdc_helper(char **splited,
 	return (result);
 }
 
-t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell)
+t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell, int expand)
 {
 	t_list		*lines;
 	void		(*old_sig[2])(int);
@@ -163,7 +163,7 @@ t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell)
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT, SIG_IGN);
 	old_errno = errno;
-	lines = ft_hdc_helper(input, num_brackets, shell);
+	lines = ft_hdc_helper(input, num_brackets, shell, expand);
 	if (!lines && errno == EINTR)
 		(*shell)->exit_status = 130;
 	else
