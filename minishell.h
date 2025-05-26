@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 12:29:24 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/26 13:14:46 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ void	handle_redirections(t_comand_data *cmd, t_shell *shell);
 void    out_red(char *file);
 void    append(char *file);
 void    in_red(char *file);
-void    here_doc(char **delimiters, int in_file, t_shell *shell);
+void    here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
 // expancion_var.c //
 
@@ -318,8 +318,8 @@ void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //
 
-t_list	*handle_heredoc(char *delimiter, t_shell **shell);
-t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell);
+t_list	*handle_heredoc(char *delimiter, t_shell **shell, int expand);
+t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell, int expand);
 
 // heredoc_utils.c //
 
@@ -328,7 +328,7 @@ void	clean_heredoc(t_heredoc *vars);
 
 // heredoc_utils2.c //
 
-void	child_process_heredoc(char	*delimiter, int pipe_fd);
+void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand);
 int		process_line(char *line, char *delimiter, int pipe_fd);
 void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
