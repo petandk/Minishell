@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 12:34:12 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:04:54 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,38 +45,51 @@ static char	*find_value(char *key, t_env *env)
 	return (value);
 }
 
+char	*ft_strjoin_doblefree(char *s1, char *s2)
+{
+	char	*join;
+
+	join = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (join);
+}
 
 char *heredoc_expansion(char *str, t_shell **shell)
 {
 	int		i;
 	int		len;
-	int		start;
 	char	*value;
 	char	*tmp;
 	char	*new_str;
+	char	*key;
 
 	i = 0;
+	new_str = ft_strdup("");
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
-			start = i + 1;
-			len = len_expan(str, start);
+			len = len_expan(str, i + 1);
 			if (len == 0)
 			{
+				tmp = ft_strdup("$");
+				new_str = ft_strjoin_doblefree(new_str, tmp);
 				i++;
 				continue ;
 			}
-			value = find_value(ft_substr(str, start, len), (*shell)->env);
-			tmp = ft_substr(str, 0, i);
-			new_str = ft_strjoin_free(tmp, value);
-			tmp = ft_strdup(str + start + len);
-			new_str = ft_strjoin_free(new_str, tmp);
-			free(tmp);
-			i += ft_strlen(value);
+			key = ft_substr(str, i + 1, len);
+			value = find_value(key, (*shell)->env);
+			tmp = ft_strdup(value);
+			new_str = ft_strjoin_doblefree(new_str, tmp);
+			i += len + 1;
 		}
-		else 
+		else
+		{
+			tmp = ft_substr(str, i, 1);
+			new_str = ft_strjoin_doblefree(new_str, tmp);
 			i++;
+		}
 	}
 	return (new_str);
 }

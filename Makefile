@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/05/28 13:37:36 by rmanzana         ###   ########.fr        #
+#    Updated: 2025/05/28 12:51:49 by gpolo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,9 +35,7 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 
 CC				:= cc
 
-CFLAGS			:= -Wall -Werror -Wextra $(LIBS_INC)
-
-#-fsanitize=address
+CFLAGS			:= -Wall -Werror -Wextra -g $(LIBS_INC)
 
 AR				:= ar rcs
 RANLIB			:= ranlib
@@ -56,7 +54,7 @@ $(OBJSDIRS):
 				$(MKDIR) $(OBJSDIRS)
 
 
-sanitize: CFLAGS += -g -fsanitize=address
+sanitize: CFLAGS += -fsanitize=address
 sanitize: all
 
 $(LIBS_A):
@@ -69,7 +67,7 @@ makelibs:
 				done
 
 clean:
-				$(RM) $(OBJS) $(ASAN_SUPP)
+				$(RM) $(OBJS)
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) clean -C $$dir; \
 				done
@@ -77,7 +75,6 @@ clean:
 fclean:			clean
 				$(RM) $(OBJSDIRS)
 				$(RM) $(NAME)
-				$(RM) asan.supp
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) fclean -C $$dir; \
 				done
@@ -89,4 +86,4 @@ normi:
 info:
 				$(info $(SRCS_FILES))
 
-.PHONY:			all clean fclean re info normi run-asan sanitize
+.PHONY:			all clean fclean re info normi sanitize

@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/26 13:56:57 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:34:52 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ void	token(char *rl, t_shell *shell);
 
 //	execution.c //
 
-int		execution(t_token *token, int size_token, t_shell *shell);
+int		execution(char *str, t_token **token, int size_token, t_shell *shell);
 
 //  token_utils.c //
 
