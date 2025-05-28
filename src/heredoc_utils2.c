@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/26 13:45:24 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:44:06 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int ex
 	while (1)
 	{
 		line = readline("> ");
-		result = process_line(line, delimiter, pipe_fd);
 		if (expand)
 			line = heredoc_expansion(line, shell);
+		result = process_line(line, delimiter, pipe_fd);
 		if (result == 1)
 		{
 			control_d_error(delimiter);
