@@ -24,6 +24,7 @@ LIBS_COM		:= readline termcap
 LIBS_INC		:= $(addprefix -I , $(LIBS_DIRS))
 LIBS_COML		:= $(addprefix -l, $(LIBS_COM))
 
+
 #SRCS_FILES		:= 
 SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
 SRCS			:= $(addsuffix .c, $(SRCS_FILES))
@@ -34,9 +35,7 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 
 CC				:= cc
 
-CFLAGS			:= -Wall -Wextra -g $(LIBS_INC)
-
-#-fsanitize=address
+CFLAGS			:= -Wall -Werror -Wextra -g $(LIBS_INC)
 
 AR				:= ar rcs
 RANLIB			:= ranlib
@@ -54,6 +53,10 @@ $(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(LIBS) Makefile
 $(OBJSDIRS):
 				$(MKDIR) $(OBJSDIRS)
 
+
+sanitize: CFLAGS += -fsanitize=address
+sanitize: all
+
 $(LIBS_A):
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) -C $$dir; \
@@ -62,7 +65,6 @@ makelibs:
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) -C $$dir; \
 				done
-				
 
 clean:
 				$(RM) $(OBJS)
@@ -84,4 +86,4 @@ normi:
 info:
 				$(info $(SRCS_FILES))
 
-.PHONY:			all clean fclean re info normi
+.PHONY:			all clean fclean re info normi sanitize
