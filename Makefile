@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/05/16 10:54:50 by gpolo            ###   ########.fr        #
+#    Updated: 2025/05/28 13:37:36 by rmanzana         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ LIBS_COM		:= readline termcap
 LIBS_INC		:= $(addprefix -I , $(LIBS_DIRS))
 LIBS_COML		:= $(addprefix -l, $(LIBS_COM))
 
+
 #SRCS_FILES		:= 
 SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
 SRCS			:= $(addsuffix .c, $(SRCS_FILES))
@@ -34,7 +35,7 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 
 CC				:= cc
 
-CFLAGS			:= -Wall -Wextra -g -fsanitize=address $(LIBS_INC)
+CFLAGS			:= -Wall -Werror -Wextra $(LIBS_INC)
 
 #-fsanitize=address
 
@@ -54,6 +55,10 @@ $(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(LIBS) Makefile
 $(OBJSDIRS):
 				$(MKDIR) $(OBJSDIRS)
 
+
+sanitize: CFLAGS += -g -fsanitize=address
+sanitize: all
+
 $(LIBS_A):
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) -C $$dir; \
@@ -62,10 +67,9 @@ makelibs:
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) -C $$dir; \
 				done
-				
 
 clean:
-				$(RM) $(OBJS)
+				$(RM) $(OBJS) $(ASAN_SUPP)
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) clean -C $$dir; \
 				done
@@ -73,6 +77,7 @@ clean:
 fclean:			clean
 				$(RM) $(OBJSDIRS)
 				$(RM) $(NAME)
+				$(RM) asan.supp
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) fclean -C $$dir; \
 				done
@@ -84,4 +89,4 @@ normi:
 info:
 				$(info $(SRCS_FILES))
 
-.PHONY:			all clean fclean re info normi
+.PHONY:			all clean fclean re info normi run-asan sanitize
