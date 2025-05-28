@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/17 13:19:33 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:23:26 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
 			&& (!cmd[0].out_file || cmd[0].out_count == 0))
 		{
-			if (builtins(shell, cmd[0].comand))
+			if (builtins(shell, cmd[0].comand, cmd, cmd_count))
 				return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);	
 		}
 	}
@@ -98,6 +98,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	cnt = 0;
 	while (cnt < cmd_count)	
 			waitpid(pids[cnt++], NULL, 0);
+//	free_comand(cmd, cmd_count);
 	free(pids);
 	signal(SIGINT, old_sig[0]);
 	signal(SIGQUIT, old_sig[1]);
