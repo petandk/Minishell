@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/05/16 10:54:50 by gpolo            ###   ########.fr        #
+#    Updated: 2025/05/28 12:51:49 by gpolo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJS			:= $(addsuffix .o, $(OBJSTEMP))
 
 CC				:= cc
 
-CFLAGS			:= -Wall -Wextra -g -fsanitize=address $(LIBS_INC)
+CFLAGS			:= -Wall -Wextra -g $(LIBS_INC)
 
 #-fsanitize=address
 

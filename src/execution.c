@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 11:43:39 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/28 13:47:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,13 @@ static void	free_comand(t_comand_data *comand, int num_comands)
 	free(comand);
 }
 
-int	execution(t_token *token, int size_token, t_shell *shell)
+int	execution(char *str, t_token **token, int size_token, t_shell *shell)
 {
 	t_comand_data	*comand;
 	int				num_comands;
 
-	num_comands = prepare_to_execute(&comand, token, size_token);
+	num_comands = prepare_to_execute(&comand, (*token), size_token);
+	free_t(str, token, size_token);
 	if (num_comands <= 0)
 		return (-1);
 	print_comands(comand, num_comands);
