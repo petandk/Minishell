@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 13:47:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/28 14:23:38 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	free_string_array(char **array, int count)
 	free(array);
 }
 
-static void	free_comand(t_comand_data *comand, int num_comands)
+void	free_comand(t_comand_data *comand, int num_comands)
 {
 	int	i;
 	int	j;

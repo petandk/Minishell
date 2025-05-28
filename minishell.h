@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 13:34:52 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/28 14:14:32 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ void	token(char *rl, t_shell *shell);
 //	execution.c //
 
 int		execution(char *str, t_token **token, int size_token, t_shell *shell);
+void    free_comand(t_comand_data *comand, int num_comands);
 
 //  token_utils.c //
 
@@ -314,7 +315,7 @@ int		ft_unset(t_env **envlist, char *name);
 
 // exit.c //
 
-void	ft_exit(t_shell **shell, int exit_code);
+void	ft_exit(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
 
 // heredoc.c //
 
@@ -345,6 +346,6 @@ char	*heredoc_expansion(char *str, t_shell **shell);
 
 // builtins.c //
 
-int		builtins(t_shell *shell, char **cmd);
+int		builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count);
 
 #endif		

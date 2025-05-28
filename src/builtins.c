@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:14 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/13 16:06:47 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:14:14 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ static int	builtins_split(t_shell *shell, char **cmd)
 	return (0);
 }
 
-int	builtins(t_shell *shell, char **cmd)
+int	builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count)
 {
 	if (!ft_strcmp(cmd[0], "exit"))
 	{
 		if (cmd[1] && cmd[1][0] != '\0')
-			return (ft_exit(&shell, ft_atoi(cmd[1])), 1);
+			return (ft_exit(&shell, ft_atoi(cmd[1]), comd, cmd_count), 1);
 		else
-			return (ft_exit(&shell, 0), 1);
+			return (ft_exit(&shell, 0, comd, cmd_count), 1);
 	}
 	if (!ft_strcmp(cmd[0], "echo"))
 	{
