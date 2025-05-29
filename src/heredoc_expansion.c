@@ -6,18 +6,20 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 13:04:54 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 12:20:53 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int len_expan(char *str, int start)
+static int	len_expan(char *str, int start)
 {
 	char	c;
 	int		len;
 
 	len = 0;
+	if (str[start] == '?')
+		return (1);
 	while (str[start + len])
 	{
 		c = str[start + len];
@@ -29,13 +31,19 @@ static int len_expan(char *str, int start)
 	return (len);
 }
 
-static char	*find_value(char *key, t_env *env)
+static char	*find_value(char *key, t_env *env, int exst)
 {
 	t_env	*var;
 	char	*value;
 
 	if (!malloc_test((void *)key))
 		exit(1);
+	if (ft_strcmp(key, "?") == 0)
+	{
+		value = ft_itoa(exst);
+		free(key);
+		return (value);
+	}
 	var = find_env_var(env, key);
 	free(key);
 	if (var)
@@ -55,41 +63,48 @@ char	*ft_strjoin_doblefree(char *s1, char *s2)
 	return (join);
 }
 
-char *heredoc_expansion(char *str, t_shell **shell)
+static int	process_dollar(char *str, t_shell **shell, t_expan *ex, char **tmp)
 {
-	int		i;
 	int		len;
 	char	*value;
-	char	*tmp;
-	char	*new_str;
 	char	*key;
 
-	i = 0;
-	new_str = ft_strdup("");
-	while (str[i])
+	len = len_expan(str, ex->i + 1);
+	if (len == 0)
 	{
-		if (str[i] == '$')
+		(*tmp) = ft_strdup("$");
+		ex->new_str = ft_strjoin_doblefree(ex->new_str, (*tmp));
+		ex->i++;
+		return (1);
+	}
+	key = ft_substr(str, ex->i + 1, len);
+	value = find_value(key, (*shell)->env, (*shell)->exit_status);
+	(*tmp) = ft_strdup(value);
+	ex->new_str = ft_strjoin_doblefree(ex->new_str, (*tmp));
+	ex->i += len + 1;
+	return (0);
+}
+
+char	*heredoc_expansion(char *str, t_shell **shell)
+{
+	t_expan	ex;
+	char	*tmp;
+
+	ex.i = 0;
+	ex.new_str = ft_strdup("");
+	while (str[ex.i])
+	{
+		if (str[ex.i] == '$')
 		{
-			len = len_expan(str, i + 1);
-			if (len == 0)
-			{
-				tmp = ft_strdup("$");
-				new_str = ft_strjoin_doblefree(new_str, tmp);
-				i++;
+			if (process_dollar(str, shell, &ex, &tmp) == 1)
 				continue ;
-			}
-			key = ft_substr(str, i + 1, len);
-			value = find_value(key, (*shell)->env);
-			tmp = ft_strdup(value);
-			new_str = ft_strjoin_doblefree(new_str, tmp);
-			i += len + 1;
 		}
 		else
 		{
-			tmp = ft_substr(str, i, 1);
-			new_str = ft_strjoin_doblefree(new_str, tmp);
-			i++;
+			tmp = ft_substr(str, ex.i, 1);
+			ex.new_str = ft_strjoin_doblefree(ex.new_str, tmp);
+			ex.i++;
 		}
 	}
-	return (new_str);
+	return (ex.new_str);
 }
