@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 14:23:26 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 13:07:28 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	old_sig[1] = signal(SIGQUIT,SIG_IGN);
 	data.i = 0;
 	data.prev_fd = -1;
-	expancion_var(&cmd[data.i], shell->env);
+	expancion_var(&cmd[data.i], shell);
+//	expancion_var(&cmd[data.i], shell-> env);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
@@ -80,6 +81,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
 		pids[data.i] = data.pid;
+//		handle_redirections(&cmd[data.i], shell);
 		if (data.pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);

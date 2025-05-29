@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 11:35:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 11:45:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static int	len_expan(char *str, int start, int qs, int qe)
 	int		len;
 
 	len = 0;
+	if (str[start] == '?')
+		return (1);
 	while (str[start + len])
 	{
 		c = str[start + len];
@@ -36,24 +38,30 @@ static int	len_expan(char *str, int start, int qs, int qe)
 	return (len);
 }
 
-static char	*find_value(char *key, t_env *env)
+static char	*find_value(char *key, t_env *env, int exst)
 {
 	t_env	*var;
 	char	*value;
 
 	if (!malloc_test((void *)key))
 		exit(1);
+	if (ft_strcmp(key, "?") == 0)
+	{
+		value = ft_itoa(exst);
+		free(key);
+		return (value);
+	}
 	var = find_env_var(env, key);
 	free(key);
 	if (var)
-		value = var->value;
+		value = ft_strdup(var->value);
 	else
 		value = "";
 	return (value);
 }
 
 static void	process_dollar(t_expan *ex, char **str,
-	t_quotes *quote, t_env *env)
+	t_quotes *quote, t_shell *shell)
 {
 	int		len;
 	char	*value;
@@ -76,12 +84,13 @@ static void	process_dollar(t_expan *ex, char **str,
 		ex->i++;
 		return ;
 	}
-	value = find_value(ft_substr(*str, ex->start, len), env);
-	ex->new_str = ft_strjoin_free(ex->new_str, value);
+	value = find_value(ft_substr(*str, ex->start, len),
+			shell->env, shell->exit_status);
+	ex->new_str = ft_strjoin_doblefree(ex->new_str, value);
 	ex->i += len + 1;
 }
 
-void	expan(char **str, t_quotes *quote, t_env *env)
+void	expan(char **str, t_quotes *quote, t_shell *shell)
 {
 	t_expan	ex;
 	char	*tmp;
@@ -92,7 +101,7 @@ void	expan(char **str, t_quotes *quote, t_env *env)
 	while ((*str)[ex.i])
 	{
 		if ((*str)[ex.i] == '$' && !is_in_single_quote(ex.i, quote))
-			process_dollar(&ex, str, quote, env);
+			process_dollar(&ex, str, quote, shell);
 		else
 		{
 			tmp = ft_substr(*str, ex.i, 1);
@@ -105,7 +114,7 @@ void	expan(char **str, t_quotes *quote, t_env *env)
 	*str = ex.new_str;
 }
 
-void	expancion_var(t_comand_data *cmd, t_env *env)
+void	expancion_var(t_comand_data *cmd, t_shell *shell)
 {
 	int	i;
 
@@ -113,7 +122,7 @@ void	expancion_var(t_comand_data *cmd, t_env *env)
 	while (cmd->comand && cmd->comand[i])
 	{
 		if (ft_strchr(cmd->comand[i], '$'))
-			expan(&cmd->comand[i], cmd->quote[i], env);
+			expan(&cmd->comand[i], cmd->quote[i], shell);
 		i++;
 	}
 }

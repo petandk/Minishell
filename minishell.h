@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 14:14:32 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 11:28:15 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,8 @@ void    here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
 // expancion_var.c //
 
-void    expancion_var(t_comand_data *cmd, t_env *env);
+void    expancion_var(t_comand_data *cmd, t_shell *shell);
+//void    expancion_var(t_comand_data *cmd, t_env *env);
 
 // cd.c //
 
@@ -343,6 +344,7 @@ t_list	*read_heredoc_pipe(int fd);
 // heredoc_expansion.c //
 
 char	*heredoc_expansion(char *str, t_shell **shell);
+char	*ft_strjoin_doblefree(char *s1, char *s2);
 
 // builtins.c //
 
