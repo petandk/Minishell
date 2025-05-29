@@ -6,14 +6,14 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:31:39 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/17 11:49:58 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:17:38 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 15:06:51 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_flag(char *str)
+int	is_flag(char *str)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ int		is_flag(char *str)
 	return (1);
 }
 
-void	ft_echo(char **cmd)
+void	ft_echo(t_shell *shell, char **cmd)
 {
 	int	i;
 	int	is_n;
@@ -51,4 +51,5 @@ void	ft_echo(char **cmd)
 	}
 	if (!is_n)
 		write(1, "\n", 1);
+	shell->exit_status = 0;
 }

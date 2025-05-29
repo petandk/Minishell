@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 11:28:15 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 19:03:32 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ void    append(char *file);
 void    in_red(char *file);
 void    here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
-// expancion_var.c //
+// expansion_var.c //
 
 void    expancion_var(t_comand_data *cmd, t_shell *shell);
 //void    expancion_var(t_comand_data *cmd, t_env *env);
@@ -253,15 +253,15 @@ void	ft_cd(t_shell *shell, char *dest);
 
 // cd_utils.c //
 
-int	update_oldpwd_env(t_env *env, char *old_path);
+int	update_oldpwd_env(t_shell *shell, char *old_path);
 
 // echo.c //
 
-void	ft_echo(char **cmd);
+void	ft_echo(t_shell *shell, char **cmd);
 
 // pwd.c //
 
-void	ft_pwd(void);
+void	ft_pwd(t_shell *shell);
 
 // export_utils.c //
 
@@ -283,7 +283,8 @@ void	clear_env_list(t_env **envlist);
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 int		process_export(char *arg, char ***splitd, t_env *env_var, int is_env);
-int		ft_export(t_env *envlist, char *arg);
+int	update_or_create_var(t_env **envlist, char *name, char *value);
+int		ft_export(t_shell *shell, char *arg);
 
 // utils.c //
 
@@ -303,7 +304,7 @@ void	print_comands(t_comand_data *comand, int num_comands);
 
 t_env	*clone_env_list(t_env *envlist);
 void	ft_show_env(t_env *envlist, int is_env);
-void	ft_env(t_env *envlist, char **args);
+void	ft_env(t_shell *shell, char **args);
 
 // split_first.c //
 

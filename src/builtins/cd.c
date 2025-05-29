@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/16 20:27:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:45:53 by rmanzana         ###   ########.fr       */
 /*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -94,26 +94,27 @@ void	ft_cd(t_shell *shell, char *dest)
 {
 	char	*newpath;
 	char	*current;
-	int		ret;
 
 	current = getcwd(NULL, 0);
 	if (!current)
+	{
+		shell->exit_status = 1;
 		return (perror("minishell: cd: getcwd error"), (void)0);
+	}
 	newpath = new_path(shell, dest);
 	if (!newpath)
-		return (free(current), (void)0);
-	ret = chdir(newpath);
-	if (ret == -1)
 	{
-		perror("cd");
-		free(newpath);
-		free(current);
-		return ;
+		shell->exit_status = 1;
+		return (free(current), (void)0);
 	}
-	update_oldpwd_env(shell->env, current);
-	update_pwd_env(shell->env);
+	if (chdir(newpath) == -1)
+	{
+		shell->exit_status = 1;
+		return (perror("cd"), free(newpath), free(current), (void)0);
+	}
 	free(shell->prev_dir);
 	shell->prev_dir = current;
-	free(newpath);
-	return ;
+	shell->exit_status = 0;
+	return (update_oldpwd_env(shell, current), update_pwd_env(shell->env), \
+			free(newpath), (void) 0);
 }

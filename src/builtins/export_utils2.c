@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/17 12:53:39 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:31:22 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	count_env_nodes(t_env *envlist)
 	count = 0;
 	if (!envlist)
 		return (0);
-	current	= envlist;
+	current = envlist;
 	while (current)
 	{
 		count++;
@@ -78,8 +78,10 @@ void	clear_env_list(t_env **envlist)
 	while (*envlist)
 	{
 		aux = (*envlist)->next;
-		free((*envlist)->name);
-		free((*envlist)->value);
+		if ((*envlist)->name)
+			free((*envlist)->name);
+		if ((*envlist)->value)
+			free((*envlist)->value);
 		free(*envlist);
 		*envlist = aux;
 	}
