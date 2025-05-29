@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 13:07:28 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 16:19:23 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	t_fork_data	data;
 	void		(*old_sig[2])(int);
 	pid_t		*pids;
-	int			cnt;
+	int			cnt[2];
 
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT,SIG_IGN);
@@ -97,9 +97,19 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			else_pid_0(&data.prev_fd, data.pipefd, data.i, cmd_count);
 		data.i++;
 	}
-	cnt = 0;
-	while (cnt < cmd_count)	
-			waitpid(pids[cnt++], NULL, 0);
+	cnt[0] = 0;
+	while (cnt[0] < cmd_count)
+	{
+			waitpid(pids[cnt[0]], &cnt[1], 0);
+			if (cnt[0] == cmd_count - 1)
+			{
+				if (WIFEXITED(cnt[1]))
+					shell->exit_status = WEXITSTATUS(cnt[1]);
+				else if (WIFSIGNALED(cnt[1]))
+					shell->exit_status = 128 + WTERMSIG(cnt[1]);
+			}
+			cnt[0]++;
+	}
 //	free_comand(cmd, cmd_count);
 	free(pids);
 	signal(SIGINT, old_sig[0]);

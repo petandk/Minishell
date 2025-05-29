@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:14 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/28 14:14:14 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/29 18:49:09 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,22 @@
 static int	builtins_split(t_shell *shell, char **cmd)
 {
 	if (!ft_strcmp(cmd[0], "pwd"))
-		return (ft_pwd(), 1);
+		return (ft_pwd(shell), 1);
 	else if (!ft_strcmp(cmd[0], "export"))
 	{
 		if (cmd[1])
-			return (ft_export(shell->env, cmd[1]), 1);
+			return (ft_export(shell, cmd[1]), 1);
 		else
-			return (ft_export(shell->env, NULL), 1);
+			return (ft_export(shell, NULL), 1);
 	}
 	else if (!ft_strcmp(cmd[0], "unset"))
 		return (ft_unset(&(shell)->env, cmd[1]), 1);
 	else if (!ft_strcmp(cmd[0], "env"))
 	{
 		if (cmd[1] == NULL)
-			return (ft_env(shell->env, NULL), 1);
+			return (ft_env(shell, NULL), 1);
 		else
-			return (ft_env(shell->env, cmd + 1), 1);
+			return (ft_env(shell, cmd + 1), 1);
 	}
 	return (0);
 }
@@ -46,7 +46,7 @@ int	builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count)
 	}
 	if (!ft_strcmp(cmd[0], "echo"))
 	{
-			return (ft_echo(cmd), 1);
+		return (ft_echo(shell, cmd), 1);
 	}
 	else if (!ft_strcmp(cmd[0], "cd"))
 		return (ft_cd(shell, cmd[1]), 1);

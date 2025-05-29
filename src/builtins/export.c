@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/13 16:06:13 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:41:33 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	update_or_create_var(t_env **envlist, char *name, char *value)
 	return (0);
 }
 
-int	ft_export(t_env *envlist, char *arg)
+int	ft_export(t_shell *shell, char *arg)
 {
 	char	**splitd;
 	t_env	env_var;
@@ -113,7 +113,7 @@ int	ft_export(t_env *envlist, char *arg)
 	env_var.next = NULL;
 	if (!arg || arg[0] == '\0')
 	{
-		sorted = clone_env_list(envlist);
+		sorted = clone_env_list(shell->env);
 		if (!sorted)
 			return (1);
 		sort_env_list(sorted);
@@ -123,7 +123,7 @@ int	ft_export(t_env *envlist, char *arg)
 	}
 	if (process_export(arg, &splitd, &env_var, 0))
 		return (1);
-	ret = update_or_create_var(&envlist, env_var.name, env_var.value);
+	ret = update_or_create_var(&shell->env, env_var.name, env_var.value);
 	free_split(splitd, -1);
 	return (ret);
 }
