@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 12:20:53 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/30 12:13:12 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ char	*ft_strjoin_doblefree(char *s1, char *s2)
 	char	*join;
 
 	join = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
 	return (join);
 }
 

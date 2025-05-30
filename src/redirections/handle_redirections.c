@@ -6,23 +6,33 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/26 12:30:07 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:35:47 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	in_files(char **in_file, int in_count, t_shell *shell)
+static int	in_files(char **in_file, int in_count, t_shell *shell)
 {
 	if (in_file && in_file[0][0] == '_')
-		here_doc(in_file, in_count, shell, 0);
+	{
+		if (here_doc(in_file, in_count, shell, 0) == -1)
+			return (-1);
+	}
 	else if (in_file && in_file[0][0] == '-')
-		here_doc(in_file, in_count, shell, 1);
+	{
+		if (here_doc(in_file, in_count, shell, 1) == -1)
+			return (-1);
+	}
 	else
-		in_red(in_file[0] + 1);
+	{
+		if (in_red(in_file[0] + 1) == -1)
+			return (-1);
+	}
+	return (0);
 }
 
-static void	out_files(char **out_file, int out_count)
+static int	out_files(char **out_file, int out_count)
 {
 	int	i;
 
@@ -30,17 +40,27 @@ static void	out_files(char **out_file, int out_count)
 	while (i < out_count)
 	{
 		if (out_file[i][0] == '_')
-			append(out_file[i] + 1);
+		{
+			if (append(out_file[i] + 1) == -1)
+				return (-1);
+		}
 		else
-			out_red(out_file[i] + 1);
+		{
+			if (out_red(out_file[i] + 1) == -1)
+				return (-1);
+		}
 		i++;
 	}
+	return (0);
 }
 
-void	handle_redirections(t_comand_data *cmd, t_shell *shell)
+int	handle_redirections(t_comand_data *cmd, t_shell *shell)
 {
 	if (cmd->in_file && cmd->in_count)
-		in_files(cmd->in_file, cmd->in_count, shell);
+		if (in_files(cmd->in_file, cmd->in_count, shell) == -1)
+			return (-1);
 	if (cmd->out_file && cmd->out_count)
-		out_files(cmd->out_file, cmd->out_count);
+		if (out_files(cmd->out_file, cmd->out_count) == -1)
+			return (-1);
+	return (0);
 }
