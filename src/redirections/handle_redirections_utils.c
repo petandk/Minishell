@@ -6,13 +6,13 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/26 13:07:24 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:35:02 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	out_red(char *file)
+int	out_red(char *file)
 {
 	int	fd;
 
@@ -20,13 +20,14 @@ void	out_red(char *file)
 	if (fd < 0)
 	{
 		printf("Error opening file\n");
-		exit (1);
+		return (-1);
 	}
 	dup2(fd, 1);
 	close (fd);
+	return (0);
 }
 
-void	append(char *file)
+int	append(char *file)
 {
 	int	fd;
 
@@ -34,13 +35,14 @@ void	append(char *file)
 	if (fd < 0)
 	{
 		printf("Error opening file\n");
-		exit (1);
+		return (-1);
 	}
 	dup2(fd, 1);
 	close (fd);
+	return (0);
 }
 
-void	in_red(char *file)
+int	in_red(char *file)
 {
 	int	fd;
 
@@ -48,13 +50,14 @@ void	in_red(char *file)
 	if (fd < 0)
 	{
 		printf("Error opening file\n");
-		exit (1);
+		return (-1);
 	}
 	dup2(fd, 0);
 	close (fd);
+	return (0);
 }
 
-void	here_doc(char **delimiters, int in_count, t_shell *shell, int expand)
+int	here_doc(char **delimiters, int in_count, t_shell *shell, int expand)
 {
 	t_list	*lines;
 	int		pipefd[2];
@@ -63,11 +66,11 @@ void	here_doc(char **delimiters, int in_count, t_shell *shell, int expand)
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe error");
-		exit (1);
+		return (-1);
 	}
 	lines = ft_heredoc(delimiters, in_count, &shell, expand);
 	if (!lines)
-		return (close(pipefd[0]), close(pipefd[1]), (void)0);
+		return (close(pipefd[0]), close(pipefd[1]), 0);
 	current = lines;
 	while (current)
 	{
@@ -79,4 +82,5 @@ void	here_doc(char **delimiters, int in_count, t_shell *shell, int expand)
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[0]);
 	ft_lstclear(&lines, free);
+	return (0);
 }

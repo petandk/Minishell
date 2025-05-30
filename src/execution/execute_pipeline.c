@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 16:19:23 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:41:29 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,17 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
 		pids[data.i] = data.pid;
-//		handle_redirections(&cmd[data.i], shell);
 		if (data.pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
-			handle_redirections(&cmd[data.i], shell);
+			if (handle_redirections(&cmd[data.i], shell) == -1)
+			{
+				free_comand(cmd, cmd_count);
+				free(pids);
+				exit (0);
+			}
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 				execute_command(cmd[data.i].comand, shell);
 			else
@@ -110,7 +114,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			}
 			cnt[0]++;
 	}
-//	free_comand(cmd, cmd_count);
 	free(pids);
 	signal(SIGINT, old_sig[0]);
 	signal(SIGQUIT, old_sig[1]);

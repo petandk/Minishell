@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 14:23:38 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/30 13:46:10 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ int	execution(char *str, t_token **token, int size_token, t_shell *shell)
 	num_comands = prepare_to_execute(&comand, (*token), size_token);
 	free_t(str, token, size_token);
 	if (num_comands <= 0)
+	{
+		free_t(str, token, size_token);
 		return (-1);
+	}
 	print_comands(comand, num_comands);
 	printf("___________________________EXECUTION___________________________\n");
 	execute_pipeline(comand, num_comands, shell);
