@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exapncion_var.c                                    :+:      :+:    :+:   */
+/*   expansion_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 11:45:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/30 12:25:52 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static char	*find_value(char *key, t_env *env, int exst)
 	if (var)
 		value = ft_strdup(var->value);
 	else
-		value = "";
+		value = ft_strdup("");
 	return (value);
 }
 
