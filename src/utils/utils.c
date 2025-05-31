@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:15 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/17 13:09:55 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:22:50 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,26 @@ int	is_valid_name(char *name)
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	is_valid_number(char *str)
+{
+	int	i;
+
+	if (!str || !*str)
+		return (0);
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
 			return (0);
 		i++;
 	}
