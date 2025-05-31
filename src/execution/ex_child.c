@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/29 14:50:47 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:21:46 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ void	free_args(char **args)
 char	*find_path_index(t_env *envp)
 {
 	char	*e;
+	t_env 	*path_env;
 
-	e = ft_strdup(find_env_var(envp, "PATH")->value);
+	path_env = find_env_var(envp, "PATH");
+	if (!path_env || !path_env->value)
+		return (NULL);
+	e = ft_strdup(path_env->value);
 	if (!malloc_test((void *)e))
 		return (NULL);
 	return (e);
@@ -67,8 +71,10 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 	char	*path;
 
 	str = find_path_index(shell->env);
+	if (!str)
+		return (NULL);
 	all_path = ft_split(str, ':');
-	if (cmd && cmd[0] && cmd [0][0] != '/')
+	if (cmd && cmd[0] && cmd [0][0] != '/' && cmd[0][0] != '.')
 	{
 		if (access(cmd[0], X_OK) == 0)
 			return (cmd[0]);
@@ -78,7 +84,7 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 			free_args(all_path);
 			printf("%s: command not found\n", cmd[0]);
 			free(str);
-			exit (127);
+			return NULL;
 		}
 	}
 	else
@@ -99,8 +105,14 @@ void	execute_command(char **cmd, t_shell *shell)
 	if (!cmd || !cmd[0])
 		exit(0);
 	path = get_command_path(shell, cmd);
+	if (!path)
+	{
+		free_args(new_env);
+//		printf("%s: No such file or directory\n", cmd[0]);
+		return ;
+	}
 	execve(path, cmd, new_env);
 	free_args(new_env);
 	printf("%s: command not found\n", cmd[0]);
-	exit (127);
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:02:38 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 14:35:47 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/30 15:15:47 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,14 @@ static int	out_files(char **out_file, int out_count)
 
 int	handle_redirections(t_comand_data *cmd, t_shell *shell)
 {
-	if (cmd->in_file && cmd->in_count)
-		if (in_files(cmd->in_file, cmd->in_count, shell) == -1)
-			return (-1);
+//	if (cmd->in_file && cmd->in_count)
+//		if (in_files(cmd->in_file, cmd->in_count, shell) == -1)
+//			return (-1);
 	if (cmd->out_file && cmd->out_count)
 		if (out_files(cmd->out_file, cmd->out_count) == -1)
+			return (-1);
+	if (cmd->in_file && cmd->in_count)
+		if (in_files(cmd->in_file, cmd->in_count, shell) == -1)
 			return (-1);
 	return (0);
 }

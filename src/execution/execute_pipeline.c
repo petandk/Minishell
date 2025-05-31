@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 14:41:29 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/31 13:19:27 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,20 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if (handle_redirections(&cmd[data.i], shell) == -1)
 			{
 				free_comand(cmd, cmd_count);
+				clear_env_list(&shell->env);
+				free(shell);
 				free(pids);
-				exit (0);
+				exit (126);
 			}
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
-				execute_command(cmd[data.i].comand, shell);
+			{
+				execute_command(cmd[data.i].comand, shell);	
+				free_comand(cmd, cmd_count);
+				clear_env_list(&shell->env);
+				free(shell);
+				free(pids);
+				exit (127);
+			}
 			else
 				exit(0);
 		}
