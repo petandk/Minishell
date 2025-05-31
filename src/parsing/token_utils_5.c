@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 11:00:10 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 12:35:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/31 11:53:12 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,13 @@ int	is_in_single_quote(int i, t_quotes *quotes)
 	int	j;
 
 	j = 0;
+	if (quotes[j].quote == 1
+		&& (0 == quotes[j].quote_start && 0 == quotes[j].quote_end))
+		return (1);
 	while (!(quotes[j].quote_start == 0 && quotes[j].quote_end == 0))
 	{
-		if (quotes[j].quote == 1 && quotes[j].closed
-			&& i > quotes[j].quote_start && i < quotes[j].quote_end)
+		if (quotes[j].quote == 1
+			&& (i >= quotes[j].quote_start && i <= quotes[j].quote_end))
 			return (1);
 		j++;
 	}
