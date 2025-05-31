@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:42:10 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/29 18:45:28 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:12:51 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	update_oldpwd_env(t_shell *shell, char *old_path)
 	}
 	else
 	{
-		return (ft_export(shell, "OLDPWD=") == 0
+		return (update_or_create_var(&shell->env, "OLDPWD=", "") == 0
 			&& update_oldpwd_env(shell, old_path));
 	}
 }
