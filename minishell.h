@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 14:00:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/05/31 13:18:34 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,11 +284,12 @@ void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 int		process_export(char *arg, char ***splitd, t_env *env_var, int is_env);
 int	update_or_create_var(t_env **envlist, char *name, char *value);
-int		ft_export(t_shell *shell, char *arg);
+int		ft_export(t_shell *shell, char **args);
 
 // utils.c //
 
 int		is_valid_name(char *name);
+int		is_valid_number(char *str);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	**list_to_matrix(t_env *env);
 int		malloc_test(void *str);
@@ -313,7 +314,7 @@ char	**split_first(char const *s, char c);
 
 // unset.c //
 
-int		ft_unset(t_env **envlist, char *name);
+int		ft_unset(t_env **envlist, char **names);
 
 // exit.c //
 

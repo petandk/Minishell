@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/29 19:14:59 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:28:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_env(t_shell *shell, char **args)
 	int		i;
 	char	**splitd;
 	t_env	env_var;
-	
+
 	if (!args || !args[0])
 	{
 		shell->exit_status = 0;
@@ -79,7 +79,6 @@ void	ft_env(t_shell *shell, char **args)
 		}
 		else
 		{
-
 			clear_env_list(&temp_env);
 			shell->exit_status = 1;
 			return ;
