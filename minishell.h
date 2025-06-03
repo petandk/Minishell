@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/31 13:18:34 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:06:39 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ int		ft_unset(t_env **envlist, char **names);
 
 // exit.c //
 
+void	ft_exit_no_print(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
 void	ft_exit(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
 
 // heredoc.c //

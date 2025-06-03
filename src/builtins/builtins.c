@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:14 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/31 13:25:10 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:20:00 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ int	builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count)
 		{
 			if (!is_valid_number(cmd[1]))
 			{
+				ft_putendl_fd("exit", 2);
 				ft_putstr_fd("Minishell: exit: ", 2);
 				ft_putstr_fd(cmd[1], 2);
 				ft_putendl_fd(": numeric argument required", 2);
-				return (ft_exit(&shell, 2, comd, cmd_count), 1);
+				return (ft_exit_no_print(&shell, 2, comd, cmd_count), 1);
 			}
 			return (ft_exit(&shell, ft_atoi(cmd[1]), comd, cmd_count), 1);
 		}
