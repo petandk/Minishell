@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 12:13:12 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/03 18:56:13 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ char	*heredoc_expansion(char *str, t_shell **shell)
 	char	*tmp;
 
 	ex.i = 0;
+	if (!str)
+		return (NULL);
 	ex.new_str = ft_strdup("");
 	while (str[ex.i])
 	{

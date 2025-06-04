@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/31 13:19:27 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/04 19:35:04 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	handle_pipe(int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
-		exit (1);
+		exit(1);
 }
 
 void	handle_fork(pid_t *pid)
 {
 	*pid = fork();
 	if (*pid == -1)
-		exit (1);
+		exit(1);
 }
 
 static void	if_pid_0(int prev_fd, int *pipefd, int i, int cmd_count)
@@ -62,19 +62,18 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
-//	expancion_var(&cmd[data.i], shell-> env);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
 			&& (!cmd[0].out_file || cmd[0].out_count == 0))
 		{
-			if (builtins(shell, cmd[0].comand, cmd, cmd_count))
+			if (builtins(shell, cmd[0].comand))
 				return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);	
 		}
 	}
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
-		return ;
+		return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);	
 	while (data.i < cmd_count)
 	{
 		if (data.i < cmd_count - 1)
@@ -88,18 +87,14 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
 			if (handle_redirections(&cmd[data.i], shell) == -1)
 			{
-				free_comand(cmd, cmd_count);
-				clear_env_list(&shell->env);
-				free(shell);
+				cleanup_shell(&shell);
 				free(pids);
 				exit (126);
 			}
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 			{
 				execute_command(cmd[data.i].comand, shell);	
-				free_comand(cmd, cmd_count);
-				clear_env_list(&shell->env);
-				free(shell);
+				cleanup_shell(&shell);
 				free(pids);
 				exit (127);
 			}

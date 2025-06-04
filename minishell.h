@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/31 16:06:39 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:26:58 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,11 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	*prev_dir;
-	t_env	*env;
-	int		exit_status;
+	char			*prev_dir;
+	t_env			*env;
+	t_comand_data	*commands;
+	int				num_commands;
+	int				exit_status;
 }	t_shell;
 
 typedef struct s_heredoc
@@ -167,10 +169,15 @@ void	execute_command(char **cmd, t_shell *shell);
 
 void	token(char *rl, t_shell *shell);
 
+//	shell.c //
+
+t_shell	*shell_init(char **envp);
+void	cleanup_shell(t_shell **shell);
+
 //	execution.c //
 
 int		execution(char *str, t_token **token, int size_token, t_shell *shell);
-void    free_comand(t_comand_data *comand, int num_comands);
+void    free_comand(t_comand_data **comand, int num_comands);
 
 //  token_utils.c //
 
@@ -211,6 +218,7 @@ void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
 char	*ft_strjoin_free(char *s1, char *s2);
 int		is_in_single_quote(int i, t_quotes *quotes);
+
 // count_tokens.c //
 
 int		count_tokens(char *rl);
@@ -245,7 +253,6 @@ int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 // expansion_var.c //
 
 void    expancion_var(t_comand_data *cmd, t_shell *shell);
-//void    expancion_var(t_comand_data *cmd, t_env *env);
 
 // cd.c //
 
@@ -283,7 +290,7 @@ void	clear_env_list(t_env **envlist);
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 int		process_export(char *arg, char ***splitd, t_env *env_var, int is_env);
-int	update_or_create_var(t_env **envlist, char *name, char *value);
+int		update_or_create_var(t_env **envlist, char *name, char *value);
 int		ft_export(t_shell *shell, char **args);
 
 // utils.c //
@@ -318,8 +325,8 @@ int		ft_unset(t_env **envlist, char **names);
 
 // exit.c //
 
-void	ft_exit_no_print(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
-void	ft_exit(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
+void	ft_exit_no_print(t_shell **shell, int exit_code);
+void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //
 
@@ -334,7 +341,7 @@ void	clean_heredoc(t_heredoc *vars);
 // heredoc_utils2.c //
 
 void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand);
-int		process_line(char *line, char *delimiter, int pipe_fd);
+int		process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd);
 void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
 void	control_d_error(char *delimiter);
@@ -351,6 +358,6 @@ char	*ft_strjoin_doblefree(char *s1, char *s2);
 
 // builtins.c //
 
-int		builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count);
+int		builtins(t_shell *shell, char **cmd);
 
 #endif		

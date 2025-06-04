@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/26 13:12:33 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:11:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 	int		status;
 	t_list	*lines;
 	int		exit_code;
+
 
 	close(pipe_fd[1]);
 	waitpid(pid, &status, 0);
@@ -113,7 +114,10 @@ static t_list	*ft_hdc_helper(char **splited,
 		{
 			lines = handle_heredoc(splited[i] + 1, shell, expand);
 			if (!lines && i == num_brackets)
+			{
+				cleanup_shell(shell);
 				exit(0);
+			}
 			if (!lines && errno == EINTR)
 			{
 				errno = EINTR;

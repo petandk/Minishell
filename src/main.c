@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/20 11:47:01 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/04 19:22:24 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 int	select_type(char *rl, t_shell **shell)
 {
 	if (!rl)
-	{
-		printf("exit\n");
-		exit(1);
-	}
+		ft_exit(shell, 1);
 	else if (ft_strcmp(rl, "status") == 0)
 		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
 	else if (*rl)
@@ -28,26 +25,6 @@ int	select_type(char *rl, t_shell **shell)
 	}
 	return (0);
 }
-
-static t_shell	*shell_init(char **envp)
-{
-	t_shell	*shell;
-
-	shell = malloc(sizeof(t_shell));
-	if (!shell)
-		exit (1);
-	shell->prev_dir = NULL;
-	shell->exit_status = 0;
-	shell->env = NULL;
-	shell->env = create_env_list(envp);
-	if (!shell->env)
-	{
-		free(shell);
-		exit (1);
-	}
-	return (shell);
-}
-
 static void	handle_sigint_main(int sig)
 {
 	(void)sig;
