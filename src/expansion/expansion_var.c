@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 12:17:08 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/05 13:26:22 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,12 @@ static void	process_dollar(t_expan *ex, char **str,
 	char	*value;
 	char	*tmp;
 
-	ex->start = ex->i + 1;
-	while (quote[ex->j].quote_start != 0 || quote[ex->j].quote_end != 0)
-	{
-		if (ex->start < quote[ex->j].quote_end)
-			break ;
-		ex->j++;
-	}
+	index_value(quote, ex);
 	len = len_expan(*str, ex->start,
 			quote[ex->j].quote_start, quote[ex->j].quote_end);
-	if (len == 0 && ft_strlen(*str) == 1 && quote[ex->j].quote == 0)
+	if (len == 0 && (quote[ex->j].quote == 0
+			|| (!(quote[ex->j].quote_start > quote[ex->j].quote_end)
+				&& quote[ex->j].quote != 0)))
 	{
 		tmp = ft_substr(*str, ex->i, 1);
 		ex->new_str = ft_strjoin_free(ex->new_str, tmp);
@@ -90,7 +86,7 @@ static void	process_dollar(t_expan *ex, char **str,
 	ex->i += len + 1;
 }
 
-void	expan(char **str, t_quotes *quote, t_shell *shell)
+void	expan(char **str, t_quotes *quote, t_shell *shell, int plus)
 {
 	t_expan	ex;
 	char	*tmp;
@@ -98,6 +94,11 @@ void	expan(char **str, t_quotes *quote, t_shell *shell)
 	ex.new_str = ft_strdup("");
 	ex.i = 0;
 	ex.j = 0;
+	if (plus == 1)
+	{
+		quote->quote_start++;
+		quote->quote_end++;
+	}
 	while ((*str)[ex.i])
 	{
 		if ((*str)[ex.i] == '$' && !is_in_single_quote(ex.i, quote))
@@ -122,7 +123,21 @@ void	expancion_var(t_comand_data *cmd, t_shell *shell)
 	while (cmd->comand && cmd->comand[i])
 	{
 		if (ft_strchr(cmd->comand[i], '$'))
-			expan(&cmd->comand[i], cmd->quote[i], shell);
+			expan(&cmd->comand[i], cmd->quote[i], shell, 0);
+		i++;
+	}
+	i = 0;
+	while (cmd->in_file && i < cmd->in_count)
+	{
+		if (ft_strchr(cmd->in_file[i], '$'))
+			expan(&cmd->in_file[i], cmd->quote_in[i], shell, 1);
+		i++;
+	}
+	i = 0;
+	while (cmd->out_file && i < cmd->out_count)
+	{
+		if (ft_strchr(cmd->out_file[i], '$'))
+			expan(&cmd->out_file[i], cmd->quote_out[i], shell, 1);
 		i++;
 	}
 }

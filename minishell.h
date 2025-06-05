@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/31 13:18:34 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:24:33 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,11 @@ typedef struct s_comand_data
 	char		**in_file;
 	char		**out_file;
 	t_quotes	**quote;
+	t_quotes	**quote_in;
+	t_quotes	**quote_out;
 	int			*quote_count;
+	int			*quote_in_count;
+	int			*quote_out_count;
 	int			in_count;
 	int			out_count;
 }				t_comand_data;
@@ -245,7 +249,10 @@ int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 // expansion_var.c //
 
 void    expancion_var(t_comand_data *cmd, t_shell *shell);
-//void    expancion_var(t_comand_data *cmd, t_env *env);
+
+// expansion_var_utils.c //
+
+void	index_value(t_quotes *quote, t_expan *ex);
 
 // cd.c //
 
