@@ -325,6 +325,7 @@ int		ft_unset(t_env **envlist, char **names);
 
 // exit.c //
 
+void	ft_exit_no_print(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
 void	ft_exit(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
 
 // heredoc.c //
