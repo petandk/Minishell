@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 11:48:45 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/16 11:58:13 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/03 14:29:07 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,23 @@ void	process_redirection(t_token *tk, t_comand_data *cmd,
 		else
 			str = init_str(rdt, tk, idx[2], idx[3]);
 		if (ft_strcmp(rdt, ">") == 0 || ft_strcmp(rdt, "_") == 0)
+		{
+			cmd->quote_out[idx[0]] = malloc(sizeof(t_quotes) * 16);
+			ft_memcpy(cmd->quote_out[idx[0]],tk[idx[2] + 1].quotes,
+				sizeof(t_quotes) * tk[idx[2] + 1].quote_count);
+			cmd->quote_out_count[idx[0]] = tk[idx[2] + 1].quote_count;
 			in_out_file(&cmd->out_file[idx[0]++], str);
+		//	cmd->quote_out[idx[0]] == tk->quotes;
+		}
 		else
+		{
+			cmd->quote_in[idx[0]] = malloc(sizeof(t_quotes) * 16);
+			ft_memcpy(cmd->quote_in[idx[1]], tk[idx[2] + 1].quotes,
+				sizeof(t_quotes) * tk[idx[2] + 1].quote_count);
+			cmd->quote_in_count[idx[1]] = tk[idx[2] + 1].quote_count;
 			in_out_file(&cmd->in_file[idx[1]++], str);
+		//	cmd->quote_out[idx[1]] == tk->quotes;
+		}
 		free(str);
 	}
 }

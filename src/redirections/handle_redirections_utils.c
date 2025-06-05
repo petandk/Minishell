@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 14:35:02 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/03 10:38:11 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	out_red(char *file)
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		printf("Error opening file\n");
+		perror("Error opening file\n");
 		return (-1);
 	}
 	dup2(fd, 1);
@@ -34,7 +34,7 @@ int	append(char *file)
 	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		printf("Error opening file\n");
+		perror("Error opening file\n");
 		return (-1);
 	}
 	dup2(fd, 1);
@@ -49,7 +49,7 @@ int	in_red(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		printf("Error opening file\n");
+		perror("Error opening file\n");
 		return (-1);
 	}
 	dup2(fd, 0);
