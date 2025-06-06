@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/04 19:22:24 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:04:40 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 	signal (SIGQUIT, SIG_IGN);
 	shell = shell_init(envp);
 	shell_loop(shell);
-	free(shell);
+	cleanup_shell(&shell);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	return (0);
