@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/03 10:38:11 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 12:20:03 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,33 +54,5 @@ int	in_red(char *file)
 	}
 	dup2(fd, 0);
 	close (fd);
-	return (0);
-}
-
-int	here_doc(char **delimiters, int in_count, t_shell *shell, int expand)
-{
-	t_list	*lines;
-	int		pipefd[2];
-	t_list	*current;
-
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe error");
-		return (-1);
-	}
-	lines = ft_heredoc(delimiters, in_count, &shell, expand);
-	if (!lines)
-		return (close(pipefd[0]), close(pipefd[1]), 0);
-	current = lines;
-	while (current)
-	{
-		write(pipefd[1], current->content, ft_strlen(current->content));
-		write(pipefd[1], "\n", 1);
-		current = current->next;
-	}
-	close(pipefd[1]);
-	dup2(pipefd[0], STDIN_FILENO);
-	close(pipefd[0]);
-	ft_lstclear(&lines, free);
 	return (0);
 }

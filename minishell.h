@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/05 13:24:33 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 12:24:14 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ typedef struct s_comand_data
 	char		**comand;
 	char		**in_file;
 	char		**out_file;
+	int			*heredoc_fd;
+	int			n_heredocs;
 	t_quotes	**quote;
 	t_quotes	**quote_in;
 	t_quotes	**quote_out;
@@ -237,14 +239,16 @@ void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell);
 
 // handle_redirections.c //
 
-int	handle_redirections(t_comand_data *cmd, t_shell *shell);
+//int	handle_redirections(t_comand_data *cmd, t_shell *shell);
+int	handle_redirections(t_comand_data *cmd);
 
 // handle_redirections_utils.c //
 
 int	out_red(char *file);
 int	append(char *file);
 int	in_red(char *file);
-int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
+
+//int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
 // expansion_var.c //
 
@@ -350,6 +354,11 @@ void	control_d_error(char *delimiter);
 
 char	*read_line_pipe(int fd);
 t_list	*read_heredoc_pipe(int fd);
+
+// heredoc_utils4.c //
+
+int		init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell);
+void    cleanup_heredocs(t_comand_data *cmd, int cmd_count);
 
 // heredoc_expansion.c //
 
