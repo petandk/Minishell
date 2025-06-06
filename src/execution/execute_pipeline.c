@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/03 12:19:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 12:24:28 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
-//	expancion_var(&cmd[data.i], shell-> env);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
@@ -75,6 +74,11 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
+	if (init_all_heredocs(cmd, cmd_count, shell) == -1)
+	{
+		perror("heredoc preparation failed");
+		return ;
+	}
 	while (data.i < cmd_count)
 	{
 		if (data.i < cmd_count - 1)
@@ -86,7 +90,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
-			if (handle_redirections(&cmd[data.i], shell) == -1)
+			if (handle_redirections(&cmd[data.i]) == -1)
 			{
 				free_comand(cmd, cmd_count);
 				clear_env_list(&shell->env);
@@ -123,6 +127,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			}
 			cnt[0]++;
 	}
+	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
 	signal(SIGINT, old_sig[0]);
 	signal(SIGQUIT, old_sig[1]);
