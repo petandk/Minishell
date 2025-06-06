@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 15:09:47 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 20:30:30 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,56 @@ void	free_comand(t_comand_data *comand, int num_comands)
 		return ;
 	while (i < num_comands)
 	{
-		j = 0;
-		while (comand[i].comand && comand[i].comand[j])
-			free(comand[i].comand[j++]);
-		j = 0;
-		while (comand[i].quote && comand[i].quote[j] && (j < 16))
-			free(comand[i].quote[j++]);
-		free(comand[i].comand);
-		free(comand[i].quote);
-		free(comand[i].quote_count);
+		if (comand[i].comand)
+		{
+			j = 0;
+			while (comand[i].comand[j])
+				free(comand[i].comand[j++]);
+			free(comand[i].comand);
+		}
+		if (comand[i].quote)
+		{
+			j = 0;
+			while (comand[i].quote[j])
+				free(comand[i].quote[j++]);
+			free(comand[i].quote);
+		}
+		if (comand[i].quote_count)
+			free(comand[i].quote_count);
 		free_string_array(comand[i].in_file, comand[i].in_count);
 		free_string_array(comand[i].out_file, comand[i].out_count);
+		if (comand[i].heredoc_fd)
+		{
+			j = 0;
+			while(j < comand[i].n_heredocs)
+				if (comand[i].heredoc_fd[j] >= 0)
+					close(comand[i].heredoc_fd[j++]);
+			free(comand[i].heredoc_fd);
+		}
+		if (comand[i].quote_in)
+		{
+			j = 0;
+			while (j < comand[i].in_count)
+			{
+				if (comand[i].quote_in[j])
+					free(comand[i].quote_in[j++]);
+			}
+			free(comand[i].quote_in);
+		}
+		if (comand[i].quote_out)
+		{
+			j = 0;
+			while (j < comand[i].out_count)
+			{
+				if (comand[i].quote_out[j])
+					free(comand[i].quote_out[j++]);
+			}
+			free(comand[i].quote_out);
+		}
+		if (comand[i].quote_in_count)
+			free(comand[i].quote_in_count);
+		if (comand[i].quote_out_count)
+			free(comand[i].quote_out_count);
 		i++;
 	}
 	free(comand);

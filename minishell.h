@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/06 12:24:14 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 18:06:55 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,11 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	*prev_dir;
-	t_env	*env;
-	int		exit_status;
+	char			*prev_dir;
+	t_env			*env;
+	t_comand_data	*commands;
+	int				num_commands;
+	int				exit_status;
 }	t_shell;
 
 typedef struct s_heredoc
@@ -172,6 +174,11 @@ void	execute_command(char **cmd, t_shell *shell);
 // token.c //
 
 void	token(char *rl, t_shell *shell);
+
+//  shell.c //
+
+t_shell	*shell_init(char **envp);
+void	cleanup_shell(t_shell **shell);
 
 //	execution.c //
 
@@ -305,7 +312,6 @@ char	*ft_strstr(const char *haystack, const char *needle);
 char	**list_to_matrix(t_env *env);
 int		malloc_test(void *str);
 
-
 // pirnt_things.c //
 
 void	print_token_array(t_token *tokens, int size);
@@ -329,8 +335,8 @@ int		ft_unset(t_env **envlist, char **names);
 
 // exit.c //
 
-void	ft_exit_no_print(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
-void	ft_exit(t_shell **shell, int exit_code, t_comand_data *cmd, int cmd_count);
+void	ft_exit_no_print(t_shell **shell, int exit_code);
+void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //
 
@@ -345,7 +351,7 @@ void	clean_heredoc(t_heredoc *vars);
 // heredoc_utils2.c //
 
 void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand);
-int		process_line(char *line, char *delimiter, int pipe_fd);
+int		process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd);
 void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
 void	control_d_error(char *delimiter);
@@ -367,6 +373,6 @@ char	*ft_strjoin_doblefree(char *s1, char *s2);
 
 // builtins.c //
 
-int		builtins(t_shell *shell, char **cmd, t_comand_data *comd, int cmd_count);
+int		builtins(t_shell *shell, char **cmd);
 
 #endif		
