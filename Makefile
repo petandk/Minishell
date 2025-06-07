@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/05/28 12:51:49 by gpolo            ###   ########.fr        #
+#    Updated: 2025/06/06 17:55:29 by rmanzana         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,11 +52,6 @@ $(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(LIBS) Makefile
 
 $(OBJSDIRS):
 				$(MKDIR) $(OBJSDIRS)
-
-
-sanitize: CFLAGS += -fsanitize=address
-sanitize: all
-
 $(LIBS_A):
 				for dir in $(LIBS_DIRS); do \
 					$(MAKE) -C $$dir; \
@@ -86,4 +81,4 @@ normi:
 info:
 				$(info $(SRCS_FILES))
 
-.PHONY:			all clean fclean re info normi sanitize
+.PHONY:			all clean fclean re info normi

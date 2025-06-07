@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:19:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/26 13:12:33 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:59:35 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,13 @@ static t_list	*parent_process_heredoc(int pipe_fd[2],
 		else if (exit_code == 42)
 		{
 			close(pipe_fd[0]);
+			(*shell)->exit_status = 0;
 			return (NULL);
 		}
 	}
-	if ((*shell)->exit_status == 130)
+/*	if ((*shell)->exit_status == 130)
 		exit(130);
-	close(pipe_fd[0]);
+*/	close(pipe_fd[0]);
 	return (NULL);
 }
 
@@ -113,7 +114,7 @@ static t_list	*ft_hdc_helper(char **splited,
 		{
 			lines = handle_heredoc(splited[i] + 1, shell, expand);
 			if (!lines && i == num_brackets)
-				exit(0);
+				return (cleanup_shell(shell), NULL);
 			if (!lines && errno == EINTR)
 			{
 				errno = EINTR;
@@ -144,7 +145,7 @@ static t_list	*ft_hdc_helper(char **splited,
 				(*shell)->exit_status = 1;
 				if (result)
 					ft_lstclear(&result, free);
-				exit(1);
+				return (NULL);
 			}
 		}
 		i++;

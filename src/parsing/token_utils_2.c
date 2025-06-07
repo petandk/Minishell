@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:15:13 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/12 11:54:06 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 20:14:52 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,17 @@ void	init_comand(t_comand_data *comand, int size)
 	i = 0;
 	while (i < size)
 	{
+		comand[i].comand = NULL;
 		comand[i].in_file = NULL;
 		comand[i].out_file = NULL;
-		comand[i].comand = NULL;
-		comand[i].quote_count = NULL;
+		comand[i].heredoc_fd = NULL;
+		comand[i].n_heredocs = 0;
 		comand[i].quote = NULL;
+		comand[i].quote_in = NULL;
+		comand[i].quote_out = NULL;
+		comand[i].quote_count = NULL;
+		comand[i].quote_in_count = NULL;
+		comand[i].quote_out_count = NULL;
 		comand[i].in_count = 0;
 		comand[i].out_count = 0;
 		i++;

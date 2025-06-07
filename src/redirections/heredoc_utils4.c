@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 11:33:53 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/06 12:23:32 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 20:45:08 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
 {
 	int	i;
 	int	j;
-	int	k;
+	int	k[2];
 	int expand;
 
 	i = 0;
@@ -104,7 +104,10 @@ int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
 		if (!cmd[i].heredoc_fd)
 			return (-1);
 		j = 0;
-		k = 0;
+		while (j < cmd[i].n_heredocs)
+			cmd[i].heredoc_fd[j++] = -1;
+		j = 0;
+		k[0] = 0;
 		while (j < cmd[i].in_count)
 		{
 			if (cmd[i].in_file[j][0] == '-' || cmd[i].in_file[j][0] == '_')
@@ -113,10 +116,20 @@ int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
 					expand = 1;
 				else
 					expand = 0;
-				cmd[i].heredoc_fd[k] = open_heredoc_pipe(cmd[i].in_file[j], shell, expand);
-				if (cmd[i].heredoc_fd[k] == -1)
+				cmd[i].heredoc_fd[k[0]] = open_heredoc_pipe(cmd[i].in_file[j], shell, expand);
+				if (cmd[i].heredoc_fd[k[0]] == -1)
+				{
+					k[1] = 0;
+					while (k[1] < k[0])
+					{
+						if (cmd[i].heredoc_fd[k[1]] >= 0)
+							close(cmd[i].heredoc_fd[k[1]]);
+						k[1]++;
+					}
+					cleanup_heredocs(cmd, i);
 					return (-1);
-				k++;
+				}
+				k[0]++;
 			}
 			j++;
 		}

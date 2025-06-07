@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 12:59:59 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/30 12:13:12 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/06 18:25:25 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*heredoc_expansion(char *str, t_shell **shell)
 
 	ex.i = 0;
 	ex.new_str = ft_strdup("");
-	while (str[ex.i])
+	while (str && str[ex.i])
 	{
 		if (str[ex.i] == '$')
 		{
