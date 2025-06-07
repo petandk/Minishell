@@ -70,7 +70,7 @@ void	cleanup_heredocs(t_comand_data *cmd, int cmd_count)
 		if (cmd[i].heredoc_fd)
 		{
 			j = 0;
-			while (j < cmd[i].in_count)
+			while (j < cmd[i].n_heredocs)
 			{
 				if (cmd[i].heredoc_fd[j] != -1)
 					close(cmd[i].heredoc_fd[j]);
@@ -137,4 +137,3 @@ int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
 	}
 	return (0);
 }
-

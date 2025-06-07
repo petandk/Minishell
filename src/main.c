@@ -15,9 +15,7 @@
 int	select_type(char *rl, t_shell **shell)
 {
 	if (!rl)
-	ft_exit(shell, 1);
-	else if (ft_strcmp(rl, "status") == 0)
-		return (printf("current exit_status: %d\n", (*shell)->exit_status), 0);
+		ft_exit(shell, 1);
 	else if (*rl)
 	{
 		token(rl, *shell);

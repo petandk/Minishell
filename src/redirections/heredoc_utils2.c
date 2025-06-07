@@ -19,7 +19,7 @@ void	sigint_handler(int sig)
 	exit(130);
 }
 
-void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand)
+int	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand)
 {
 	char	*line;
 	int		result;
@@ -27,9 +27,9 @@ void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int ex
 
 	(void)shell;
 	(void)expand;
-/*	signal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-*/	while (1)
+	while (1)
 	{
 		line = readline("> ");
 		if (expand && line)
@@ -43,14 +43,14 @@ void	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int ex
 		{
 			close(pipe_fd);
 			cleanup_shell(shell);
-			exit(42);
+			return (42);
 		}
 		else if (result == 2)
 			break ;
 	}
 	close(pipe_fd);
 	cleanup_shell(shell);
-	exit(EXIT_SUCCESS);
+	return(0);
 }
 
 int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
@@ -74,17 +74,6 @@ int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
 	write(pipe_fd, "\n", 1);
 	free(line);
 	return (0);
-}
-
-int	ft_split_count(char **splited)
-{
-	int	i;
-
-	i = 0;
-	while (splited[i])
-		i++;
-	printf("split_count: %d\n", i);
-	return (i);
 }
 
 void	control_d_error(char *delimiter)
