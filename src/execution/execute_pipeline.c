@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/06 17:46:04 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:52:37 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,21 @@ void	handle_fork(pid_t *pid)
 		exit (1);
 }
 
-static void	if_pid_0(int prev_fd, int *pipefd, int i, int cmd_count)
+static void	if_pid_0(int prev_fd, int *pipefd, int i, int cmd_count, t_comand_data *cmd)
 {
+	int has_output_redir;
+
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
+	has_output_redir = cmd[i].out_file && cmd[i].out_count > 0;
+	if (!has_output_redir && i < cmd_count - 1)
+		dup2(pipefd[1], STDOUT_FILENO);
 	if (i < cmd_count -1)
 	{
-		dup2(pipefd[1], STDOUT_FILENO);
+//		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
 	}
@@ -81,6 +86,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	}
 	while (data.i < cmd_count)
 	{
+		
 		if (data.i < cmd_count - 1)
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
@@ -89,9 +95,10 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count);
+			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count, cmd);
 			if (handle_redirections(&cmd[data.i]) == -1)
 			{
+//				free_comand(cmd, cmd_count);
 				cleanup_shell(&shell);
 				free(pids);
 				exit (126);

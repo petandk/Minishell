@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:43:52 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/06 17:52:30 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/07 13:35:51 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ void	cleanup_shell(t_shell **shell)
 		(*shell)->prev_dir = NULL;
 	}
 	if ((*shell)->commands && (*shell)->num_commands > 0)
-	{
-		free_comand((*shell)->commands, (*shell)->num_commands);
 		(*shell)->num_commands = 0;
-	}
 	free(*shell);
 	*shell = NULL;
 }
