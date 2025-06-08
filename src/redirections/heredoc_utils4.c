@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	open_heredoc_pipe(char *delimiter, t_shell *shell, int expand)
+static int	open_heredoc_pipe(char *delimiter, t_shell **shell, int expand)
 {
 	t_list	*lines;
 	t_list	*tmp;
@@ -23,8 +23,7 @@ int	open_heredoc_pipe(char *delimiter, t_shell *shell, int expand)
 		perror("pipe");
 		return (-1);
 	}
-
-	lines = ft_heredoc(&delimiter, 1, &shell, expand);
+	lines = ft_heredoc(&delimiter, 1, shell, expand);
 	if (!lines)
 	{
 		close(pipefd[0]);
@@ -45,7 +44,7 @@ int	open_heredoc_pipe(char *delimiter, t_shell *shell, int expand)
 	return (pipefd[0]);
 }
 
-int	count_heredocs(char **in_file, int in_count)
+static int	count_heredocs(char **in_file, int in_count)
 {
 	int	i;
 	int	count = 0;
@@ -83,7 +82,7 @@ void	cleanup_heredocs(t_comand_data *cmd, int cmd_count)
 	}
 }
 
-int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
+int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell **shell)
 {
 	int	i;
 	int	j;

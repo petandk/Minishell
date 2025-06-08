@@ -19,11 +19,11 @@ void	ft_pwd(t_shell *shell)
 	current = getcwd(NULL, 0);
 	if (!current)
 	{
-		perror("pwd");
+		ft_putendl_fd("pwd", 2);
 		shell->exit_status = 1;
 		return ;
 	}
-	printf("%s\n", current);
+	ft_putendl_fd(current, 1);
 	free(current);
 	shell->exit_status = 0;
 }

@@ -27,7 +27,7 @@ void	handle_fork(pid_t *pid)
 
 static void	if_pid_0(int prev_fd, int *pipefd, int i, int cmd_count, t_comand_data *cmd)
 {
-	int has_output_redir;
+	int	has_output_redir;
 
 	if (prev_fd != -1)
 	{
@@ -63,7 +63,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	int			cnt[2];
 
 	old_sig[0] = signal(SIGINT, SIG_IGN);
-	old_sig[1] = signal(SIGQUIT,SIG_IGN);
+	old_sig[1] = signal(SIGQUIT, SIG_IGN);
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
@@ -73,20 +73,21 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			&& (!cmd[0].out_file || cmd[0].out_count == 0))
 		{
 			if (builtins(shell, cmd[0].comand))
-				return (signal(SIGINT, old_sig[0]), signal(SIGQUIT, old_sig[1]), (void)0);	
+				return (signal(SIGINT, old_sig[0]), \
+						signal(SIGQUIT, old_sig[1]), (void)0);
 		}
 	}
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
-	if (init_all_heredocs(cmd, cmd_count, shell) == -1)
+	if (init_all_heredocs(cmd, cmd_count, &shell) == -1)
 	{
-		perror("heredoc preparation failed");
+		ft_putendl_fd("heredoc preparation failed", 2);
+		free(pids);
 		return ;
 	}
 	while (data.i < cmd_count)
 	{
-		
 		if (data.i < cmd_count - 1)
 			handle_pipe(data.pipefd);
 		handle_fork(&data.pid);
@@ -98,7 +99,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count, cmd);
 			if (handle_redirections(&cmd[data.i]) == -1)
 			{
-//				printf("test\n");
 				cleanup_shell(&shell);
 				free(pids);
 				exit (126);

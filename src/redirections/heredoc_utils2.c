@@ -19,7 +19,7 @@ void	sigint_handler(int sig)
 	exit(130);
 }
 
-int	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand)
+int	child_process_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand)
 {
 	char	*line;
 	int		result;
@@ -32,25 +32,31 @@ int	child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int exp
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+		{
+			close(pipe_fd);
+			cleanup_shell(&shell);
+			exit(130);
+		}
 		if (expand && line)
 		{
-			expanded = heredoc_expansion(line, shell);
+			expanded = heredoc_expansion(line, &shell);
 			free(line);
 			line = expanded;
 		}
-		result = process_line(shell, line, delimiter, pipe_fd);
+		result = process_line(&shell, line, delimiter, pipe_fd);
 		if (result == 1)
 		{
 			close(pipe_fd);
-			cleanup_shell(shell);
+			cleanup_shell(&shell);
 			return (42);
 		}
 		else if (result == 2)
 			break ;
 	}
 	close(pipe_fd);
-	cleanup_shell(shell);
-	return(0);
+	cleanup_shell(&shell);
+	return (0);
 }
 
 int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)

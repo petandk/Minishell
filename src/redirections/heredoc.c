@@ -80,7 +80,8 @@ t_list	*handle_heredoc(char *delimiter, t_shell **shell, int expand)
 		close(pipe_fd[0]);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		child_process_heredoc(shell, delimiter, pipe_fd[1], expand);
+		child_process_heredoc(*shell, delimiter, pipe_fd[1], expand);
+		exit(0);
 	}
 	result = parent_process_heredoc(pipe_fd, pid, shell);
 	signal(SIGINT, old_sig[0]);
@@ -114,7 +115,7 @@ static t_list	*ft_hdc_helper(char **splited,
 		{
 			lines = handle_heredoc(splited[i] + 1, shell, expand);
 			if (!lines && i == num_brackets)
-				return (cleanup_shell(shell), NULL);
+				return (NULL);
 			if (!lines && errno == EINTR)
 			{
 				errno = EINTR;
@@ -159,7 +160,7 @@ t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell, int expand)
 	t_list		*lines;
 	void		(*old_sig[2])(int);
 	int			old_errno;
-	
+
 	lines = NULL;
 	old_sig[0] = signal(SIGINT, SIG_IGN);
 	old_sig[1] = signal(SIGQUIT, SIG_IGN);

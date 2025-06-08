@@ -350,7 +350,7 @@ void	clean_heredoc(t_heredoc *vars);
 
 // heredoc_utils2.c //
 
-int		child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand);
+int		child_process_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand);
 int		process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd);
 void	sigint_handler(int sig);
 int		ft_split_count(char **splited);
@@ -363,7 +363,7 @@ t_list	*read_heredoc_pipe(int fd);
 
 // heredoc_utils4.c //
 
-int		init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell);
+int		init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell **shell);
 void    cleanup_heredocs(t_comand_data *cmd, int cmd_count);
 
 // heredoc_expansion.c //

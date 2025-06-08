@@ -86,7 +86,7 @@ int	init_all(t_token_data *data, char *rl)
 	data->size_token = count_tokens(rl);
 	if (data->size_token == -1)
 	{
-		printf("Error: operadores de redirección incorrectos\n");
+		ft_putendl_fd("Error: Incorrect redirection operators.", 2);
 		return (0);
 	}
 	if (data->size_token == 0)
