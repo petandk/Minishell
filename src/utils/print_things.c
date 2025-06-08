@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 16:17:24 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/03 14:31:06 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/08 12:26:53 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,73 +148,3 @@ void	print_comands(t_comand_data *comand, int num_comands)
 		i++;
 	}
 }
-
-
-/*
-void print_comands(t_comand_data *comand, int num_comands)
-{
-	int i = 0;
-	while (i < num_comands)
-	{
-		printf(">>%d<<\n", i + 1);
-		printf("Command %d:\n", i + 1);
-
-		// Print arguments
-		printf("  Arguments: ");
-		if (!comand[i].comand)
-			printf("(None)\n");
-		else
-		{
-			int j = 0;
-			while (comand[i].comand[j])
-			{
-				printf("[%s]", comand[i].comand[j]);
-
-				if (comand[i].quote && comand[i].quote[j] && comand[i].quote_count)
-				{
-					int q = 0;
-					while (q < comand[i].quote_count[j])
-					{
-						const char *type = comand[i].quote[j][q].quote == 1 ? "single" :
-						                   comand[i].quote[j][q].quote == 2 ? "double" : "none";
-						printf("(%s:%d-%d)", type,
-							comand[i].quote[j][q].quote_start,
-							comand[i].quote[j][q].quote_end);
-						q++;
-					}
-				}
-				j++;
-			}
-			printf("\n");
-		}
-
-		// Print input files
-		printf("  Input files: ");
-		if (comand[i].in_file && comand[i].in_count > 0)
-		{
-			for (int k = 0; k < comand[i].in_count; k++)
-			{
-				printf("%s%s", (k > 0) ? ", " : "", comand[i].in_file[k]);
-			}
-			printf("\n");
-		}
-		else
-			printf("(None)\n");
-
-		// Print output files
-		printf("  Output files: ");
-		if (comand[i].out_file && comand[i].out_count > 0)
-		{
-			for (int k = 0; k < comand[i].out_count; k++)
-			{
-				printf("%s%s", (k > 0) ? ", " : "", comand[i].out_file[k]);
-			}
-			printf("\n");
-		}
-		else
-			printf("(None)\n");
-
-		printf("\n");
-		i++;
-	}
-}*/
