@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/07 14:52:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/08 10:45:59 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if_pid_0(data.prev_fd, data.pipefd, data.i, cmd_count, cmd);
 			if (handle_redirections(&cmd[data.i]) == -1)
 			{
-//				free_comand(cmd, cmd_count);
+//				printf("test\n");
 				cleanup_shell(&shell);
 				free(pids);
 				exit (126);
