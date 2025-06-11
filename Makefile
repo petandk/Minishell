@@ -6,7 +6,7 @@
 #    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/06/06 17:55:29 by rmanzana         ###   ########.fr        #
+#    Updated: 2025/06/11 17:36:17 by rmanzana         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ fclean:			clean
 re:				fclean $(NAME)
 
 normi:
+				@clear
 				@norminette $(SRCS) $(LIBS)
 info:
 				$(info $(SRCS_FILES))

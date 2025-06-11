@@ -60,7 +60,7 @@ int	check_unclosed_quotes(t_token_data *data, int token_count)
 		{
 			if (!curr_token->quotes[q_i].closed)
 			{
-				printf("NO CLOSED QUOTES\n");
+				ft_putendl_fd("No closed quotes", 2);
 				return (1);
 			}
 			q_i++;

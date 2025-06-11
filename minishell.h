@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/08 12:27:22 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/10 19:27:38 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,6 @@ typedef struct s_num_malloc
 	int	*out;
 }	t_num_malloc;
 
-// reed_rl.c //
-
-void	reed_rl(char *rl, char **envp);
-
 // ex_child.c //
 
 void	free_args(char **args);
@@ -224,6 +220,7 @@ void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
 char	*ft_strjoin_free(char *s1, char *s2);
 int		is_in_single_quote(int i, t_quotes *quotes);
+
 // count_tokens.c //
 
 int		count_tokens(char *rl);
@@ -341,7 +338,11 @@ void	ft_exit(t_shell **shell, int exit_code);
 // heredoc.c //
 
 t_list	*handle_heredoc(char *delimiter, t_shell **shell, int expand);
-t_list	*ft_heredoc(char **input, int num_brackets, t_shell **shell, int expand);
+t_list	*ft_heredoc(char **input, int brackets, t_shell **shell, int expand);
+
+// heredoc_helper.c //
+
+t_list	*ft_hdc_helper(char **split, int brackets, t_shell **shell, int expand);
 
 // heredoc_utils.c //
 
@@ -350,21 +351,25 @@ void	clean_heredoc(t_heredoc *vars);
 
 // heredoc_utils2.c //
 
-int		child_process_heredoc(t_shell **shell, char *delimiter, int pipe_fd, int expand);
+int		child_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand);
 int		process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd);
 void	sigint_handler(int sig);
-int		ft_split_count(char **splited);
-void	control_d_error(char *delimiter);
 
 // heredoc_utils3.c //
 
 char	*read_line_pipe(int fd);
 t_list	*read_heredoc_pipe(int fd);
+t_list	*parent_process_heredoc(int pipe_fd[2], pid_t pid, t_shell **shell);
 
 // heredoc_utils4.c //
 
-int		init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell);
-void    cleanup_heredocs(t_comand_data *cmd, int cmd_count);
+int		init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell **shell);
+
+// heredoc_utils4helper.c //
+
+int		open_hd_pipe(char *delimiter, t_shell **shell, int expand);
+int		count_heredocs(char **in_file, int in_count);
+void	cleanup_heredocs(t_comand_data *cmd, int cmd_count);
 
 // heredoc_expansion.c //
 
@@ -374,5 +379,15 @@ char	*ft_strjoin_doblefree(char *s1, char *s2);
 // builtins.c //
 
 int		builtins(t_shell *shell, char **cmd);
+
+//ft_putmult_fd.c //
+
+void	multend_fd(char *s1, char *s2, char *s3, int fd);
+void	mult_fd(char *s1, char *s2, char *s3, int fd);
+
+// errors.c //
+
+void	printerror(char *err_type, char *name);
+void	control_d_error(char *delimiter);
 
 #endif		

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int	execution(char *str, t_token **token, int size_token, t_shell *shell)
 {
 	t_comand_data	*comand;
@@ -23,7 +24,7 @@ int	execution(char *str, t_token **token, int size_token, t_shell *shell)
 	shell->commands = comand;
 	shell->num_commands = num_comands;
 	print_comands(comand, num_comands);
-	printf("___________________________EXECUTION___________________________\n");
+	ft_putendl_fd("_______________________EXECUTION_______________________", 1);
 	execute_pipeline(comand, num_comands, shell);
 	free_comand(comand, num_comands);
 	return (1);

@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_putmult_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 16:41:32 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/29 17:40:01 by rmanzana         ###   ########.fr       */
+/*   Created: 2025/06/10 18:18:55 by rmanzana          #+#    #+#             */
+/*   Updated: 2025/06/10 19:12:57 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pwd(t_shell *shell)
+void	multend_fd(char *s1, char *s2, char *s3, int fd)
 {
-	char	*current;
-
-	current = getcwd(NULL, 0);
-	if (!current)
+	if (s1 && s2 && s3 && fd)
 	{
-		ft_putendl_fd("pwd", 2);
-		shell->exit_status = 1;
-		return ;
+		ft_putstr_fd(s1, fd);
+		ft_putstr_fd(s2, fd);
+		ft_putendl_fd(s3, fd);
 	}
-	ft_putendl_fd(current, 1);
-	free(current);
-	shell->exit_status = 0;
+}
+
+void	mult_fd(char *s1, char *s2, char *s3, int fd)
+{
+	if (s1 && s2 && s3 && fd)
+	{
+		ft_putstr_fd(s1, fd);
+		ft_putstr_fd(s2, fd);
+		ft_putstr_fd(s3, fd);
+	}
 }
