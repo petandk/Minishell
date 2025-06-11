@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/06 20:56:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:30:07 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,44 +19,44 @@ void	sigint_handler(int sig)
 	exit(130);
 }
 
-int	child_process_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand)
+static char	*child_heredoc_setup(t_shell *shell, int pipe_fd, int expand)
+{
+	char	*line;
+	char	*expanded;
+
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+	line = readline("> ");
+	if (!line)
+	{
+		close(pipe_fd);
+		cleanup_shell(&shell);
+		exit(130);
+	}
+	if (expand && line)
+	{
+		expanded = heredoc_expansion(line, &shell);
+		free(line);
+		return (expanded);
+	}
+	return (line);
+}
+
+int	child_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand)
 {
 	char	*line;
 	int		result;
-	char	*expanded;
 
-	(void)shell;
-	(void)expand;
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
-		{
-			close(pipe_fd);
-			cleanup_shell(&shell);
-			exit(130);
-		}
-		if (expand && line)
-		{
-			expanded = heredoc_expansion(line, &shell);
-			free(line);
-			line = expanded;
-		}
+		line = child_heredoc_setup(shell, pipe_fd, expand);
 		result = process_line(&shell, line, delimiter, pipe_fd);
 		if (result == 1)
-		{
-			close(pipe_fd);
-			cleanup_shell(&shell);
-			return (42);
-		}
+			return (close(pipe_fd), cleanup_shell(&shell), 42);
 		else if (result == 2)
 			break ;
 	}
-	close(pipe_fd);
-	cleanup_shell(&shell);
-	return (0);
+	return (close(pipe_fd), cleanup_shell(&shell), 0);
 }
 
 int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
@@ -80,12 +80,4 @@ int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
 	write(pipe_fd, "\n", 1);
 	free(line);
 	return (0);
-}
-
-void	control_d_error(char *delimiter)
-{
-	ft_putstr_fd("minishell: warning: here-document ", 2);
-	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(delimiter, 2);
-	ft_putstr_fd("')\n", 2);
 }

@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/31 13:27:09 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:17:11 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int	ft_export(t_shell *shell, char **args)
 	t_env	*sorted;
 
 	env_var.next = NULL;
+	splitd = NULL;
 	if (!args || !args[0])
 	{
 		sorted = clone_env_list(shell->env);

@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 20:47:53 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/14 20:56:03 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:34:12 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,57 @@ t_list	*read_heredoc_pipe(int fd)
 		ft_lstadd_back(&lines, ft_lstnew(line));
 	}
 	return (lines);
+}
+
+static int	handle_child(int status, t_shell **shell, int pipe_fd)
+{
+	int	exit_code;
+
+	if ((*shell)->exit_status == 130)
+		return (close(pipe_fd), 130);
+	if (WIFEXITED(status))
+		(*shell)->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		(*shell)->exit_status = 128 + WTERMSIG(status);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		errno = EINTR;
+		return (close (pipe_fd), 2);
+	}
+	else if (WIFEXITED(status))
+	{
+		exit_code = WEXITSTATUS(status);
+		if (exit_code == EXIT_SUCCESS)
+			return (0);
+		else if (exit_code == 42)
+		{
+			(*shell)->exit_status = 0;
+			return (close(pipe_fd), 42);
+		}
+	}
+	return (1);
+}
+
+t_list	*parent_process_heredoc(int pipe_fd[2],
+		pid_t pid, t_shell **shell)
+{
+	int		status;
+	t_list	*lines;
+	int		result;
+
+	close(pipe_fd[1]);
+	waitpid(pid, &status, 0);
+	result = handle_child(status, shell, pipe_fd[0]);
+	if (result == 0)
+	{
+		lines = read_heredoc_pipe(pipe_fd[0]);
+		close(pipe_fd[0]);
+		return (lines);
+	}
+	else
+	{
+		if (result != 130 && result != 2 && result != 42)
+			close(pipe_fd[0]);
+		return (NULL);
+	}
 }
