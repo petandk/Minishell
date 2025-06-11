@@ -15,7 +15,7 @@
 static int	in_files(t_comand_data *cmd)
 {
 	int	i;
-	int k;
+	int	k;
 
 	k = 0;
 	i = 0;

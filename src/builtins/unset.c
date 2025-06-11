@@ -6,7 +6,7 @@
 /*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:14:22 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/31 12:45:44 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:05:53 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,26 @@ static int	remove_env_var(t_env **envlist, char *name)
 	return (0);
 }
 
+static void	unset_helper(t_env **envlist, char *name, int *error)
+{
+	int	ret;
+
+	if (!is_valid_name(name))
+	{
+		printerror("no_unset", name);
+		(*error)++;
+	}
+	else
+	{
+		ret = remove_env_var(envlist, name);
+		if (ret != 0)
+			(*error)++;
+	}
+}
+
 int	ft_unset(t_env **envlist, char **names)
 {
 	int	i;
-	int	ret;
 	int	error_cnt;
 
 	if (!envlist || !*envlist || !names)
@@ -59,19 +75,7 @@ int	ft_unset(t_env **envlist, char **names)
 	i = 0;
 	while (names[i])
 	{
-		if (!is_valid_name(names[i]))
-		{
-			ft_putstr_fd("unset: ", 2);
-			ft_putstr_fd(names[i], 2);
-			ft_putendl_fd(": not a valid identifier", 2);
-			error_cnt++;
-		}
-		else
-		{
-			ret = remove_env_var(envlist, names[i]);
-			if (ret != 0)
-				error_cnt++;
-		}
+		unset_helper(envlist, names[i], &error_cnt);
 		i++;
 	}
 	if (error_cnt > 0)

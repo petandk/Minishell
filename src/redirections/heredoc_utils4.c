@@ -3,92 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils4.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 11:33:53 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/06 20:45:08 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:53:12 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_heredoc_pipe(char *delimiter, t_shell *shell, int expand)
-{
-	t_list	*lines;
-	t_list	*tmp;
-	int		pipefd[2];
-
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return (-1);
-	}
-
-	lines = ft_heredoc(&delimiter, 1, &shell, expand);
-	if (!lines)
-	{
-		close(pipefd[0]);
-		close(pipefd[1]);
-		return (-1);
-	}
-
-	tmp = lines;
-	while (tmp)
-	{
-		write(pipefd[1], tmp->content, ft_strlen(tmp->content));
-		write(pipefd[1], "\n", 1);
-		tmp = tmp->next;
-	}
-	ft_lstclear(&lines, free);
-	close(pipefd[1]);
-
-	return (pipefd[0]);
-}
-
-int	count_heredocs(char **in_file, int in_count)
+static int	setup_here_mem(t_comand_data *cmd)
 {
 	int	i;
-	int	count = 0;
 
+	cmd->heredoc_fd = malloc(sizeof(int) * cmd->n_heredocs);
+	if (!cmd->heredoc_fd)
+		return (-1);
 	i = 0;
-	while (i < in_count)
-	{
-		if (in_file[i][0] == '-' || in_file[i][0] == '_')
-			count++;
-		i++;
-	}
-	return (count);
+	while (i < cmd->n_heredocs)
+		cmd->heredoc_fd[i++] = -1;
+	return (0);
 }
 
-void	cleanup_heredocs(t_comand_data *cmd, int cmd_count)
+static void	clean_open_fds(t_comand_data *cmd, int count)
 {
-	int	i, j;
+	int	i;
 
 	i = 0;
-	while (i < cmd_count)
+	while (i < count)
 	{
-		if (cmd[i].heredoc_fd)
-		{
-			j = 0;
-			while (j < cmd[i].n_heredocs)
-			{
-				if (cmd[i].heredoc_fd[j] != -1)
-					close(cmd[i].heredoc_fd[j]);
-				j++;
-			}
-			free(cmd[i].heredoc_fd);
-			cmd[i].heredoc_fd = NULL;
-		}
+		if (cmd->heredoc_fd[i] >= 0)
+			close(cmd->heredoc_fd[i]);
 		i++;
 	}
 }
 
-int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
+static int	proc_sngl_hd(t_comand_data *cmd, char *file, t_shell **shell, int i)
+{
+	int	exp;
+
+	if (file[0] == '-')
+		exp = 1;
+	else
+		exp = 0;
+	cmd->heredoc_fd[i] = open_hd_pipe(file, shell, exp);
+	if (cmd->heredoc_fd[i] == -1)
+		return (-1);
+	return (0);
+}
+
+static int	proc_hd_files(t_comand_data *cmd, t_shell **shell)
 {
 	int	i;
 	int	j;
-	int	k[2];
-	int expand;
+
+	i = 0;
+	j = 0;
+	while (i < cmd->in_count)
+	{
+		if (cmd->in_file[i][0] == '-' || cmd->in_file[i][0] == '_')
+		{
+			if (proc_sngl_hd(cmd, cmd->in_file[i], shell, j) == -1)
+			{
+				clean_open_fds(cmd, j);
+				return (-1);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell **shell)
+{
+	int	i;
 
 	i = 0;
 	while (i < cmd_count)
@@ -98,40 +87,14 @@ int	init_all_heredocs(t_comand_data *cmd, int cmd_count, t_shell *shell)
 		{
 			cmd[i].heredoc_fd = NULL;
 			i++;
-			continue;
+			continue ;
 		}
-		cmd[i].heredoc_fd = malloc(sizeof(int) * cmd[i].n_heredocs);
-		if (!cmd[i].heredoc_fd)
+		if (setup_here_mem(&cmd[i]) == -1)
 			return (-1);
-		j = 0;
-		while (j < cmd[i].n_heredocs)
-			cmd[i].heredoc_fd[j++] = -1;
-		j = 0;
-		k[0] = 0;
-		while (j < cmd[i].in_count)
+		if (proc_hd_files(&cmd[i], shell) == -1)
 		{
-			if (cmd[i].in_file[j][0] == '-' || cmd[i].in_file[j][0] == '_')
-			{
-				if (cmd[i].in_file[j][0] == '-')
-					expand = 1;
-				else
-					expand = 0;
-				cmd[i].heredoc_fd[k[0]] = open_heredoc_pipe(cmd[i].in_file[j], shell, expand);
-				if (cmd[i].heredoc_fd[k[0]] == -1)
-				{
-					k[1] = 0;
-					while (k[1] < k[0])
-					{
-						if (cmd[i].heredoc_fd[k[1]] >= 0)
-							close(cmd[i].heredoc_fd[k[1]]);
-						k[1]++;
-					}
-					cleanup_heredocs(cmd, i);
-					return (-1);
-				}
-				k[0]++;
-			}
-			j++;
+			cleanup_heredocs(cmd, i);
+			return (-1);
 		}
 		i++;
 	}

@@ -25,7 +25,7 @@ void	free_args(char **args)
 char	*find_path_index(t_env *envp)
 {
 	char	*e;
-	t_env 	*path_env;
+	t_env	*path_env;
 
 	path_env = find_env_var(envp, "PATH");
 	if (!path_env || !path_env->value)
@@ -82,16 +82,15 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 		if (!path)
 		{
 			free_args(all_path);
-			printf("%s: command not found\n", cmd[0]);
+			ft_putstr_fd(cmd[0], 2);
+			ft_putendl_fd(": command not found", 2);
 			free(str);
-			return NULL;
+			return (NULL);
 		}
 	}
 	else
 		path = cmd[0];
-	free_args(all_path);
-	free(str);
-	return (path);
+	return (free_args(all_path), free(str), path);
 }
 
 void	execute_command(char **cmd, t_shell *shell)
@@ -113,6 +112,7 @@ void	execute_command(char **cmd, t_shell *shell)
 	}
 	execve(path, cmd, new_env);
 	free_args(new_env);
-	printf("%s: command not found\n", cmd[0]);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putendl_fd(": command not found\n", 2);
 	return ;
 }
