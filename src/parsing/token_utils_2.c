@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 10:15:13 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/06 20:14:52 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:59:18 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	init_comand(t_comand_data *comand, int size)
 	}
 }
 
+//void	init_others(t_comand_data *comand, int j, int size, t_token token)
 void	init_others(t_comand_data *comand, int j, int size)
 {
 	int	i;
@@ -79,11 +80,15 @@ void	init_others(t_comand_data *comand, int j, int size)
 	i = 0;
 	while (i < size)
 	{
-		comand[j].comand[i] = NULL;
+//		comand[j].comand[i] = NULL;
+		if (comand[j].quote)
+			printf("comand[%d].quote init\n",j);
+		if (comand[j].quote[i])
+			printf("comand[%d].quote init[%d]\n",j,i);
 		if (comand[j].quote && comand[j].quote[i])
 		{
 			q = 0;
-			while (q < 16)
+			while (q < comand[j].quote_count[i])
 			{
 				comand[j].quote[i][q].quote = 0;
 				comand[j].quote[i][q].quote_start = 0;
@@ -93,8 +98,8 @@ void	init_others(t_comand_data *comand, int j, int size)
 		}
 		i++;
 	}
-	if (size > 0)
-		comand[j].comand[size] = NULL;
+/*	if (size > 0)
+		comand[j].comand[size] = NULL;*/
 	comand[j].in_count = 0;
 	comand[j].out_count = 0;
 }

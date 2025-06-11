@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/08 12:03:37 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/11 17:52:52 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,6 @@ void	token(char *rl, t_shell *shell)
 	}
 	if (!finalize_token(&data))
 		execution(data.str, &data.token, data.size_token, shell);
+	else
+		free_t(data.str, &data.token, data.size_token);
 }

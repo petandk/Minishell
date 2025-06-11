@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/08 12:27:22 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/11 13:10:20 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ typedef struct s_token
 	int			less_than;
 	int			double_less;
 	int			pipe;
-	t_quotes	quotes[16];
+//	t_quotes	quotes[16];
+	t_quotes	*quotes;
 	int			quote_count;
 }			t_token;
 
@@ -189,7 +190,7 @@ void    free_comand(t_comand_data *comand, int num_comands);
 
 int		ft_isspace(char c);
 void	token_operator(t_token *token, char c, char next);
-void	init_token(t_token *token, int size);
+void	init_token(t_token *token, int size, int num_quotes);
 void	free_token(t_token **token, int size);
 int		init_all(t_token_data *data, char *rl);
 
@@ -224,6 +225,11 @@ void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
 char	*ft_strjoin_free(char *s1, char *s2);
 int		is_in_single_quote(int i, t_quotes *quotes);
+
+//  token_utils_6.c //
+
+int	count_quotes(char *str);
+
 // count_tokens.c //
 
 int		count_tokens(char *rl);
