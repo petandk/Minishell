@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 20:47:53 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/10 19:34:12 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:09:10 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ static int	handle_child(int status, t_shell **shell, int pipe_fd)
 {
 	int	exit_code;
 
-	if ((*shell)->exit_status == 130)
-		return (close(pipe_fd), 130);
 	if (WIFEXITED(status))
 		(*shell)->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -92,6 +90,8 @@ static int	handle_child(int status, t_shell **shell, int pipe_fd)
 			(*shell)->exit_status = 0;
 			return (close(pipe_fd), 42);
 		}
+		else if ((*shell)->exit_status == 130)
+			return (close(pipe_fd), 130);
 	}
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/08 10:45:59 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/11 18:13:21 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,15 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	cnt[0] = 0;
 	while (cnt[0] < cmd_count)
 	{
-			waitpid(pids[cnt[0]], &cnt[1], 0);
-			if (cnt[0] == cmd_count - 1)
-			{
-				if (WIFEXITED(cnt[1]))
-					shell->exit_status = WEXITSTATUS(cnt[1]);
-				else if (WIFSIGNALED(cnt[1]))
-					shell->exit_status = 128 + WTERMSIG(cnt[1]);
-			}
-			cnt[0]++;
+		waitpid(pids[cnt[0]], &cnt[1], 0);
+		if (cnt[0] == cmd_count - 1)
+		{
+			if (WIFEXITED(cnt[1]))
+				shell->exit_status = WEXITSTATUS(cnt[1]);
+			else if (WIFSIGNALED(cnt[1]))
+				shell->exit_status = 128 + WTERMSIG(cnt[1]);
+		}
+		cnt[0]++;
 	}
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);

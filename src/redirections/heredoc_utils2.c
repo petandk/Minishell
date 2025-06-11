@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/10 19:30:07 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:30:01 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
 	}
 	if (ft_strcmp(delimiter, line) == 0)
 		return (free(line), 2);
-	write(pipe_fd, line, ft_strlen(line));
-	write(pipe_fd, "\n", 1);
+	ft_putendl_fd(line, pipe_fd);
 	free(line);
 	return (0);
 }
