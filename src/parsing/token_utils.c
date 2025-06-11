@@ -6,7 +6,7 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:37:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/28 13:22:55 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/11 13:14:29 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	token_operator(t_token *token, char c, char next)
 		token->pipe = 1;
 }
 
-void	init_token(t_token *token, int size)
+void	init_token(t_token *token, int size, int num_quotes)
 {
 	int	i;
 	int	q;
@@ -51,8 +51,9 @@ void	init_token(t_token *token, int size)
 		token[i].less_than = 0;
 		token[i].double_less = 0;
 		token[i].pipe = 0;
+		token[i].quotes = malloc(sizeof(t_quotes) * num_quotes);
 		q = 0;
-		while (q < 16)
+		while (q < num_quotes)
 		{
 			token[i].quotes[q].quote = 0;
 			token[i].quotes[q].quote_start = -1;
@@ -71,15 +72,20 @@ void	free_token(t_token **token, int size)
 	i = 0;
 	while (i < size)
 	{
+		if ((*token)[i].quotes)
+			free((*token)[i].quotes);
 		if ((*token)[i].str)
 			free((*token)[i].str);
 		i++;
 	}
-	free (*token);
+	free(*token);
 }
 
 int	init_all(t_token_data *data, char *rl)
 {
+	int num_quotes;
+
+	num_quotes = count_quotes(rl);
 	data->i = 0;
 	data->j = 0;
 	data->str_i = 0;
@@ -100,6 +106,6 @@ int	init_all(t_token_data *data, char *rl)
 		free(data->str);
 		return (0);
 	}
-	init_token(data->token, data->size_token);
+	init_token(data->token, data->size_token, num_quotes);
 	return (1);
 }

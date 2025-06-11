@@ -1,29 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_var_utils.c                              :+:      :+:    :+:   */
+/*   token_utils_6.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 13:11:48 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 18:04:53 by gpolo            ###   ########.fr       */
+/*   Created: 2025/06/09 10:01:55 by gpolo             #+#    #+#             */
+/*   Updated: 2025/06/09 10:51:10 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	index_value(t_quotes *quote, t_expan *ex)
+int	count_quotes(char *str)
 {
-	ex->start = ex->i + 1;
-	while (quote[ex->j].quote_start != -1 || quote[ex->j].quote_end != -1)
+	int		i;
+	int		q;
+	char	in_quote;
+
+	in_quote = 0;
+	i = 0;
+	q = 0;
+	while (str[i])
 	{
-		if (ex->start <= quote[ex->j].quote_end)
-			break ;
-		if (quote[ex->j].quote_start == ex->i && quote[ex->j].quote_end == ex->i)
-			break;
-		if (ex->start == quote[ex->j].quote_start
-			&& quote[ex->j].quote_start > quote[ex->j].quote_end)
-			break ;
-		ex->j++;
-	}	
+		if ((str[i] == '\'') || (str[i] == '"'))
+		{
+			if (!in_quote)
+			{
+				in_quote = str[i];
+				q++;
+			}
+			else if (in_quote == str[i])
+			{
+				in_quote = 0;
+				q++;
+			}
+		}
+		i++;
+	}
+	if ((q % 2) > 0)
+		return (q / 2 + 1);
+	return (q / 2);
 }

@@ -6,13 +6,13 @@
 /*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:22:44 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/05 13:26:22 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/11 18:03:34 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	len_expan(char *str, int start, int qs, int qe)
+static int	len_expan(char *str, int start, int qs, int qe, int q)
 {
 	char	c;
 	int		len;
@@ -20,6 +20,8 @@ static int	len_expan(char *str, int start, int qs, int qe)
 	len = 0;
 	if (str[start] == '?')
 		return (1);
+	if (qs == qe && start > qe && q != 0)
+		return (0);
 	while (str[start + len])
 	{
 		c = str[start + len];
@@ -69,7 +71,7 @@ static void	process_dollar(t_expan *ex, char **str,
 
 	index_value(quote, ex);
 	len = len_expan(*str, ex->start,
-			quote[ex->j].quote_start, quote[ex->j].quote_end);
+			quote[ex->j].quote_start, quote[ex->j].quote_end, quote[ex->j].quote);
 	if (len == 0 && (quote[ex->j].quote == 0
 			|| (!(quote[ex->j].quote_start > quote[ex->j].quote_end)
 				&& quote[ex->j].quote != 0)))

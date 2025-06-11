@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 18:13:21 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:46:44 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
+//	printf("after expancion\n");
+//	print_comands(cmd, cmd_count);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
