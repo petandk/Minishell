@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 20:47:53 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/11 19:09:10 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:20:40 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,17 @@
 static char	*add_chr_to_pipe_line(char *line, char c)
 {
 	char	*temp;
+	size_t	len;
 
-	temp = malloc(ft_strlen(line) + 2);
+	if (!line)
+		return (NULL);
+	len = ft_strlen(line);
+	temp = malloc(len + 2);
 	if (!temp)
 		return (free(line), NULL);
-	ft_strlcpy(temp, line, ft_strlen(line) + 1);
-	temp[ft_strlen(line)] = c;
-	temp[ft_strlen(line) + 1] = '\0';
+	ft_strlcpy(temp, line, len + 1);
+	temp[len] = c;
+	temp[len + 1] = '\0';
 	free(line);
 	return (temp);
 }
@@ -55,6 +59,7 @@ t_list	*read_heredoc_pipe(int fd)
 {
 	char	*line;
 	t_list	*lines;
+	t_list	*new_node;
 
 	lines = NULL;
 	while (1)
@@ -62,7 +67,10 @@ t_list	*read_heredoc_pipe(int fd)
 		line = read_line_pipe(fd);
 		if (!line)
 			break ;
-		ft_lstadd_back(&lines, ft_lstnew(line));
+		new_node = ft_lstnew(line);
+		if (!new_node)
+			return (free(line), ft_lstclear(&lines, free), NULL);
+		ft_lstadd_back(&lines, new_node);
 	}
 	return (lines);
 }
@@ -113,9 +121,5 @@ t_list	*parent_process_heredoc(int pipe_fd[2],
 		return (lines);
 	}
 	else
-	{
-		if (result != 130 && result != 2 && result != 42)
-			close(pipe_fd[0]);
 		return (NULL);
-	}
 }

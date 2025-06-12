@@ -6,32 +6,31 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/11 18:30:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:07:05 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	sigint_handler(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	exit(130);
-}
 
 static char	*child_heredoc_setup(t_shell *shell, int pipe_fd, int expand)
 {
 	char	*line;
 	char	*expanded;
 
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
 	line = readline("> ");
+	if (g_signal == 1)
+	{
+		if (line)
+			free(line);
+		close(pipe_fd);
+		cleanup_shell(&shell);	
+		exit(130);
+	}
 	if (!line)
 	{
 		close(pipe_fd);
 		cleanup_shell(&shell);
-		exit(130);
+		exit(0);
 	}
 	if (expand && line)
 	{
@@ -47,12 +46,23 @@ int	child_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand)
 	char	*line;
 	int		result;
 
+	heredoc_child_signals();
 	while (1)
 	{
+		if (g_signal == 1)
+		{
+			close(pipe_fd);
+			cleanup_shell(&shell);
+			exit(130);
+		}
 		line = child_heredoc_setup(shell, pipe_fd, expand);
 		result = process_line(&shell, line, delimiter, pipe_fd);
 		if (result == 1)
-			return (close(pipe_fd), cleanup_shell(&shell), 42);
+		{
+			close(pipe_fd);
+			cleanup_shell(&shell);
+			exit(42);
+		}
 		else if (result == 2)
 			break ;
 	}

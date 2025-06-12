@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils4helper.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:16:33 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/11 13:16:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:34:00 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

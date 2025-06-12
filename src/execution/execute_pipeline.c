@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 11:46:44 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/12 19:07:29 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	if_pid_0(int prev_fd, int *pipefd, int i, int cmd_count, t_comand_da
 {
 	int	has_output_redir;
 
+	child_execution_signals();
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -58,25 +59,20 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			t_shell *shell)
 {
 	t_fork_data	data;
-	void		(*old_sig[2])(int);
 	pid_t		*pids;
 	int			cnt[2];
 
-	old_sig[0] = signal(SIGINT, SIG_IGN);
-	old_sig[1] = signal(SIGQUIT, SIG_IGN);
+	execution_signals();
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
-//	printf("after expancion\n");
-//	print_comands(cmd, cmd_count);
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
 		if ((!cmd[0].in_file || cmd[0].in_count == 0)
 			&& (!cmd[0].out_file || cmd[0].out_count == 0))
 		{
 			if (builtins(shell, cmd[0].comand))
-				return (signal(SIGINT, old_sig[0]), \
-						signal(SIGQUIT, old_sig[1]), (void)0);
+				return (shell_signals(), (void)0);
 		}
 	}
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
@@ -86,6 +82,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	{
 		ft_putendl_fd("heredoc preparation failed", 2);
 		free(pids);
+		shell_signals();
 		return ;
 	}
 	while (data.i < cmd_count)
@@ -134,6 +131,5 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	}
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
-	signal(SIGINT, old_sig[0]);
-	signal(SIGQUIT, old_sig[1]);
+	shell_signals();
 }
