@@ -54,31 +54,13 @@ int	pipe_size(int i, t_token *token, int size_token)
 void	strdup_comand(t_comand_data **comand, t_token *token, t_ind ind)
 {
 	int	k;
-	int	q;
 
 	k = 0;
-	while ((k < ind.size))
+	while (k < ind.size)
 	{
-		while (!(token[ind.i].str) && (token[ind.i + 1].str))
+		while (!(token[ind.i].str) && token[ind.i + 1].str)
 			ind.i += 2;
-		(*comand)[ind.j].quote[k] = malloc(sizeof(t_quotes) * (token[ind.i].quote_count + 1));
-		if (!malloc_test((*comand)[ind.j].quote[k]))
-			exit(1);	
-		(*comand)[ind.j].comand[k] = ft_strdup(token[ind.i].str);
-		q = 0;
-		(*comand)[ind.j].quote_count[k] = token[ind.i].quote_count;
-		while (q < token[ind.i].quote_count)
-		{
-			(*comand)[ind.j].quote[k][q].quote = token[ind.i].quotes[q].quote;
-			(*comand)[ind.j].quote[k][q].quote_start
-				= token[ind.i].quotes[q].quote_start;
-			(*comand)[ind.j].quote[k][q].quote_end
-				= token[ind.i].quotes[q].quote_end;
-			q++;
-		}
-		(*comand)[ind.j].quote[k][q].quote = 0;
-		(*comand)[ind.j].quote[k][q].quote_start = -1;
-		(*comand)[ind.j].quote[k][q].quote_end = -1;
+		alloc_and_copy1(&(*comand)[ind.j], token, &ind, k);
 		k++;
 		ind.i++;
 	}

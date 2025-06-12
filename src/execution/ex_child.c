@@ -107,7 +107,6 @@ void	execute_command(char **cmd, t_shell *shell)
 	if (!path)
 	{
 		free_args(new_env);
-//		printf("%s: No such file or directory\n", cmd[0]);
 		return ;
 	}
 	execve(path, cmd, new_env);

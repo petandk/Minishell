@@ -12,24 +12,25 @@
 
 #include "minishell.h"
 
-static int	len_expan(char *str, int start, int qs, int qe, int q)
+static int	len_expan(char *str, int start, t_quotes quote)
 {
-	char	c;
 	int		len;
+	char	c;
 
 	len = 0;
 	if (str[start] == '?')
 		return (1);
-	if (qs == qe && start > qe && q != 0)
+	if (quote.quote_start == quote.quote_end && start > quote.quote_end
+		&& quote.quote != 0)
 		return (0);
 	while (str[start + len])
 	{
 		c = str[start + len];
-		if (start + len == qs && start + len == qe)
+		if (start + len == quote.quote_start && start + len == quote.quote_end)
 			break ;
-		if (start + len == qs || start + len == qe)
+		if (start + len == quote.quote_start || start + len == quote.quote_end)
 		{
-			if (start + len == qe && (ft_isalnum(c) || c == '_'))
+			if (start + len == quote.quote_end && (ft_isalnum(c) || c == '_'))
 				len++;
 			break ;
 		}
@@ -70,11 +71,11 @@ static void	process_dollar(t_expan *ex, char **str,
 	char	*tmp;
 
 	index_value(quote, ex);
-	len = len_expan(*str, ex->start,
-			quote[ex->j].quote_start, quote[ex->j].quote_end, quote[ex->j].quote);
+	len = len_expan(*str, ex->start, quote[ex->j]);
 	if (len == 0 && (quote[ex->j].quote == 0
 			|| (!(quote[ex->j].quote_start > quote[ex->j].quote_end)
-				&& quote[ex->j].quote != 0)))
+				&& quote[ex->j].quote != 0
+				&& quote[ex->j].quote_start != ex->start)))
 	{
 		tmp = ft_substr(*str, ex->i, 1);
 		ex->new_str = ft_strjoin_free(ex->new_str, tmp);
