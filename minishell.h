@@ -34,22 +34,22 @@
 
 // COLORS //
 
-# define C_START "\001"
-# define C_END   "\002"
+//# define C_START "\001"
+//# define C_END   "\002"
 
-# define YELLOW  C_START "\033[33m" C_END
-# define RED     C_START "\033[31m" C_END
-# define GREY    C_START "\033[90m" C_END
-# define RESET   C_START "\033[0m" C_END
+# define YELLOW  "\001" "\033[33m" "\002"
+# define RED     "\001" "\033[31m" "\002"
+# define GREY    "\001" "\033[90m" "\002"
+# define RESET   "\001" "\033[0m" "\002"
 
 // STRUCTS //
 
 typedef struct s_quotes
 {
-	int quote;
-	int quote_start;
+	int	quote;
+	int	quote_start;
 	int	quote_end;
-	int closed;	
+	int	closed;	
 }		t_quotes;
 
 typedef struct s_token
@@ -60,7 +60,6 @@ typedef struct s_token
 	int			less_than;
 	int			double_less;
 	int			pipe;
-//	t_quotes	quotes[16];
 	t_quotes	*quotes;
 	int			quote_count;
 }			t_token;
@@ -129,6 +128,8 @@ typedef struct s_fork_data
 	int		pipefd[2];
 	int		prev_fd;
 	pid_t	pid;
+	pid_t	*pids;
+	int		cmd_count;
 }			t_fork_data;
 
 typedef struct s_env
@@ -170,6 +171,8 @@ void	execute_command(char **cmd, t_shell *shell);
 
 // token.c //
 
+int		process_outside_quotes(t_token_data *data, char *rl);
+int		handle_quotes(t_token_data *data, t_quote_tracker *qt);
 void	token(char *rl, t_shell *shell);
 
 //  shell.c //
@@ -180,7 +183,7 @@ void	cleanup_shell(t_shell **shell);
 //	execution.c //
 
 int		execution(char *str, t_token **token, int size_token, t_shell *shell);
-void    free_comand(t_comand_data *comand, int num_comands);
+void	free_comand(t_comand_data *comand, int num_comands);
 
 //  token_utils.c //
 
@@ -195,28 +198,30 @@ int		init_all(t_token_data *data, char *rl);
 int		count_comands(t_token *token, int size_token);
 void	init_others(t_comand_data *comand, int j, int size);
 void	init_comand(t_comand_data *comand, int size);
-void	in_out_file(char **file,char *str);
+void	in_out_file(char **file, char *str);
 char	*init_str(char *c, t_token *token, int i, int size_token);
 
 //  token_utils_3.c //
 
 void	init_int_out(t_comand_data *comand, int size_in, int size_out);
 int		check_in_out(int size_token, t_token *token);
-void	in_out_size(t_comand_data *comand, t_ind ind, int size_token, t_token *token);
-int		chek_token(t_token *token);
-int		chek_double(char a, char b, int  *i);
+void	in_out_size(t_comand_data *comand, t_ind ind, int size_token,
+			t_token *token);
+//int		chek_token(t_token *token);
+int		chek_double(char a, char b, int *i);
 
 //  token_utils_4.c //
 
 void	free_t(char *str, t_token **token, int size);
 void	init_quote_tracker(t_quote_tracker *qt);
-void	quotes(t_token_data *data, t_quote_tracker *qt);
-void	d_quotes(t_token_data *data, t_quote_tracker *qt);
 int		finalize_token(t_token_data *data);
+void	process_token_loop(t_token_data *data, t_quote_tracker *qt, char *rl);
+void	handle_final_token(t_token_data *data, t_shell *shell);
 
 //  token_utils_5.c //
 
-void	start_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
+void	start_quote(t_token_data *data, t_quote_tracker *qt,
+			t_token *curr_token);
 void	end_quote(t_token_data *data, t_quote_tracker *qt, t_token *curr_token);
 int		check_unclosed_quotes(t_token_data *data, int token_count);
 char	*ft_strjoin_free(char *s1, char *s2);
@@ -224,7 +229,9 @@ int		is_in_single_quote(int i, t_quotes *quotes);
 
 //  token_utils_6.c //
 
-int	count_quotes(char *str);
+int		count_quotes(char *str, int i, int q, int in_quote);
+void	copy_quotes(t_quotes *dst, t_quotes *src, int count);
+void	alloc_and_copy1(t_comand_data *cmd, t_token *token, t_ind *ind, int k);
 
 // count_tokens.c //
 
@@ -232,36 +239,52 @@ int		count_tokens(char *rl);
 
 // token_split.c //
 
-t_comand_data	*token_split(t_token *token, int size_token);
+//t_comand_data	*token_split(t_token *token, int size_token);
 
 // prepare_to_execute.c //
 
-int		prepare_to_execute(t_comand_data **comand, t_token *token, int size_token);
+int		prepare_to_execute(t_comand_data **comand, t_token *token,
+			int size_token);
 
 // the_files.c //
 
-int	the_files(t_ind *ind, int size_token, t_token *token, t_comand_data **comand);
+int		the_files(t_ind *ind, int size_token, t_token *token,
+			t_comand_data **comand);
 
 // execute_pipeline.c //
 
-void	execute_pipeline(t_comand_data *commands, int cmd_count, t_shell *shell);
+void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell);
+
+// Funciones auxiliares que pueden estar en otro .c si están separadas
+void	handle_pipe(int pipefd[2]);
+void	handle_fork(pid_t *pid);
+void	set_exit_status(t_shell *shell, int status);
+int		check_single_builtin(t_comand_data *cmd, int cmd_count,
+			t_shell *shell, void (*old_sig[2])(int));
+void	free_heredoc_fail(pid_t *pids);
+void	start_fork(t_fork_data *data, t_comand_data *cmd,
+			t_shell *shell, pid_t *pids);
+void	wait_children(pid_t *pids, int cmd_count, t_shell *shell);
+void	if_pid_0(t_fork_data *data, t_comand_data *cmd);
+void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count);
 
 // handle_redirections.c //
 
 //int	handle_redirections(t_comand_data *cmd, t_shell *shell);
-int	handle_redirections(t_comand_data *cmd);
+
+int		handle_redirections(t_comand_data *cmd);
 
 // handle_redirections_utils.c //
 
-int	out_red(char *file);
-int	append(char *file);
-int	in_red(char *file);
+int		out_red(char *file);
+int		append(char *file);
+int		in_red(char *file);
 
 //int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
 // expansion_var.c //
 
-void    expancion_var(t_comand_data *cmd, t_shell *shell);
+void	expancion_var(t_comand_data *cmd, t_shell *shell);
 
 // expansion_var_utils.c //
 
@@ -273,7 +296,7 @@ void	ft_cd(t_shell *shell, char *dest);
 
 // cd_utils.c //
 
-int	update_oldpwd_env(t_shell *shell, char *old_path);
+int		update_oldpwd_env(t_shell *shell, char *old_path);
 
 // echo.c //
 
@@ -303,7 +326,8 @@ void	clear_env_list(t_env **envlist);
 void	swap_env_content(t_env *a, t_env *b);
 void	sort_env_list(t_env	*envlist);
 int		process_export(char *arg, char ***splitd, t_env *env_var, int is_env);
-int	update_or_create_var(t_env **envlist, char *name, char *value);
+int		update_or_create_var(t_env **envlist, char *name,
+			char *value);
 int		ft_export(t_shell *shell, char **args);
 
 // utils.c //
@@ -319,6 +343,13 @@ int		malloc_test(void *str);
 void	print_token_array(t_token *tokens, int size);
 void	print_args(char **args);
 void	print_comands(t_comand_data *comand, int num_comands);
+
+// the_files_utils.c //
+
+void	process_output_redirection(t_comand_data *cmd, t_token *tk,
+			int *idx, char *str);
+void	process_input_redirection(t_comand_data *cmd, t_token *tk,
+			int *idx, char *str);
 
 // env.c //
 

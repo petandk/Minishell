@@ -12,33 +12,6 @@
 
 #include "minishell.h"
 
-int	chek_double(char a, char b, int *i)
-{
-	if (a == b)
-	{
-		*i += 2;
-		return (1);
-	}
-	return (0);
-}
-
-int	check_in_out(int size_token, t_token *token)
-{
-	int	i;
-
-	i = 0;
-	while (i < size_token)
-	{
-		if (!token[i].str && i == (size_token - 1))
-			return (0);
-		else if ((!token[i].str && !token[i].pipe) && ((!token[i + 1].str)
-				|| (token[i + 1].pipe)))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	init_string_array(char ***array, int size)
 {
 	int	i;

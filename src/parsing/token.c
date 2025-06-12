@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	handle_quotes(t_token_data *data, t_quote_tracker *qt)
+int	handle_quotes(t_token_data *data, t_quote_tracker *qt)
 {
 	t_token	*curr_token;
 
@@ -58,7 +58,7 @@ static void	handle_operator(t_token_data *data, char *rl)
 	}
 }
 
-static int	process_outside_quotes(t_token_data *data, char *rl)
+int	process_outside_quotes(t_token_data *data, char *rl)
 {
 	if (ft_isspace(data->c))
 	{
@@ -85,24 +85,6 @@ void	token(char *rl, t_shell *shell)
 	if (!init_all(&data, rl))
 		return ;
 	init_quote_tracker(&qt);
-	while (rl[data.i])
-	{
-		data.c = rl[data.i];
-		if (handle_quotes(&data, &qt))
-			continue ;
-		if (qt.active)
-		{
-			qt.current_len++;
-			data.str[data.str_i++] = data.c;
-			data.i++;
-			continue ;
-		}
-		if (process_outside_quotes(&data, rl))
-			continue ;
-		data.i++;
-	}
-	if (!finalize_token(&data))
-		execution(data.str, &data.token, data.size_token, shell);
-	else
-		free_t(data.str, &data.token, data.size_token);
+	process_token_loop(&data, &qt, rl);
+	handle_final_token(&data, shell);
 }

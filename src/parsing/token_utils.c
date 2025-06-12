@@ -83,9 +83,9 @@ void	free_token(t_token **token, int size)
 
 int	init_all(t_token_data *data, char *rl)
 {
-	int num_quotes;
+	int	num_quotes;
 
-	num_quotes = count_quotes(rl);
+	num_quotes = count_quotes(rl, 0, 0, 0);
 	data->i = 0;
 	data->j = 0;
 	data->str_i = 0;

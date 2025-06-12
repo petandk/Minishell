@@ -38,3 +38,31 @@ int	finalize_token(t_token_data *data)
 	i = check_unclosed_quotes(data, data->j);
 	return (i);
 }
+
+void	process_token_loop(t_token_data *data, t_quote_tracker *qt, char *rl)
+{
+	while (rl[data->i])
+	{
+		data->c = rl[data->i];
+		if (handle_quotes(data, qt))
+			continue ;
+		if (qt->active)
+		{
+			qt->current_len++;
+			data->str[data->str_i++] = data->c;
+			data->i++;
+			continue ;
+		}
+		if (process_outside_quotes(data, rl))
+			continue ;
+		data->i++;
+	}
+}
+
+void	handle_final_token(t_token_data *data, t_shell *shell)
+{
+	if (!finalize_token(data))
+		execution(data->str, &data->token, data->size_token, shell);
+	else
+		free_t(data->str, &data->token, data->size_token);
+}

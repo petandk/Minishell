@@ -83,6 +83,8 @@ int	is_in_single_quote(int i, t_quotes *quotes)
 {
 	int	j;
 
+	if (!quotes)
+		return (0);
 	j = 0;
 	while (quotes[j].quote_start != -1)
 	{

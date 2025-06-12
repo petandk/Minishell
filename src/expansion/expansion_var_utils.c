@@ -19,11 +19,12 @@ void	index_value(t_quotes *quote, t_expan *ex)
 	{
 		if (ex->start <= quote[ex->j].quote_end)
 			break ;
-		if (quote[ex->j].quote_start == ex->i && quote[ex->j].quote_end == ex->i)
-			break;
+		if (quote[ex->j].quote_start == ex->i
+			&& quote[ex->j].quote_end == ex->i)
+			break ;
 		if (ex->start == quote[ex->j].quote_start
 			&& quote[ex->j].quote_start > quote[ex->j].quote_end)
 			break ;
 		ex->j++;
-	}	
+	}
 }
