@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 13:10:20 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/13 20:36:32 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@
 
 // COLORS //
 
-//# define C_START "\001"
-//# define C_END   "\002"
+# define YELLOW	"\001\033[33m\002"
+# define RED	"\001\033[31m\002"
+# define GREY	"\001\033[90m\002"
+# define RESET	"\001\033[0m\002"
 
-# define YELLOW  "\001" "\033[33m" "\002"
-# define RED     "\001" "\033[31m" "\002"
-# define GREY    "\001" "\033[90m" "\002"
-# define RESET   "\001" "\033[0m" "\002"
+// GLOBAL VAR FOR SIGNALS! //
+
+extern volatile sig_atomic_t g_signal;
 
 // STRUCTS //
 
@@ -145,6 +146,7 @@ typedef struct s_shell
 	t_env			*env;
 	t_comand_data	*commands;
 	int				num_commands;
+	pid_t			*pids;
 	int				exit_status;
 }	t_shell;
 
@@ -161,6 +163,19 @@ typedef struct s_num_malloc
 	int	*in;
 	int	*out;
 }	t_num_malloc;
+
+// signals.c //
+
+void	handle_sigint_main(int sig);
+void	shell_signals(void);
+void	heredoc_parent_signals(void);
+void	execution_signals(void);
+
+// child_signals.c //
+
+void	heredoc_sigint_handler(int sig);
+void	heredoc_child_signals(void);
+void	child_execution_signals(void);
 
 // ex_child.c //
 

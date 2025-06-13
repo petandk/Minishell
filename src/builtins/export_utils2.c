@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/29 18:31:22 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:44:18 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,15 @@ void	clear_env_list(t_env **envlist)
 	{
 		aux = (*envlist)->next;
 		if ((*envlist)->name)
+		{
 			free((*envlist)->name);
+			(*envlist)->name = NULL;
+		}
 		if ((*envlist)->value)
+		{
 			free((*envlist)->value);
+			(*envlist)->value = NULL;
+		}
 		free(*envlist);
 		*envlist = aux;
 	}

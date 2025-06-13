@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/10 18:15:53 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:36:15 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+volatile sig_atomic_t g_signal;
 
 int	select_type(char *rl, t_shell **shell)
 {
@@ -22,15 +24,6 @@ int	select_type(char *rl, t_shell **shell)
 		add_history(rl);
 	}
 	return (0);
-}
-
-static void	handle_sigint_main(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
 }
 
 static void	shell_loop(t_shell *shell)

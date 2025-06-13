@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 18:51:30 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/10 19:11:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:31:39 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-//	if (ft_strncmp(err_type, "", ) == 0)
+
 void	printerror(char *err_type, char *name)
 {
 	if (ft_strncmp(err_type, "no_file", 7) == 0)

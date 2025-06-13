@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 11:46:44 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/13 21:47:25 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	if_pid_0(t_fork_data *data, t_comand_data *cmd)
 {
 	int	has_output_redir;
 
-	if (data->prev_fd != -1)
+	child_execution_signals();
+	if (prev_fd != -1)
 	{
 		dup2(data->prev_fd, STDIN_FILENO);
 		close(data->prev_fd);
@@ -175,12 +176,10 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			t_shell *shell)
 {
 	t_fork_data	data;
-	void		(*old_sig[2])(int);
 	pid_t		*pids;
 	int			cnt[2];
 
-	old_sig[0] = signal(SIGINT, SIG_IGN);
-	old_sig[1] = signal(SIGQUIT, SIG_IGN);
+	execution_signals();
 	data.i = 0;
 	data.prev_fd = -1;
 	expancion_var(&cmd[data.i], shell);
@@ -190,17 +189,19 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			&& (!cmd[0].out_file || cmd[0].out_count == 0))
 		{
 			if (builtins(shell, cmd[0].comand))
-				return (signal(SIGINT, old_sig[0]), \
-						signal(SIGQUIT, old_sig[1]), (void)0);
+				return (shell_signals(), (void)0);
 		}
 	}
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
+	shell->pids = pids;
 	if (init_all_heredocs(cmd, cmd_count, &shell) == -1)
 	{
 		ft_putendl_fd("heredoc preparation failed", 2);
 		free(pids);
+		shell->pids = NULL;
+		shell_signals();
 		return ;
 	}
 	while (data.i < cmd_count)
@@ -217,14 +218,12 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if (handle_redirections(&cmd[data.i]) == -1)
 			{
 				cleanup_shell(&shell);
-				free(pids);
 				exit (126);
 			}
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 			{
 				execute_command(cmd[data.i].comand, shell);	
 				cleanup_shell(&shell);
-				free(pids);
 				exit (127);
 			}
 			else
@@ -249,6 +248,7 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	}
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
-	signal(SIGINT, old_sig[0]);
-	signal(SIGQUIT, old_sig[1]);
-}*/
+	shell->pids = NULL;
+	shell_signals();
+}
+
