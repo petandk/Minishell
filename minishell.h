@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/12 18:52:15 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:36:32 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ typedef struct s_shell
 	t_env			*env;
 	t_comand_data	*commands;
 	int				num_commands;
+	pid_t			*pids;
 	int				exit_status;
 }	t_shell;
 

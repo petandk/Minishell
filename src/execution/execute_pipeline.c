@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/12 19:07:29 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:47:25 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,12 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	pids = (pid_t *)malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
+	shell->pids = pids;
 	if (init_all_heredocs(cmd, cmd_count, &shell) == -1)
 	{
 		ft_putendl_fd("heredoc preparation failed", 2);
 		free(pids);
+		shell->pids = NULL;
 		shell_signals();
 		return ;
 	}
@@ -99,14 +101,12 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			if (handle_redirections(&cmd[data.i]) == -1)
 			{
 				cleanup_shell(&shell);
-				free(pids);
 				exit (126);
 			}
 			if (cmd[data.i].comand && cmd[data.i].comand[0])
 			{
 				execute_command(cmd[data.i].comand, shell);	
 				cleanup_shell(&shell);
-				free(pids);
 				exit (127);
 			}
 			else
@@ -131,5 +131,6 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	}
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
+	shell->pids = NULL;
 	shell_signals();
 }
