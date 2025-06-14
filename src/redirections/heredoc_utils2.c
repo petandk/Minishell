@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/12 19:07:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:21:56 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*child_heredoc_setup(t_shell *shell, int pipe_fd, int expand)
 		if (line)
 			free(line);
 		close(pipe_fd);
-		cleanup_shell(&shell);	
+		cleanup_shell(&shell);
 		exit(130);
 	}
 	if (!line)

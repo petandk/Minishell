@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/13 21:47:25 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:47:11 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	if_pid_0(t_fork_data *data, t_comand_data *cmd)
 	int	has_output_redir;
 
 	child_execution_signals();
-	if (prev_fd != -1)
+	if (data->prev_fd != -1)
 	{
 		dup2(data->prev_fd, STDIN_FILENO);
 		close(data->prev_fd);
@@ -167,12 +167,12 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell)
 	wait_children(pids, cmd_count, shell);
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
+	shell->pids = NULL;
 	signal(SIGINT, old_sig[0]);
 	signal(SIGQUIT, old_sig[1]);
 }
 
-/*
-void	execute_pipeline(t_comand_data *cmd, int cmd_count,
+/*void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 			t_shell *shell)
 {
 	t_fork_data	data;
@@ -250,5 +250,4 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count,
 	free(pids);
 	shell->pids = NULL;
 	shell_signals();
-}
-
+}*/
