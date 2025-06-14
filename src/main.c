@@ -21,7 +21,8 @@ int	select_type(char *rl, t_shell **shell)
 	else if (*rl)
 	{
 		token(rl, *shell);
-		add_history(rl);
+		if (isatty(STDIN_FILENO))
+			add_history(rl);
 	}
 	return (0);
 }
@@ -29,12 +30,18 @@ int	select_type(char *rl, t_shell **shell)
 static void	shell_loop(t_shell *shell)
 {
 	char	*rl;
+	char	*prompt;
 
+	if (isatty(STDIN_FILENO))
+	{
+		prompt = YELLOW "M" RED "i" YELLOW "n" RED "i" YELLOW "s" \
+			RED "h" YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET;
+	}
+	else
+		prompt = "";
 	while (1)
 	{
-		rl = readline(YELLOW "M" RED "i" YELLOW "n"
-				RED "i" YELLOW "s" RED "h"
-				YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET);
+		rl = readline(prompt);
 		if (select_type(rl, &shell))
 		{
 			free (rl);
@@ -50,12 +57,10 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	signal (SIGINT, handle_sigint_main);
-	signal (SIGQUIT, SIG_IGN);
+	shell_signals();
 	shell = shell_init(envp);
 	shell_loop(shell);
 	cleanup_shell(&shell);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	child_execution_signals();
 	return (0);
 }
