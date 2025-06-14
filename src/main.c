@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/12 18:36:15 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:22:16 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_signal;
+volatile sig_atomic_t	g_signal;
 
 int	select_type(char *rl, t_shell **shell)
 {
