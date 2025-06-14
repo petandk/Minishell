@@ -266,7 +266,8 @@ int		the_files(t_ind *ind, int size_token, t_token *token,
 
 void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell);
 
-// Funciones auxiliares que pueden estar en otro .c si están separadas
+// Aux functions that can be on another .c
+
 void	handle_pipe(int pipefd[2]);
 void	handle_fork(pid_t *pid);
 void	set_exit_status(t_shell *shell, int status);
