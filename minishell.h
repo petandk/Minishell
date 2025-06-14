@@ -252,10 +252,6 @@ void	alloc_and_copy1(t_comand_data *cmd, t_token *token, t_ind *ind, int k);
 
 int		count_tokens(char *rl);
 
-// token_split.c //
-
-//t_comand_data	*token_split(t_token *token, int size_token);
-
 // prepare_to_execute.c //
 
 int		prepare_to_execute(t_comand_data **comand, t_token *token,
@@ -284,8 +280,6 @@ void	else_pid_0(int *prev_fd, int *pipefd, int i, int cmd_count);
 
 // handle_redirections.c //
 
-//int	handle_redirections(t_comand_data *cmd, t_shell *shell);
-
 int		handle_redirections(t_comand_data *cmd);
 
 // handle_redirections_utils.c //
@@ -293,8 +287,6 @@ int		handle_redirections(t_comand_data *cmd);
 int		out_red(char *file);
 int		append(char *file);
 int		in_red(char *file);
-
-//int	here_doc(char **delimiters, int in_file, t_shell *shell, int expand);
 
 // expansion_var.c //
 
@@ -351,12 +343,6 @@ int		is_valid_number(char *str);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	**list_to_matrix(t_env *env);
 int		malloc_test(void *str);
-
-// pirnt_things.c //
-
-void	print_token_array(t_token *tokens, int size);
-void	print_args(char **args);
-void	print_comands(t_comand_data *comand, int num_comands);
 
 // the_files_utils.c //
 
