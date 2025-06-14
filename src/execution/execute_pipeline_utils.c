@@ -3,32 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:57:49 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/12 11:13:27 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/14 12:14:35 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	child_process(t_fork_data *data, t_comand_data *cmd,
-		t_shell *shell, pid_t *pids)
+		t_shell *shell)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	child_execution_signals();
 	if_pid_0(data, cmd);
 	if (handle_redirections(&cmd[data->i]) == -1)
 	{
 		cleanup_shell(&shell);
-		free(pids);
 		exit(126);
 	}
 	if (cmd[data->i].comand && cmd[data->i].comand[0])
 	{
 		execute_command(cmd[data->i].comand, shell);
 		cleanup_shell(&shell);
-		free(pids);
 		exit(127);
 	}
 	exit(0);
@@ -47,7 +44,7 @@ void	start_fork(t_fork_data *data, t_comand_data *cmd,
 	handle_fork(&data->pid);
 	pids[data->i] = data->pid;
 	if (data->pid == 0)
-		child_process(data, cmd, shell, pids);
+		child_process(data, cmd, shell);
 	else
 		parent_process(data);
 	data->i++;

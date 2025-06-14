@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline_utils1.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:58:37 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/12 11:12:39 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/14 12:17:09 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_single_builtin(t_comand_data *cmd, int cmd_count,
-		t_shell *shell, void (*old_sig[2])(int))
+int	check_single_builtin(t_comand_data *cmd, int cmd_count, t_shell *shell)
 {
 	if (cmd_count == 1 && cmd[0].comand && cmd[0].comand[0])
 	{
@@ -22,8 +21,7 @@ int	check_single_builtin(t_comand_data *cmd, int cmd_count,
 		{
 			if (builtins(shell, cmd[0].comand))
 			{
-				signal(SIGINT, old_sig[0]);
-				signal(SIGQUIT, old_sig[1]);
+				shell_signals();
 				return (1);
 			}
 		}
@@ -31,8 +29,10 @@ int	check_single_builtin(t_comand_data *cmd, int cmd_count,
 	return (0);
 }
 
-void	free_heredoc_fail(pid_t *pids)
+void	free_heredoc_fail(pid_t *pids, t_shell *shell)
 {
 	ft_putendl_fd("heredoc preparation failed", 2);
 	free(pids);
+	shell->pids = NULL;
+	shell_signals();
 }

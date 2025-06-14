@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 10:47:11 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/14 12:21:02 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,30 +146,28 @@ void	wait_children(pid_t *pids, int cmd_count, t_shell *shell)
 void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell)
 {
 	t_fork_data	data;
-	void		(*old_sig[2])(int);
 	pid_t		*pids;
 
-	old_sig[0] = signal(SIGINT, SIG_IGN);
-	old_sig[1] = signal(SIGQUIT, SIG_IGN);
+	execution_signals();
 	data.i = 0;
 	data.prev_fd = -1;
 	data.cmd_count = cmd_count;
 	expancion_var(&cmd[data.i], shell);
-	if (check_single_builtin(cmd, cmd_count, shell, old_sig))
+	if (check_single_builtin(cmd, cmd_count, shell))
 		return ;
 	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
+	shell->pids = pids;
 	if (init_all_heredocs(cmd, cmd_count, &shell) == -1)
-		return (free_heredoc_fail(pids), (void)0);
+		return (free_heredoc_fail(pids, shell), (void)0);
 	while (data.i < cmd_count)
 		start_fork(&data, cmd, shell, pids);
 	wait_children(pids, cmd_count, shell);
 	cleanup_heredocs(cmd, cmd_count);
 	free(pids);
 	shell->pids = NULL;
-	signal(SIGINT, old_sig[0]);
-	signal(SIGQUIT, old_sig[1]);
+	shell_signals();
 }
 
 /*void	execute_pipeline(t_comand_data *cmd, int cmd_count,

@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/13 20:36:32 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/14 12:22:28 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 
 // GLOBAL VAR FOR SIGNALS! //
 
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 // STRUCTS //
 
@@ -274,9 +274,8 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell);
 void	handle_pipe(int pipefd[2]);
 void	handle_fork(pid_t *pid);
 void	set_exit_status(t_shell *shell, int status);
-int		check_single_builtin(t_comand_data *cmd, int cmd_count,
-			t_shell *shell, void (*old_sig[2])(int));
-void	free_heredoc_fail(pid_t *pids);
+int		check_single_builtin(t_comand_data *cmd, int cmd_count, t_shell *shell);
+void	free_heredoc_fail(pid_t *pids, t_shell *shell);
 void	start_fork(t_fork_data *data, t_comand_data *cmd,
 			t_shell *shell, pid_t *pids);
 void	wait_children(pid_t *pids, int cmd_count, t_shell *shell);
