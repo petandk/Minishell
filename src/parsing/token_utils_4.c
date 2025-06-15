@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:58:18 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 17:15:33 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 13:52:42 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	finalize_token(t_token_data *data)
 {
 	int	i;
 
-	if (data->str_i > 0)
+	if (data->str_i > 0 || (data->str_i == 0 && data->token[data->j].quotes
+			&& data->token[data->j].quotes->closed))
 	{
 		data->str[data->str_i] = '\0';
 		data->token[data->j].str = ft_strdup(data->str);
@@ -57,6 +58,8 @@ void	process_token_loop(t_token_data *data, t_quote_tracker *qt, char *rl)
 			continue ;
 		data->i++;
 	}
+	if (qt->active)
+		register_unclosed_quote(data, qt);
 }
 
 void	handle_final_token(t_token_data *data, t_shell *shell)

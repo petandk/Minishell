@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   prepare_to_execute.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:48:46 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 17:42:47 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 13:51:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	inint_to_token(t_token *token, int size_token,
-		t_comand_data **comand, t_ind *ind)
+int	inint_to_token(t_token *token, int size_token, t_comand_data **comand,
+		t_ind *ind)
 {
 	int	num_comands;
 
@@ -73,8 +73,7 @@ void	the_comad(t_comand_data **comand, t_token *token, t_ind ind)
 	int	k;
 
 	(*comand)[ind.j].comand = (char **)ft_calloc(ind.size + 1, sizeof(char *));
-	(*comand)[ind.j].quote
-		= ft_calloc(ind.size + 1, sizeof(t_quotes *));
+	(*comand)[ind.j].quote = ft_calloc(ind.size + 1, sizeof(t_quotes *));
 	(*comand)[ind.j].quote_count = (int *)ft_calloc(ind.size + 1, sizeof(int));
 	if (!malloc_test((void *)(*comand)[ind.j].quote)
 		|| !malloc_test((void *)(*comand)[ind.j].comand)
@@ -87,13 +86,13 @@ void	the_comad(t_comand_data **comand, t_token *token, t_ind ind)
 
 int	prepare_to_execute(t_comand_data **comand, t_token *token, int size_token)
 {
-	int				num_comands;
-	t_ind			ind;
+	int		num_comands;
+	t_ind	ind;
 
 	if (!token || size_token <= 0)
 		return (-1);
-	if (!check_in_out(size_token, token))
-		return (-1);
+	/*if (!check_in_out(size_token, token))
+		return (-1);*/
 	num_comands = inint_to_token(token, size_token, comand, &ind);
 	if (num_comands <= 0)
 		return (-1);
