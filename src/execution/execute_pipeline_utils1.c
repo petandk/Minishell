@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:58:37 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 12:17:09 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 16:02:14 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	check_single_builtin(t_comand_data *cmd, int cmd_count, t_shell *shell)
 
 void	free_heredoc_fail(pid_t *pids, t_shell *shell)
 {
-	ft_putendl_fd("heredoc preparation failed", 2);
 	free(pids);
 	shell->pids = NULL;
 	shell_signals();

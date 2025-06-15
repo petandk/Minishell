@@ -6,24 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 14:47:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:36:00 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 volatile sig_atomic_t	g_signal;
-/*
-static void	ft_a(t_shell **shell, int exit_code)
-{
-	if (!shell || !*shell)
-		return ;
-	if ((*shell)->env)
-		clear_env_list(&(*shell)->env);
-	free(*shell);
-	*shell = NULL;
-	ft_exit(exit_code & 0xFF);
-}*/
 
 int	select_type(char *rl, t_shell **shell)
 {
