@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:07:50 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 17:00:01 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 17:31:10 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	execution(char *str, t_token **token, int size_token, t_shell *shell)
 		return (-1);
 	shell->commands = comand;
 	shell->num_commands = num_comands;
-//	print_comands(comand, num_comands);
 	execute_pipeline(comand, num_comands, shell);
 	free_comand(comand, num_comands);
 	return (1);
