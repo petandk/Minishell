@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 12:12:32 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 12:21:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 16:35:13 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ void	execute_pipeline(t_comand_data *cmd, int cmd_count, t_shell *shell)
 	data.i = 0;
 	data.prev_fd = -1;
 	data.cmd_count = cmd_count;
-	expancion_var(&cmd[data.i], shell);
+	while (data.i < cmd_count)
+		expancion_var(&cmd[data.i++], shell);
+	data.i = 0;
 	if (check_single_builtin(cmd, cmd_count, shell))
 		return ;
 	pids = ft_calloc(cmd_count + 1, sizeof(pid_t));
