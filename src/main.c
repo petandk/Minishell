@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:02:01 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 15:36:00 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:30:10 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ static void	shell_loop(t_shell *shell)
 
 	if (isatty(STDIN_FILENO))
 	{
-		prompt = YELLOW "M" RED "i" YELLOW "n" RED "i" YELLOW "s" \
-			RED "h" YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET;
+		prompt = YELLOW "M" RED "i" YELLOW "n" RED "i" YELLOW "s" RED "h" YELLOW "e" RED "l" YELLOW "l" GREY " > " RESET;
 	}
 	else
 		prompt = "";
@@ -48,10 +47,10 @@ static void	shell_loop(t_shell *shell)
 		rl = readline(prompt);
 		if (select_type(rl, &shell))
 		{
-			free (rl);
+			free(rl);
 			break ;
 		}
-		free (rl);
+		free(rl);
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 18:51:30 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/12 13:31:39 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:41:18 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	printerror(char *err_type, char *name)
 		multend_fd("unset: ", name, ": not a valid identifier", 2);
 	if (ft_strncmp(err_type, "no_exit", 7) == 0)
 		multend_fd("Minishell: exit: ", name, ": numeric argument required", 2);
+	if (ft_strncmp(err_type, "no_perm", 7) == 0)
+		multend_fd("minishell: ", name, ": Permission denied", 2);
 }
 
 void	control_d_error(char *delimiter)

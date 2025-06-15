@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:17:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 13:05:04 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:50:12 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ int	out_red(char *file)
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		printerror("no_file", file);
+		if (errno == EACCES)
+			printerror("no_perm", file);
+		else
+			printerror("no_file", file);
 		return (-1);
 	}
 	dup2(fd, 1);
-	close (fd);
+	close(fd);
 	return (0);
 }
 
@@ -34,11 +37,14 @@ int	append(char *file)
 	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		printerror("no_file", file);
+		if (errno == EACCES)
+			printerror("no_perm", file);
+		else
+			printerror("no_file", file);
 		return (-1);
 	}
 	dup2(fd, 1);
-	close (fd);
+	close(fd);
 	return (0);
 }
 
@@ -49,10 +55,13 @@ int	in_red(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		printerror("no_file", file);
+		if (errno == EACCES)
+			printerror("no_perm", file);
+		else
+			printerror("no_file", file);
 		return (-1);
 	}
 	dup2(fd, 0);
-	close (fd);
+	close(fd);
 	return (0);
 }
