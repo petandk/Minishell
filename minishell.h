@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 12:22:28 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:50:44 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,7 @@ int		ft_unset(t_env **envlist, char **names);
 // exit.c //
 
 void	ft_exit_no_print(t_shell **shell, int exit_code);
+void	ft_exit_no_full_init(t_shell **shell, int exit_code);
 void	ft_exit(t_shell **shell, int exit_code);
 
 // heredoc.c //

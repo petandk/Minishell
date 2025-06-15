@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:15 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/31 13:22:50 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:11:06 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ int	is_valid_name(char *name)
 
 int	is_valid_number(char *str)
 {
-	int	i;
+	int		i;
+	long	result;
 
 	if (!str || !*str)
 		return (0);
 	i = 0;
+	result = 0;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	if (!str[i])
@@ -44,6 +46,9 @@ int	is_valid_number(char *str)
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
+			return (0);
+		result = (result * 10) + (str[i] - '0');
+		if (result > 2147483647)
 			return (0);
 		i++;
 	}
