@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:43:52 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/13 20:43:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 21:08:42 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_shell	*shell_init(char **envp)
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		exit (1);
-	shell->prev_dir = NULL;
 	shell->commands = NULL;
 	shell->num_commands = 0;
 	shell->exit_status = 0;
@@ -40,11 +39,6 @@ void	cleanup_shell(t_shell **shell)
 		return ;
 	if ((*shell)->env)
 		clear_env_list(&(*shell)->env);
-	if ((*shell)->prev_dir)
-	{
-		free((*shell)->prev_dir);
-		(*shell)->prev_dir = NULL;
-	}
 	if ((*shell)->commands && (*shell)->num_commands > 0)
 	{
 		free_comand((*shell)->commands, (*shell)->num_commands);

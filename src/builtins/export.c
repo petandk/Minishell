@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/10 19:17:11 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 21:34:05 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,53 +81,48 @@ int	process_export(char *arg, char ***splitd,
 	return (0);
 }
 
-int	update_or_create_var(t_env **envlist, char *name, char *value)
-{
-	t_env	*exist;
-
-	exist = find_env_var(*envlist, name);
-	if (exist)
-	{
-		free(exist->value);
-		exist->value = ft_strdup(value);
-		if (!exist->value)
-			return (1);
-	}
-	else
-	{
-		exist = env_lstnew(name, value);
-		if (!exist)
-			return (1);
-		env_lstadd_back(envlist, exist);
-	}
-	return (0);
-}
-
-int	ft_export(t_shell *shell, char **args)
+static int	process_export_args(t_shell *shell, char **args)
 {
 	char	**splitd;
 	t_env	env_var;
 	int		ret[2];
+
+	ret[0] = 0;
+	ret[1] = 0;
+	while (args[ret[0]])
+	{
+		if (ft_strchr(args[ret[0]], '='))
+		{
+			env_var.next = NULL;
+			if (process_export(args[ret[0]], &splitd, &env_var, 0) == 0)
+			{
+				update_or_create_var(&shell->env, env_var.name, env_var.value);
+				free_split(splitd, -1);
+			}
+			else
+				ret[1] = 1;
+		}
+		else
+			if (handle_no_val_export(shell, args[ret[0]]))
+				ret[1] = 1;
+		ret[0]++;
+	}
+	return (ret[1]);
+}
+
+int	ft_export(t_shell *shell, char **args)
+{
 	t_env	*sorted;
 
-	env_var.next = NULL;
-	splitd = NULL;
 	if (!args || !args[0])
 	{
 		sorted = clone_env_list(shell->env);
 		if (!sorted)
 			return (1);
-		return (sort_env_list(sorted), ft_show_env(sorted, 0), \
-				clear_env_list(&sorted), 0);
+		sort_env_list(sorted);
+		ft_show_env(sorted, 0);
+		clear_env_list(&sorted);
+		return (0);
 	}
-	ret[1] = 0;
-	while (args[ret[1]] && ft_strchr(args[ret[1]], '='))
-	{
-		if (process_export(args[ret[1]], &splitd, &env_var, 0))
-			return (1);
-		ret[0] = update_or_create_var(&shell->env, env_var.name, env_var.value);
-		ret[1]++;
-	}
-	free_split(splitd, -1);
-	return (ret[0]);
+	return (process_export_args(shell, args));
 }

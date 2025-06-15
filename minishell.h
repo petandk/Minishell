@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 17:22:12 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 21:45:54 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char						*prev_dir;
 	t_env						*env;
 	t_comand_data				*commands;
 	int							num_commands;
@@ -329,7 +328,8 @@ void							ft_cd(t_shell *shell, char *dest);
 
 // cd_utils.c //
 
-int								update_oldpwd_env(t_shell *shell,
+char							*get_oldpwd(t_shell *shell);
+void							update_oldpwd_env(t_shell *shell, \
 									char *old_path);
 char							*go_home(t_shell *shell);
 
@@ -351,10 +351,16 @@ t_env							*create_env_list(char **envp);
 
 // export_utils2.c //
 
+int								update_or_create_var(t_env **envlist,
+									char *name, char *value);
 t_env							*create_basic_env(void);
 t_env							*find_env_var(t_env *envlist, char *name);
 int								count_env_nodes(t_env *envlist);
 void							clear_env_list(t_env **envlist);
+
+// export_utils3.c
+
+int	handle_no_val_export(t_shell *shell, char *arg);
 
 // export.c //
 
@@ -362,8 +368,6 @@ void							swap_env_content(t_env *a, t_env *b);
 void							sort_env_list(t_env *envlist);
 int								process_export(char *arg, char ***splitd,
 									t_env *env_var, int is_env);
-int								update_or_create_var(t_env **envlist,
-									char *name, char *value);
 int								ft_export(t_shell *shell, char **args);
 
 // utils.c //
