@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:18:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/11 17:52:52 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 13:52:45 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	handle_quotes(t_token_data *data, t_quote_tracker *qt)
 	t_token	*curr_token;
 
 	curr_token = &data->token[data->j];
-	if ((data->c == '\'' && qt->active != 2)
-		|| (data->c == '\"' && qt->active != 1))
+	if ((data->c == '\'' && qt->active != 2) || (data->c == '\"'
+			&& qt->active != 1))
 	{
 		if (!qt->active)
 			start_quote(data, qt, curr_token);
@@ -44,8 +44,8 @@ static void	save_token_string(t_token_data *data)
 static void	handle_operator(t_token_data *data, char *rl)
 {
 	save_token_string(data);
-	if ((data->c == '>' && rl[data->i + 1] == '>')
-		|| (data->c == '<' && rl[data->i + 1] == '<'))
+	if ((data->c == '>' && rl[data->i + 1] == '>') || (data->c == '<'
+			&& rl[data->i + 1] == '<'))
 	{
 		token_operator(&data->token[data->j], data->c, rl[data->i + 1]);
 		data->j++;
