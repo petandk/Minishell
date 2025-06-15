@@ -32,7 +32,7 @@ static void	free_command_strings(t_comand_data *cmd)
 	int	j;
 
 	j = 0;
-	while (cmd->comand && cmd->comand[j])
+	while (cmd->comand && cmd->comand[j] && j < cmd->num_comands)
 		free(cmd->comand[j++]);
 	free(cmd->comand);
 	j = 0;

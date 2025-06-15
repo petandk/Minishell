@@ -58,7 +58,7 @@ void	alloc_and_copy1(t_comand_data *cmd, t_token *token, t_ind *ind, int k)
 	int	count;
 
 	count = token[ind->i].quote_count;
-	cmd->quote[k] = malloc(sizeof(t_quotes) * (count + 1));
+	cmd->quote[k] = ft_calloc(count + 1, sizeof(t_quotes));
 	if (!malloc_test(cmd->quote[k]))
 		exit(1);
 	cmd->comand[k] = ft_strdup(token[ind->i].str);

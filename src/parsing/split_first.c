@@ -32,7 +32,7 @@ static char	*ft_fill_word(const char *str, int start, int end)
 	int		i;
 
 	i = 0;
-	word = (char *)malloc((end - start + 1) * sizeof(char));
+	word = ft_calloc(end - start + 1, sizeof(char));
 	if (!word)
 		return (NULL);
 	while (start < end)
@@ -85,7 +85,7 @@ char	**split_first(const char *s, char c)
 
 	if (!s)
 		return (NULL);
-	matrix = ft_calloc((word_count(s, c) + 1), sizeof(char *));
+	matrix = ft_calloc(word_count(s, c) + 1, sizeof(char *));
 	if (!matrix)
 		return (NULL);
 	return (ft_fill_matrix(s, c, matrix));

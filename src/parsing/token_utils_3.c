@@ -18,7 +18,7 @@ void	init_string_array(char ***array, int size)
 
 	if (!array || size <= 0)
 		return ;
-	*array = (char **)malloc(size * sizeof(char *));
+	*array = ft_calloc(size + 1, sizeof(char *));
 	if (!*array)
 		exit(1);
 	i = 0;
@@ -35,7 +35,7 @@ void	init_quote_array(t_quotes ***array, int size)
 
 	if (!array || size <= 0)
 		return ;
-	*array = (t_quotes **)malloc(size * sizeof(t_quotes *));
+	*array = ft_calloc(size + 1, sizeof(t_quotes *));
 	if (!*array)
 		exit(1);
 	i = 0;
@@ -52,7 +52,7 @@ void	init_int_array(int **array, int size)
 
 	if (!array || size <= 0)
 		return ;
-	*array = (int *)malloc(size * sizeof(int));
+	*array = ft_calloc(size + 1, sizeof(int));
 	if (!*array)
 		exit(1);
 	i = 0;

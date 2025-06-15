@@ -69,7 +69,7 @@ char	*ft_replace(const char *str)
 	if (!str)
 		return (NULL);
 	size = ft_calculate_size(str);
-	result = (char *)malloc((size + 1) * sizeof(char));
+	result = ft_calloc(size + 1, sizeof(char));
 	if (!result)
 		return (NULL);
 	ft_handle_string(str, result);

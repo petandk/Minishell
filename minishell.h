@@ -106,6 +106,7 @@ typedef struct s_comand_data
 	int			*quote_out_count;
 	int			in_count;
 	int			out_count;
+	int			num_comands;
 }				t_comand_data;
 
 typedef struct s_token_state
@@ -304,6 +305,7 @@ void	ft_cd(t_shell *shell, char *dest);
 // cd_utils.c //
 
 int		update_oldpwd_env(t_shell *shell, char *old_path);
+char	*go_home(t_shell *shell);
 
 // echo.c //
 

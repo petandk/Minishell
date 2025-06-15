@@ -16,7 +16,7 @@ static int	setup_here_mem(t_comand_data *cmd)
 {
 	int	i;
 
-	cmd->heredoc_fd = malloc(sizeof(int) * cmd->n_heredocs);
+	cmd->heredoc_fd = ft_calloc(cmd->n_heredocs + 1, sizeof(int));
 	if (!cmd->heredoc_fd)
 		return (-1);
 	i = 0;

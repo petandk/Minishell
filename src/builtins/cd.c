@@ -13,16 +13,6 @@
 
 #include "minishell.h"
 
-static char	*go_home(t_shell *shell)
-{
-	t_env	*home;
-
-	home = find_env_var(shell->env, "HOME");
-	if (!home)
-		return (ft_putendl_fd("minishell: cd: HOME not set", 2), NULL);
-	return (ft_strdup(home->value));
-}
-
 static char	*go_back(void)
 {
 	char	*current;
@@ -90,6 +80,28 @@ static int	update_pwd_env(t_env *env)
 	return (1);
 }
 
+static int	change_directory(t_shell *shell, char *dest,
+		char *newpath, char *current)
+{
+	if (chdir(newpath) == -1)
+	{
+		shell->exit_status = 1;
+		printerror("no_file", dest);
+		free(newpath);
+		free(current);
+		free(dest);
+		return (1);
+	}
+	free(shell->prev_dir);
+	shell->prev_dir = current;
+	update_oldpwd_env(shell, current);
+	update_pwd_env(shell->env);
+	free(newpath);
+	free(dest);
+	shell->exit_status = 0;
+	return (0);
+}
+
 void	ft_cd(t_shell *shell, char *dest)
 {
 	char	*newpath;
@@ -99,22 +111,15 @@ void	ft_cd(t_shell *shell, char *dest)
 	if (!current)
 	{
 		shell->exit_status = 1;
-		return (perror("minishell: cd: getcwd error"), (void)0);
+		ft_putendl_fd("minishell: cd: getcwd error", 2);
+		return ;
 	}
 	newpath = new_path(shell, dest);
 	if (!newpath)
 	{
 		shell->exit_status = 1;
-		return (free(current), (void)0);
+		free(current);
+		return ;
 	}
-	if (chdir(newpath) == -1)
-	{
-		shell->exit_status = 1;
-		return (perror("cd"), free(newpath), free(current), (void)0);
-	}
-	free(shell->prev_dir);
-	shell->prev_dir = current;
-	shell->exit_status = 0;
-	return (update_oldpwd_env(shell, current), update_pwd_env(shell->env), \
-			free(newpath), (void) 0);
+	change_directory(shell, dest, newpath, current);
 }

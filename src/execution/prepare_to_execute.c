@@ -22,9 +22,10 @@ int	inint_to_token(t_token *token, int size_token,
 	num_comands = count_comands(token, size_token);
 	if (num_comands >= 0)
 	{
-		*comand = malloc((num_comands) * sizeof(t_comand_data));
+		*comand = ft_calloc(num_comands + 1, sizeof(t_comand_data));
 		if (!malloc_test((void *)*comand))
 			exit(1);
+		(*comand)->num_comands = num_comands;
 		init_comand(*comand, num_comands);
 	}
 	return (num_comands);
@@ -71,10 +72,10 @@ void	the_comad(t_comand_data **comand, t_token *token, t_ind ind)
 {
 	int	k;
 
-	(*comand)[ind.j].comand = (char **)malloc((ind.size + 1) * sizeof(char *));
+	(*comand)[ind.j].comand = (char **)ft_calloc(ind.size + 1, sizeof(char *));
 	(*comand)[ind.j].quote
-		= (t_quotes **)malloc((ind.size + 1) * sizeof(t_quotes *));
-	(*comand)[ind.j].quote_count = (int *)malloc((ind.size + 1) * sizeof(int));
+		= ft_calloc(ind.size + 1, sizeof(t_quotes *));
+	(*comand)[ind.j].quote_count = (int *)ft_calloc(ind.size + 1, sizeof(int));
 	if (!malloc_test((void *)(*comand)[ind.j].quote)
 		|| !malloc_test((void *)(*comand)[ind.j].comand)
 		|| !malloc_test((void *)(*comand)[ind.j].quote_count))

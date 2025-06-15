@@ -89,7 +89,7 @@ char	**list_to_matrix(t_env *env)
 
 	current = env;
 	i = 0;
-	matrix = (char **)malloc(sizeof(char *) * (count_env_nodes(env) + 1));
+	matrix = ft_calloc(count_env_nodes(env) + 1, sizeof(char *));
 	if (!matrix)
 		return (NULL);
 	while (current)

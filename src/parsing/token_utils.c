@@ -51,7 +51,7 @@ void	init_token(t_token *token, int size, int num_quotes)
 		token[i].less_than = 0;
 		token[i].double_less = 0;
 		token[i].pipe = 0;
-		token[i].quotes = malloc(sizeof(t_quotes) * num_quotes);
+		token[i].quotes = ft_calloc(num_quotes + 1, sizeof(t_quotes));
 		q = 0;
 		while (q < num_quotes)
 		{
@@ -97,10 +97,10 @@ int	init_all(t_token_data *data, char *rl)
 	}
 	if (data->size_token == 0)
 		return (0);
-	data->str = malloc((ft_strlen(rl) + 1) * (sizeof(char)));
+	data->str = ft_calloc(ft_strlen(rl) + 1, sizeof(char));
 	if (!data->str)
 		return (0);
-	data->token = malloc(data->size_token * (sizeof(t_token)));
+	data->token = ft_calloc(data->size_token + 1, sizeof(t_token));
 	if (!data->token)
 	{
 		free(data->str);

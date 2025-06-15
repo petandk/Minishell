@@ -14,10 +14,25 @@
 
 volatile sig_atomic_t	g_signal;
 
+static void	ft_a(t_shell **shell, int exit_code)
+{
+	if (!shell || !*shell)
+		return ;
+	if ((*shell)->env)
+		clear_env_list(&(*shell)->env);
+	free(*shell);
+	*shell = NULL;
+	exit (exit_code & 0xFF);
+}
+
 int	select_type(char *rl, t_shell **shell)
 {
 	if (!rl)
+	{
+		if (*shell)
+			ft_a(shell, 0);
 		ft_exit(shell, 1);
+	}
 	else if (*rl)
 	{
 		token(rl, *shell);

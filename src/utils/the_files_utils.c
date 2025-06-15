@@ -16,7 +16,7 @@ static t_quotes	*init_empty_quotes(void)
 {
 	t_quotes	*quotes;
 
-	quotes = malloc(sizeof(t_quotes) * 2);
+	quotes = ft_calloc(2, sizeof(t_quotes));
 	if (!quotes)
 		return (NULL);
 	quotes[0].quote = 0;
@@ -36,7 +36,7 @@ static t_quotes	*init_quotes_array(t_token *tk, int index, int *count)
 	qcount = tk[index].quote_count;
 	if (qcount > 0 && tk[index].quotes)
 	{
-		quotes = malloc(sizeof(t_quotes) * (qcount + 1));
+		quotes = ft_calloc(qcount + 1, sizeof(t_quotes));
 		if (!quotes)
 			return (NULL);
 		copy_quotes(quotes, tk[index].quotes, qcount);

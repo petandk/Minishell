@@ -33,3 +33,13 @@ int	update_oldpwd_env(t_shell *shell, char *old_path)
 			&& update_oldpwd_env(shell, old_path));
 	}
 }
+
+char	*go_home(t_shell *shell)
+{
+	t_env	*home;
+
+	home = find_env_var(shell->env, "HOME");
+	if (!home)
+		return (ft_putendl_fd("minishell: cd: HOME not set", 2), NULL);
+	return (ft_strdup(home->value));
+}
