@@ -31,7 +31,6 @@ int	check_single_builtin(t_comand_data *cmd, int cmd_count, t_shell *shell)
 
 void	free_heredoc_fail(pid_t *pids, t_shell *shell)
 {
-	ft_putendl_fd("heredoc preparation failed", 2);
 	free(pids);
 	shell->pids = NULL;
 	shell_signals();

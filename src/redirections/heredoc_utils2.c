@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/14 10:21:56 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 15:45:27 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*child_heredoc_setup(t_shell *shell, int pipe_fd, int expand)
+static char	*child_hd_setup(t_shell **shell, int pipe_fd, int expand, char *deli)
 {
 	char	*line;
 	char	*expanded;
@@ -23,20 +23,20 @@ static char	*child_heredoc_setup(t_shell *shell, int pipe_fd, int expand)
 		if (line)
 			free(line);
 		close(pipe_fd);
-		cleanup_shell(&shell);
+		cleanup_shell(shell);
 		exit(130);
 	}
 	if (!line)
 	{
+		control_d_error(deli);
 		close(pipe_fd);
-		cleanup_shell(&shell);
+		cleanup_shell(shell);
 		exit(0);
 	}
 	if (expand && line)
 	{
-		expanded = heredoc_expansion(line, &shell);
-		free(line);
-		return (expanded);
+		expanded = heredoc_expansion(line, shell);
+		return (free(line), expanded);
 	}
 	return (line);
 }
@@ -55,7 +55,7 @@ int	child_heredoc(t_shell *shell, char *delimiter, int pipe_fd, int expand)
 			cleanup_shell(&shell);
 			exit(130);
 		}
-		line = child_heredoc_setup(shell, pipe_fd, expand);
+		line = child_hd_setup(&shell, pipe_fd, expand, delimiter);
 		result = process_line(&shell, line, delimiter, pipe_fd);
 		if (result == 1)
 		{
@@ -78,10 +78,7 @@ int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
 	{
 		del_copy = ft_strdup(delimiter);
 		if (del_copy)
-		{
-			control_d_error(del_copy);
 			free(del_copy);
-		}
 		return (1);
 	}
 	if (ft_strcmp(delimiter, line) == 0)
