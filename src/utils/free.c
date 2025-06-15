@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 13:29:36 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/08 12:12:27 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 16:18:51 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	free_command_strings(t_comand_data *cmd)
 	int	j;
 
 	j = 0;
-	while (cmd->comand && cmd->comand[j] && j < cmd->num_comands)
+	while (cmd->comand && cmd->comand[j])
 		free(cmd->comand[j++]);
 	free(cmd->comand);
 	j = 0;

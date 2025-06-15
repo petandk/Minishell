@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:57:49 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/14 12:14:35 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:58:22 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	child_process(t_fork_data *data, t_comand_data *cmd,
-		t_shell *shell)
+void	child_process(t_fork_data *data, t_comand_data *cmd, t_shell *shell)
 {
 	child_execution_signals();
 	if_pid_0(data, cmd);
@@ -24,7 +23,8 @@ void	child_process(t_fork_data *data, t_comand_data *cmd,
 	}
 	if (cmd[data->i].comand && cmd[data->i].comand[0])
 	{
-		execute_command(cmd[data->i].comand, shell);
+		if ((!builtins(shell, cmd[data->i].comand)))
+			execute_command(cmd[data->i].comand, shell);
 		cleanup_shell(&shell);
 		exit(127);
 	}
@@ -36,8 +36,8 @@ void	parent_process(t_fork_data *data)
 	else_pid_0(&data->prev_fd, data->pipefd, data->i, data->cmd_count);
 }
 
-void	start_fork(t_fork_data *data, t_comand_data *cmd,
-		t_shell *shell, pid_t *pids)
+void	start_fork(t_fork_data *data, t_comand_data *cmd, t_shell *shell,
+		pid_t *pids)
 {
 	if (data->i < data->cmd_count - 1)
 		handle_pipe(data->pipefd);
