@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:48:46 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 13:51:45 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 17:31:27 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ int	prepare_to_execute(t_comand_data **comand, t_token *token, int size_token)
 
 	if (!token || size_token <= 0)
 		return (-1);
-	/*if (!check_in_out(size_token, token))
-		return (-1);*/
 	num_comands = inint_to_token(token, size_token, comand, &ind);
 	if (num_comands <= 0)
 		return (-1);

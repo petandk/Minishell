@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ex_child.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/05/31 13:21:46 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 17:25:44 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ char	*find_path_access(char **all_path, char **cmd)
 		path = ft_strjoin(all_path[i++], n_cmd);
 		if (!path)
 		{
-			free (n_cmd);
+			free(n_cmd);
 			return (NULL);
 		}
 		if (access(path, X_OK) == 0)
 			break ;
-		free (path);
+		free(path);
 	}
-	free (n_cmd);
+	free(n_cmd);
 	if (all_path[i] == NULL)
 		return (NULL);
 	return (path);
@@ -70,27 +70,25 @@ static char	*get_command_path(t_shell *shell, char **cmd)
 	char	**all_path;
 	char	*path;
 
+	if (cmd && cmd[0] && (cmd[0][0] == '/' || cmd[0][0] == '.'))
+		return (cmd[0]);
 	str = find_path_index(shell->env);
 	if (!str)
-		return (NULL);
+		return (return_error_child(cmd[0]));
 	all_path = ft_split(str, ':');
-	if (cmd && cmd[0] && cmd [0][0] != '/' && cmd[0][0] != '.')
-	{
-		if (access(cmd[0], X_OK) == 0)
-			return (cmd[0]);
-		path = find_path_access(all_path, cmd);
-		if (!path)
-		{
-			free_args(all_path);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			free(str);
-			return (NULL);
-		}
-	}
-	else
+	if (access(cmd[0], X_OK) == 0)
 		path = cmd[0];
-	return (free_args(all_path), free(str), path);
+	else
+		path = find_path_access(all_path, cmd);
+	if (!path)
+	{
+		free_args(all_path);
+		free(str);
+		return (return_error_child(cmd[0]));
+	}
+	free_args(all_path);
+	free(str);
+	return (path);
 }
 
 void	execute_command(char **cmd, t_shell *shell)
@@ -112,6 +110,6 @@ void	execute_command(char **cmd, t_shell *shell)
 	execve(path, cmd, new_env);
 	free_args(new_env);
 	ft_putstr_fd(cmd[0], 2);
-	ft_putendl_fd(": command not found\n", 2);
+	ft_putendl_fd(": command not found", 2);
 	return ;
 }
