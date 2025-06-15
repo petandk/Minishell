@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_6.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 10:01:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/09 10:51:10 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/15 13:48:49 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,24 @@ int	chek_double(char a, char b, int *i)
 	return (0);
 }
 
-int	check_in_out(int size_token, t_token *token)
+void	register_unclosed_quote(t_token_data *data, t_quote_tracker *qt)
 {
-	int	i;
-
-	i = 0;
-	while (i < size_token)
+	if (data->j == 0)
+		data->token[data->j].str = NULL;
+	if (data->token[data->j].quotes)
+		free(data->token[data->j].quotes);
+	if (!data->token[data->j].quotes)
+		data->token[data->j].quotes = malloc(sizeof(t_quotes));
+	if (data->token[data->j].quotes)
 	{
-		if (!token[i].str && i == (size_token - 1))
-			return (0);
-		else if ((!token[i].str && !token[i].pipe) && ((!token[i + 1].str)
-				|| (token[i + 1].pipe)))
-			return (0);
-		i++;
+		if (qt->active == 1)
+			data->token[data->j].quotes[0].quote = 1;
+		else
+			data->token[data->j].quotes[0].quote = 2;
+		data->token[data->j].quotes[0].quote_start = 0;
+		data->token[data->j].quotes[0].quote_end = -1;
+		data->token[data->j].quotes[0].closed = 0;
 	}
-	return (1);
+	data->token[data->j].quote_count = 1;
+	data->j++;
 }

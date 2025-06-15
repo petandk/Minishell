@@ -248,6 +248,7 @@ int		is_in_single_quote(int i, t_quotes *quotes);
 int		count_quotes(char *str, int i, int q, int in_quote);
 void	copy_quotes(t_quotes *dst, t_quotes *src, int count);
 void	alloc_and_copy1(t_comand_data *cmd, t_token *token, t_ind *ind, int k);
+void	register_unclosed_quote(t_token_data *data, t_quote_tracker *qt);
 
 // count_tokens.c //
 
@@ -430,4 +431,6 @@ void	mult_fd(char *s1, char *s2, char *s3, int fd);
 void	printerror(char *err_type, char *name);
 void	control_d_error(char *delimiter);
 
+void	print_comands(t_comand_data *comand, int num_comands);
+void print_token_array(t_token *tokens, int size);
 #endif		
