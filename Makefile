@@ -25,20 +25,20 @@ LIBS_INC		:= $(addprefix -I , $(LIBS_DIRS))
 LIBS_COML		:= $(addprefix -l, $(LIBS_COM))
 
 
-#SRCS_FILES		:= src/expansion/expansion_var src/expansion/expansion_var_utils src/parsing/count_token \
+SRCS_FILES		:= src/expansion/expansion_var src/expansion/expansion_var_utils src/parsing/count_token \
 				   src/parsing/split_first src/parsing/token_utils_2 src/parsing/token src/parsing/token_utils \
 				   src/parsing/token_utils_3 src/parsing/token_utils_4 src/parsing/token_utils_5 src/parsing/token_utils_6 \
 				   src/builtins/cd_utils src/builtins/cd src/builtins/echo src/builtins/export_utils src/builtins/builtins \
 				   src/builtins/env src/builtins/exit src/builtins/export src/builtins/pwd src/builtins/unset \
-				   src/builtins/export_utils2 src/redirections/handle_redirections src/redirections/heredoc_utils4helper \
-				   src/redirections/heredoc_utils src/redirections/heredoc src/redirections/heredoc_utils4 src/redirections/heredoc_helper \
-				   src/redirections/heredoc_expansion src/redirections/handle_redirections_utils src/redirections/heredoc_utils2 \
-				   src/redirections/heredoc_utils3 src/execution/ex_child src/execution/prepare_to_execute src/execution/execute_pipeline \
-				   src/execution/execute_pipeline_utils src/execution/execute_pipeline_utils1 src/execution/execution src/utils/utils \
-				   src/utils/free src/utils/ft_putmult_fd src/utils/child_signals src/utils/signals src/utils/the_files \
-				   src/utils/the_files_utils src/shell/shell src/errors/errors src/main
+				   src/builtins/export_utils2 src/builtins/export_utils3 src/redirections/handle_redirections \
+				   src/redirections/heredoc_utils4helper src/redirections/heredoc_utils src/redirections/heredoc \
+				   src/redirections/heredoc_utils4 src/redirections/heredoc_helper src/redirections/heredoc_expansion \
+				   src/redirections/handle_redirections_utils src/redirections/heredoc_utils2 src/redirections/heredoc_utils3 \
+				   src/execution/ex_child src/execution/prepare_to_execute src/execution/execute_pipeline src/execution/execute_pipeline_utils \
+				   src/execution/execute_pipeline_utils1 src/execution/execution src/utils/utils src/utils/free src/utils/ft_putmult_fd \
+				   src/utils/child_signals src/utils/signals src/utils/the_files src/utils/the_files_utils src/shell/shell src/errors/errors src/main
  
-SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
+#SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
 SRCS			:= $(addsuffix .c, $(SRCS_FILES))
 SRCDIRS			:= $(shell find $(SRC_DIR) -type d)
 OBJSDIRS		:= $(patsubst $(SRC_DIR)%,$(OBJ_DIR)%,$(SRCDIRS))

@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:16:33 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 16:01:01 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:12:48 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	open_hd_pipe(char *delimiter, t_shell **shell, int expand)
 		return (ft_putendl_fd("pipe", 2), -1);
 	lines = ft_heredoc(&delimiter, 1, shell, expand);
 	if (!lines)
-		return (close(pipefd[0]), close(pipefd[1]),-1);
+		return (close(pipefd[0]), close(pipefd[1]), -1);
 	if (ft_strcmp(delimiter, lines->content) == 0)
 	{
 		close(pipefd[0]);

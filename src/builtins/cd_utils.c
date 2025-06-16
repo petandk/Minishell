@@ -3,35 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:42:10 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/30 16:12:51 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/15 20:55:48 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	update_oldpwd_env(t_shell *shell, char *old_path)
+void	update_oldpwd_env(t_shell *shell, char *old_path)
 {
-	t_env	*current_node;
+	t_env	*oldpwd_node;
 
 	if (!old_path)
-		return (0);
-	current_node = shell->env;
-	while (current_node && ft_strcmp(current_node->name, "OLDPWD") != 0)
-		current_node = current_node->next;
-	if (current_node)
+		return ;
+	oldpwd_node = find_env_var(shell->env, "OLDPWD");
+	if (oldpwd_node)
 	{
-		free(current_node->value);
-		current_node->value = ft_strdup(old_path);
-		return (current_node->value != NULL);
+		free(oldpwd_node->value);
+		oldpwd_node->value = ft_strdup(old_path);
 	}
 	else
-	{
-		return (update_or_create_var(&shell->env, "OLDPWD=", "") == 0
-			&& update_oldpwd_env(shell, old_path));
-	}
+		update_or_create_var(&shell->env, "OLDPWD", old_path);
+}
+
+char	*get_oldpwd(t_shell *shell)
+{
+	t_env	*oldpwd;
+
+	oldpwd = find_env_var(shell->env, "OLDPWD");
+	if (!oldpwd || !oldpwd->value)
+		return (NULL);
+	return (oldpwd->value);
 }
 
 char	*go_home(t_shell *shell)
@@ -39,7 +43,10 @@ char	*go_home(t_shell *shell)
 	t_env	*home;
 
 	home = find_env_var(shell->env, "HOME");
-	if (!home)
-		return (ft_putendl_fd("minishell: cd: HOME not set", 2), NULL);
+	if (!home || !home->value)
+	{
+		ft_putendl_fd("minishell: cd: HOME not set", 2);
+		return (NULL);
+	}
 	return (ft_strdup(home->value));
 }

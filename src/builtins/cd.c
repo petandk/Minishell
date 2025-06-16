@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/05/29 18:45:53 by rmanzana         ###   ########.fr       */
-/*   Updated: 2025/02/05 17:43:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:05:47 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +38,7 @@ static char	*go_back(void)
 static char	*new_path(t_shell *shell, char *dest)
 {
 	char	*newpath;
+	char	*oldpwd;
 
 	if ((!dest || ft_strncmp(dest, "", 1) == 0)
 		|| (ft_strncmp(dest, "~", 1) == 0))
@@ -47,64 +47,38 @@ static char	*new_path(t_shell *shell, char *dest)
 		newpath = go_back();
 	else if (ft_strncmp(dest, "-", 1) == 0)
 	{
-		if (!shell->prev_dir)
+		oldpwd = get_oldpwd(shell);
+		if (!oldpwd)
 			return (ft_putendl_fd("cd: OLDPWD not set", 2), NULL);
-		newpath = ft_strdup(shell->prev_dir);
-		ft_putendl_fd(newpath, 1);
+		newpath = ft_strdup(oldpwd);
+		if (newpath)
+			ft_putendl_fd(newpath, 1);
 	}
 	else
 		newpath = ft_strdup(dest);
 	return (newpath);
 }
 
-static int	update_pwd_env(t_env *env)
+static void	update_pwd_env(t_env *env)
 {
 	char	*current;
-	t_env	*current_node;
+	t_env	*pwd_node;
 
 	current = getcwd(NULL, 0);
 	if (!current)
-		return (0);
-	current_node = env;
-	while (current_node && ft_strcmp(current_node->name, "PWD") != 0)
-		current_node = current_node->next;
-	if (current_node)
+		return ;
+	pwd_node = find_env_var(env, "PWD");
+	if (pwd_node)
 	{
-		free(current_node->value);
-		current_node->value = current;
+		free(pwd_node->value);
+		pwd_node->value = current;
 	}
 	else
-	{
-		free(current);
-	}
-	return (1);
+		free (current);
 }
 
-static int	change_directory(t_shell *shell, char *dest,
-		char *newpath, char *current)
+static int	change_directory(t_shell *shell, char *dest, char *newpath)
 {
-	if (chdir(newpath) == -1)
-	{
-		shell->exit_status = 1;
-		printerror("no_file", dest);
-		free(newpath);
-		free(current);
-		free(dest);
-		return (1);
-	}
-	free(shell->prev_dir);
-	shell->prev_dir = current;
-	update_oldpwd_env(shell, current);
-	update_pwd_env(shell->env);
-	free(newpath);
-	free(dest);
-	shell->exit_status = 0;
-	return (0);
-}
-
-void	ft_cd(t_shell *shell, char *dest)
-{
-	char	*newpath;
 	char	*current;
 
 	current = getcwd(NULL, 0);
@@ -112,14 +86,34 @@ void	ft_cd(t_shell *shell, char *dest)
 	{
 		shell->exit_status = 1;
 		ft_putendl_fd("minishell: cd: getcwd error", 2);
-		return ;
+		free(newpath);
+		return (1);
 	}
+	if (chdir(newpath) == -1)
+	{
+		shell->exit_status = 1;
+		printerror("no_file", dest);
+		free(newpath);
+		free(current);
+		return (1);
+	}
+	update_oldpwd_env(shell, current);
+	update_pwd_env(shell->env);
+	free(newpath);
+	free(current);
+	shell->exit_status = 0;
+	return (0);
+}
+
+void	ft_cd(t_shell *shell, char *dest)
+{
+	char	*newpath;
+
 	newpath = new_path(shell, dest);
 	if (!newpath)
 	{
 		shell->exit_status = 1;
-		free(current);
 		return ;
 	}
-	change_directory(shell, dest, newpath, current);
+	change_directory(shell, dest, newpath);
 }
