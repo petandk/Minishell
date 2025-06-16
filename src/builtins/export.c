@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 21:34:05 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:37:24 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ int	process_export(char *arg, char ***splitd,
 	env_var->name = (*splitd)[0];
 	if ((*splitd)[1])
 		env_var->value = (*splitd)[1];
-	else
+	else if (ft_strchr(arg, '='))
 		env_var->value = "";
+	else
+		env_var->value = NULL;
 	if (!is_valid_name(env_var->name))
 	{
 		if (is_env)

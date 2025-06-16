@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/10 18:25:42 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:41:01 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,23 @@ void	ft_show_env(t_env *envlist, int is_env)
 		{
 			ft_putstr_fd("declare -x ", 1);
 			ft_putstr_fd(current->name, 1);
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(current->value, 1);
-			ft_putendl_fd("\"", 1);
+			if (current->value != NULL)
+			{
+				ft_putstr_fd("=\"", 1);
+				ft_putstr_fd(current->value, 1);
+				ft_putendl_fd("\"", 1);
+			}
+			else
+				ft_putendl_fd("", 1);
 		}
 		else if (is_env == 1)
 		{
-			ft_putstr_fd(current->name, 1);
-			ft_putstr_fd("=", 1);
-			ft_putendl_fd(current->value, 1);
+			if (current->value && current->value[0] != '\0')
+			{
+				ft_putstr_fd(current->name, 1);
+				ft_putstr_fd("=", 1);
+				ft_putendl_fd(current->value, 1);
+			}
 		}
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 21:27:21 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:42:17 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ int	update_or_create_var(t_env **envlist, char *name, char *value)
 	exist = find_env_var(*envlist, name);
 	if (exist)
 	{
-		free(exist->value);
-		exist->value = ft_strdup(value);
-		if (!exist->value)
-			return (1);
+		if (value != NULL)
+		{
+			free(exist->value);
+			exist->value = ft_strdup(value);
+			if (!exist->value)
+				return (1);
+		}
 	}
 	else
 	{

@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -6,7 +7,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 21:35:49 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:04:14 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +24,13 @@ t_env	*env_lstnew(char *name, char *val)
 	if (!new_node->name)
 		return (free(new_node), NULL);
 	if (val)
+	{
 		new_node->value = ft_strdup(val);
+		if (!new_node->value)
+			return (free(new_node->name), free(new_node), NULL);
+	}
 	else
 		new_node->value = NULL;
-	if (val && !new_node->value)
-		return (free(new_node->name), free(new_node), NULL);
 	new_node->next = NULL;
 	return (new_node);
 }
