@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:49:34 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 21:36:41 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:05:47 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,7 @@ static void	update_pwd_env(t_env *env)
 		pwd_node->value = current;
 	}
 	else
-	{
-		update_or_create_var(&env, "PWD", current);
 		free (current);
-	}
 }
 
 static int	change_directory(t_shell *shell, char *dest, char *newpath)
@@ -103,6 +100,7 @@ static int	change_directory(t_shell *shell, char *dest, char *newpath)
 	update_oldpwd_env(shell, current);
 	update_pwd_env(shell->env);
 	free(newpath);
+	free(current);
 	shell->exit_status = 0;
 	return (0);
 }

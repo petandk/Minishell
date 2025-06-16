@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:36:46 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/16 17:37:24 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:13:32 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ int	process_export(char *arg, char ***splitd,
 			ft_putstr_fd("export: ", 2);
 		ft_putstr_fd(env_var->name, 2);
 		ft_putendl_fd(": not a valid identifier", 2);
-		free_split(*splitd, -1);
-		return (1);
+		return (free_split(*splitd, -1), 1);
 	}
 	return (0);
 }

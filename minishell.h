@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:22:58 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 21:45:54 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:11:27 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,7 +360,7 @@ void							clear_env_list(t_env **envlist);
 
 // export_utils3.c
 
-int	handle_no_val_export(t_shell *shell, char *arg);
+int								handle_no_val_export(t_shell *shell, char *arg);
 
 // export.c //
 
@@ -477,4 +477,5 @@ void							control_d_error(char *delimiter);
 void							print_comands(t_comand_data *comand,
 									int num_comands);
 void							print_token_array(t_token *tokens, int size);
+
 #endif
