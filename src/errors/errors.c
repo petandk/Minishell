@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/10 18:51:30 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 17:41:18 by gpolo            ###   ########.fr       */
+/*   Created: 2025/06/15 17:41:18 by gpolo             #+#    #+#             */
+/*   Updated: 2025/06/16 18:30:25 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	printerror(char *err_type, char *name)
 		multend_fd("Minishell: exit: ", name, ": numeric argument required", 2);
 	if (ft_strncmp(err_type, "no_perm", 7) == 0)
 		multend_fd("minishell: ", name, ": Permission denied", 2);
+	if (ft_strncmp(err_type, "no_env", 6) == 0)
+		ft_putendl_fd("Minishell: Error: Run \"env\" without options.", 2);
 }
 
 void	control_d_error(char *delimiter)

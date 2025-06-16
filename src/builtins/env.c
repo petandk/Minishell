@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:22:37 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/16 18:15:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:29:31 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,13 @@ static int	process_env_args(t_shell *shell, char **args, t_env **temp_env)
 	int		i;
 	char	**splitd;
 	t_env	env_var;
+	int		error_flag;
 
 	*temp_env = clone_env_list(shell->env);
 	if (!*temp_env)
 		return (1);
 	i = 0;
+	error_flag = 0;
 	while (args[i] && ft_strchr(args[i], '='))
 	{
 		if (process_export(args[i], &splitd, &env_var, 1) == 0)
@@ -79,27 +81,26 @@ static int	process_env_args(t_shell *shell, char **args, t_env **temp_env)
 			free_split(splitd, -1);
 		}
 		else
-			return (clear_env_list(temp_env), 1);
+			error_flag = 1;
 		i++;
 	}
 	if (args[i])
-	{
-		ft_putendl_fd("Minishell: Error: Run \"env\" without options.", 2);
-		return (clear_env_list(temp_env), 1);
-	}
-	return (0);
+		return (printerror("no_env", NULL), clear_env_list(temp_env), 1);
+	return (error_flag);
 }
 
 void	ft_env(t_shell *shell, char **args)
 {
 	t_env	*temp_env;
+	int		result;
 
 	if (!args || !args[0])
 	{
 		shell->exit_status = 0;
 		return (ft_show_env(shell->env, 1));
 	}
-	if (process_env_args(shell, args, &temp_env) != 0)
+	result = process_env_args(shell, args, &temp_env);
+	if (result != 0)
 	{
 		shell->exit_status = 1;
 		return ;
