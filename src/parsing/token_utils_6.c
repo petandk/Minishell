@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 10:01:55 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/15 13:48:49 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/16 14:33:16 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void	register_unclosed_quote(t_token_data *data, t_quote_tracker *qt)
 	if (data->j == 0)
 		data->token[data->j].str = NULL;
 	if (data->token[data->j].quotes)
+	{
 		free(data->token[data->j].quotes);
+		data->token[data->j].quotes = NULL;
+	}
 	if (!data->token[data->j].quotes)
 		data->token[data->j].quotes = malloc(sizeof(t_quotes));
 	if (data->token[data->j].quotes)
