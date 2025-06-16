@@ -6,7 +6,7 @@
 /*   By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:33:35 by gpolo             #+#    #+#             */
-/*   Updated: 2025/06/16 14:48:40 by gpolo            ###   ########.fr       */
+/*   Updated: 2025/06/16 16:21:18 by gpolo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ void	execute_command(char **cmd, t_shell *shell)
 		return ;
 	}
 	execve(path, cmd, new_env);
+	if (path)
+		free(path);
 	free_args(new_env);
 	ft_putstr_fd(cmd[0], 2);
 	ft_putendl_fd(": command not found", 2);

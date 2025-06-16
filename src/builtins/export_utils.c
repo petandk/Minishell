@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmanzana <rmanzana@student.42barcelon      +#+  +:+       +#+        */
+/*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 20:32:41 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/04/14 21:12:07 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:17:28 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@ t_env	*env_lstnew(char *name, char *val)
 	new_node->name = ft_strdup(name);
 	if (!new_node->name)
 		return (free(new_node), NULL);
-	new_node->value = ft_strdup(val);
-	if (!new_node->value)
-		return (free(new_node->name), free(new_node), NULL);
+	if (val)
+	{
+		new_node->value = ft_strdup(val);
+		if (!new_node->value)
+			return (free(new_node->name), free(new_node), NULL);
+	}
+	else
+		new_node->value = NULL;
 	new_node->next = NULL;
 	return (new_node);
 }

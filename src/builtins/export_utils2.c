@@ -6,11 +6,36 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 12:23:05 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/13 20:44:18 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:42:17 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	update_or_create_var(t_env **envlist, char *name, char *value)
+{
+	t_env	*exist;
+
+	exist = find_env_var(*envlist, name);
+	if (exist)
+	{
+		if (value != NULL)
+		{
+			free(exist->value);
+			exist->value = ft_strdup(value);
+			if (!exist->value)
+				return (1);
+		}
+	}
+	else
+	{
+		exist = env_lstnew(name, value);
+		if (!exist)
+			return (1);
+		env_lstadd_back(envlist, exist);
+	}
+	return (0);
+}
 
 t_env	*create_basic_env(void)
 {

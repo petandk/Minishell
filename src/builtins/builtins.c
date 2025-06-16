@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:14 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 14:42:02 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:16:26 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ int	builtins(t_shell *shell, char **cmd)
 			return (ft_exit(&shell, shell->exit_status), 1);
 	}
 	if (!ft_strcmp(cmd[0], "echo"))
-	{
 		return (ft_echo(shell, cmd), 1);
-	}
 	else if (!ft_strcmp(cmd[0], "cd"))
+	{
+		if (cmd[2])
+			return (ft_putendl_fd("Minishell: cd: too many arguments", 2), 1);
 		return (ft_cd(shell, cmd[1]), 1);
+	}
 	return (builtins_split(shell, cmd));
 }

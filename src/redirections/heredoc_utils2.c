@@ -6,13 +6,13 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/15 15:45:27 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:12:19 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*child_hd_setup(t_shell **shell, int pipe_fd, int expand, char *deli)
+static char	*child_hd_setup(t_shell **shell, int pipe_fd, int exp, char *deli)
 {
 	char	*line;
 	char	*expanded;
@@ -33,7 +33,7 @@ static char	*child_hd_setup(t_shell **shell, int pipe_fd, int expand, char *deli
 		cleanup_shell(shell);
 		exit(0);
 	}
-	if (expand && line)
+	if (exp && line)
 	{
 		expanded = heredoc_expansion(line, shell);
 		return (free(line), expanded);
