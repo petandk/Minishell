@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gpolo <gpolo@student.42barcelona.com>      +#+  +:+       +#+         #
+#    By: gpolo <gpolo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/04 11:11:44 by gpolo             #+#    #+#              #
-#    Updated: 2025/06/14 13:18:29 by rmanzana         ###   ########.fr        #
+#    Updated: 2025/06/16 17:27:19 by gpolo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBS_INC		:= $(addprefix -I , $(LIBS_DIRS))
 LIBS_COML		:= $(addprefix -l, $(LIBS_COM))
 
 
-SRCS_FILES		:= src/expansion/expansion_var src/expansion/expansion_var_utils src/parsing/count_token \
+#SRCS_FILES		:= src/expansion/expansion_var src/expansion/expansion_var_utils src/parsing/count_token \
 				   src/parsing/split_first src/parsing/token_utils_2 src/parsing/token src/parsing/token_utils \
 				   src/parsing/token_utils_3 src/parsing/token_utils_4 src/parsing/token_utils_5 src/parsing/token_utils_6 \
 				   src/builtins/cd_utils src/builtins/cd src/builtins/echo src/builtins/export_utils src/builtins/builtins \
@@ -38,7 +38,7 @@ SRCS_FILES		:= src/expansion/expansion_var src/expansion/expansion_var_utils src
 				   src/utils/free src/utils/ft_putmult_fd src/utils/child_signals src/utils/signals src/utils/the_files \
 				   src/utils/the_files_utils src/shell/shell src/errors/errors src/main
  
-#SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
+SRCS_FILES		:= $(shell find $(SRC_DIR) -type f -iname "*.c" | sed 's#[.][^.]*$$##')
 SRCS			:= $(addsuffix .c, $(SRCS_FILES))
 SRCDIRS			:= $(shell find $(SRC_DIR) -type d)
 OBJSDIRS		:= $(patsubst $(SRC_DIR)%,$(OBJ_DIR)%,$(SRCDIRS))
