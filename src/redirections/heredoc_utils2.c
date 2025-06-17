@@ -6,7 +6,7 @@
 /*   By: rmanzana <rmanzana@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 14:18:21 by rmanzana          #+#    #+#             */
-/*   Updated: 2025/06/16 18:12:19 by rmanzana         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:07:15 by rmanzana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ int	process_line(t_shell **shell, char *line, char *delimiter, int pipe_fd)
 		return (1);
 	}
 	if (ft_strcmp(delimiter, line) == 0)
-		return (free(line), 2);
+	{
+		free(line);
+		return (2);
+	}
 	ft_putendl_fd(line, pipe_fd);
 	free(line);
 	return (0);
